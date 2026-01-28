@@ -39,46 +39,57 @@
                             <div class="mb-3 group-hover position-relative">
                                 <button @click="removeItem('certifications', index)" class="btn btn-link text-danger p-0 position-absolute top-0 end-0 no-print opacity-50 hover-100" style="font-size:0.7rem"><i class="fas fa-times"></i></button>
                                 
-                                <div class="d-flex align-items-center mb-1">
-                                    <i :class="cert.icon || 'fas fa-certificate'" class="text-warning small me-2"></i>
-                                    <input x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0" placeholder="Certification Name">
-                                </div>
-                                <div class="d-flex gap-1 ps-4">
-                                    <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" placeholder="Start">
-                                    <span class="text-white-50 small">-</span>
-                                    <input x-model="cert.end" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" placeholder="End">
+                                <input x-model="cert.icon" class="form-control-ghost cert-icon-input" placeholder="Icon class (e.g. fab fa-google)">
+
+                                <div class="d-flex align-items-start mb-1 justify-content-start">
+                                    <i :class="cert.icon || 'fas fa-certificate'" class="text-warning small me-2 mt-1" style="width: 15px; text-align:center; flex-shrink: 0;"></i>
+                                    
+                                    <div class="w-100">
+                                        <input x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0 no-print" placeholder="Certification Name">
+                                        <div class="print-only fw-bold small text-white" style="line-height: 1.2;" x-text="cert.name"></div>
+                                        
+                                        <div class="d-flex gap-1 mt-1 align-items-center">
+                                            <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="Start">
+                                            <span class="text-white-50 small">-</span>
+                                            <input x-model="cert.end" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="End">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </template>
                     </div>
                     
-                    <div class="sidebar-header mt-5 d-flex justify-content-between align-items-center">
-                        <span>Core Competencies</span>
-                        <button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print opacity-50"><i class="fas fa-folder-plus"></i></button>
-                    </div>
-                    
-                    <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
-                        <div class="mb-4 section-group">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY">
-                                <div class="no-print">
-                                    <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-plus small"></i></button>
-                                    <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1"><i class="fas fa-times small"></i></button>
-                                </div>
-                            </div>
-                            <template x-for="(skill, sIndex) in cat.list" :key="sIndex">
-                                <div class="skill-item-row group-hover">
-                                    <input x-model="skill.name" class="form-control-ghost form-control-ghost-dark skill-name-input" placeholder="Skill">
-                                    <div class="skill-bar-wrapper">
-                                        <template x-for="level in 5">
-                                            <div class="skill-dot" :class="{'filled': level <= skill.level}" @click="skill.level = level"></div>
-                                        </template>
-                                    </div>
-                                    <i @click="cat.list.splice(sIndex, 1)" class="fas fa-minus-circle text-danger ms-1 small cursor-pointer opacity-0 hover-100 no-print"></i>
-                                </div>
-                            </template>
+                    <div class="section-group">
+                        <div class="sidebar-header mt-5 d-flex justify-content-between align-items-center">
+                            <span>Core Competencies</span>
+                            <button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print opacity-50"><i class="fas fa-folder-plus"></i></button>
                         </div>
-                    </template>
+                        
+                        <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
+                            <div class="mb-4 skill-category-wrapper">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY">
+                                    <div class="no-print">
+                                        <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-plus small"></i></button>
+                                        <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1"><i class="fas fa-times small"></i></button>
+                                    </div>
+                                </div>
+                                <template x-for="(skill, sIndex) in cat.list" :key="sIndex">
+                                    <div class="skill-item-row group-hover">
+                                        <input x-model="skill.name" class="form-control-ghost form-control-ghost-dark skill-name-input no-print" placeholder="Skill">
+                                        <div class="print-only skill-name-text" x-text="skill.name"></div>
+
+                                        <div class="skill-bar-wrapper">
+                                            <template x-for="level in 5">
+                                                <div class="skill-dot" :class="{'filled': level <= skill.level}" @click="skill.level = level"></div>
+                                            </template>
+                                        </div>
+                                        <i @click="cat.list.splice(sIndex, 1)" class="fas fa-minus-circle text-danger ms-1 small cursor-pointer opacity-0 hover-100 no-print"></i>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </div>
 
                 <div class="col-lg-8 main-content-wrapper">
@@ -87,10 +98,12 @@
                         <h2 class="section-title">Professional Profile</h2>
                         <div class="beautiful-separator"></div>
                         <textarea x-model="resume.profile.summary" class="form-control-ghost mb-4 text-muted fs-5" style="line-height: 1.8;" rows="4" @input="resize($event.target)"></textarea>
+                        
                         <div class="highlight-box">
                             <div class="highlight-text-bg">
                                 <i class="fas fa-quote-left text-secondary mb-2"></i>
-                                <textarea x-model="resume.profile.impact_statement" class="form-control-ghost position-relative impact-font text-center" style="z-index: 1;" rows="3" @input="resize($event.target)"></textarea>
+                                <textarea x-model="resume.profile.impact_statement" class="form-control-ghost position-relative impact-font text-center no-print" style="z-index: 1;" rows="3" @input="resize($event.target)"></textarea>
+                                <div class="print-only impact-font text-center" x-text="resume.profile.impact_statement" style="white-space: pre-wrap;"></div>
                             </div>
                         </div>
                     </div>
@@ -105,7 +118,7 @@
                             <template x-for="(ach, index) in resume.signature_achievements" :key="index">
                                 <div class="col-md-6">
                                     <div class="card h-100 border-0 shadow-sm position-relative group-hover achievement-card">
-                                        <button @click="removeItem('signature_achievements', index)" class="btn text-danger btn-remove-card no-print"><i class="fas fa-times"></i></button>
+                                        <button @click="removeItem('signature_achievements', index)" class="btn btn-remove-card no-print"><i class="fas fa-times"></i></button>
                                         <div class="card-body p-4">
                                             <div class="d-flex justify-content-between align-items-start mb-3">
                                                 <input x-model="ach.title" class="form-control-ghost fw-bold text-dark fs-5" placeholder="Title">
@@ -125,13 +138,35 @@
                             <button @click="addItem('experience')" class="btn btn-sm text-primary no-print">+ Role</button>
                         </div>
                         <div class="beautiful-separator"></div>
+                        
                         <div class="timeline-container">
+                            <div class="timeline-badge-top">Current</div>
+                            <div class="timeline-badge-bottom">Start</div>
+
                             <template x-for="(job, index) in resume.experience" :key="index">
                                 <div class="timeline-item section-group">
                                     <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
                                         <div class="col-8"><input x-model="job.role" class="form-control-ghost timeline-role" placeholder="Role Title"></div>
-                                        <div class="col-4"><input x-model="job.dates" class="form-control-ghost timeline-date" placeholder="Dates"></div>
+                                        <div class="col-4 text-end">
+                                            <div class="timeline-date print-only">
+                                                <span x-text="formatDate(job.startDate)"></span>
+                                                -
+                                                <span x-text="job.isCurrent ? 'Present' : formatDate(job.endDate)"></span>
+                                            </div>
+                                            <div class="no-print d-flex flex-column align-items-end gap-1">
+                                                <div class="d-flex gap-1 align-items-center">
+                                                    <input type="month" x-model="job.startDate" class="date-picker-modern">
+                                                    <span class="small text-muted">-</span>
+                                                    <input type="month" x-model="job.endDate" class="date-picker-modern" x-show="!job.isCurrent">
+                                                    <span class="badge bg-success" x-show="job.isCurrent">Present</span>
+                                                </div>
+                                                <div class="form-check small">
+                                                    <input type="checkbox" class="form-check-input" :id="'curr'+index" x-model="job.isCurrent">
+                                                    <label class="form-check-label text-muted" :for="'curr'+index">Currently Working</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <input x-model="job.company" class="form-control-ghost timeline-company" placeholder="Company Name">
                                     <ul class="list-unstyled detail-list mt-3 text-muted">
@@ -139,6 +174,40 @@
                                             <li class="d-flex"><textarea x-model="job.achievements[i]" class="form-control-ghost py-0 font-sans-regular" rows="1" @input="resize($event.target)"></textarea></li>
                                         </template>
                                     </ul>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mb-5 section-group">
+                        <div class="d-flex justify-content-between align-items-end mb-2">
+                            <h2 class="section-title mb-0">Certifications</h2>
+                            <button @click="addItem('certifications')" class="btn btn-sm text-primary no-print">+ Add</button>
+                        </div>
+                        <div class="beautiful-separator"></div>
+                        <div class="row g-3">
+                            <template x-for="(cert, index) in resume.certifications" :key="index">
+                                <div class="col-12 section-group">
+                                    <div class="cert-main-card group-hover position-relative">
+                                        <button @click="removeItem('certifications', index)" class="btn btn-remove-card no-print" style="top: -10px; right: -10px;"><i class="fas fa-times"></i></button>
+                                        
+                                        <div class="cert-main-icon-box">
+                                            <i :class="cert.icon || 'fas fa-certificate'"></i>
+                                        </div>
+                                        
+                                        <div class="flex-grow-1">
+                                            <input x-model="cert.icon" class="form-control-ghost cert-main-icon-input" placeholder="Icon class (e.g. fab fa-google)">
+                                            
+                                            <input x-model="cert.name" class="form-control-ghost fw-bold text-dark fs-5 mb-1 no-print" placeholder="Certification Name">
+                                            <div class="print-only fw-bold text-dark fs-6 mb-1" x-text="cert.name"></div>
+                                        </div>
+                                        
+                                        <div class="cert-main-date-badge d-flex align-items-center gap-1">
+                                            <input x-model="cert.start" class="form-control-ghost p-0 text-center" style="width: 40px; font-weight:bold; color:inherit;" placeholder="Start">
+                                            <span>-</span>
+                                            <input x-model="cert.end" class="form-control-ghost p-0 text-center" style="width: 50px; font-weight:bold; color:inherit;" placeholder="End">
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -156,7 +225,18 @@
                                     <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
                                         <div class="col-8"><input x-model="edu.degree" class="form-control-ghost timeline-role fs-5"></div>
-                                        <div class="col-4"><input x-model="edu.dates" class="form-control-ghost timeline-date"></div>
+                                        <div class="col-4 text-end">
+                                            <div class="timeline-date print-only">
+                                                <span x-text="formatDate(edu.startDate)"></span>
+                                                -
+                                                <span x-text="formatDate(edu.endDate)"></span>
+                                            </div>
+                                            <div class="no-print d-flex justify-content-end align-items-center gap-1">
+                                                <input type="month" x-model="edu.startDate" class="date-picker-modern">
+                                                <span class="small text-muted">-</span>
+                                                <input type="month" x-model="edu.endDate" class="date-picker-modern">
+                                            </div>
+                                        </div>
                                     </div>
                                     <input x-model="edu.institution" class="form-control-ghost timeline-company text-muted">
                                     <textarea x-model="edu.details" class="form-control-ghost text-muted small mt-2" rows="1" @input="resize($event.target)"></textarea>

@@ -1,3 +1,23 @@
+// Function to format "YYYY-MM" to "Mon YYYY"
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const date = new Date(dateStr + "-01");
+    // Handle Year only or Month-Year
+    if(dateStr.length === 4) return dateStr; 
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+// Helper to attempt parsing old dates
+function parseLegacyDate(dateStr) {
+    if(!dateStr || dateStr.toLowerCase() === 'present') return "";
+    // Check if it's just a year "2007"
+    if(dateStr.trim().match(/^\d{4}$/)) return dateStr.trim() + "-01";
+    
+    const date = new Date(dateStr);
+    if(isNaN(date.getTime())) return "";
+    return date.toISOString().slice(0, 7); // Returns YYYY-MM
+}
+
 function getSafeDefaults() {
     let data = window.hugoDefaultData;
     if (typeof data === 'string') {
@@ -32,9 +52,28 @@ const resumeAppData = () => ({
             try {
                 const parsed = JSON.parse(localData);
                 this.resume = { ...this.resume, ...parsed };
-                // Fix old cert structure if needed
-                if(this.resume.certifications && this.resume.certifications.length > 0 && !this.resume.certifications[0].icon) {
-                     this.resume.certifications = this.resume.certifications.map(c => ({...c, start: c.year, end: "Present", icon: "fas fa-certificate"}));
+                
+                // MIGRATION: Convert old experience strings
+                if (this.resume.experience) {
+                    this.resume.experience.forEach(job => {
+                        if (job.dates && !job.startDate) {
+                            const parts = job.dates.split(' - ');
+                            job.startDate = parseLegacyDate(parts[0]);
+                            job.isCurrent = (parts[1] || "").toLowerCase().includes("present");
+                            if (!job.isCurrent) job.endDate = parseLegacyDate(parts[1]);
+                        }
+                    });
+                }
+                
+                // MIGRATION: Convert old Education strings
+                if (this.resume.education) {
+                    this.resume.education.forEach(edu => {
+                        if (edu.dates && !edu.startDate) {
+                            const parts = edu.dates.split(' - ');
+                            edu.startDate = parseLegacyDate(parts[0]);
+                            edu.endDate = parseLegacyDate(parts[1]);
+                        }
+                    });
                 }
             } catch (e) { console.error(e); }
         }
@@ -58,6 +97,26 @@ const resumeAppData = () => ({
         if (confirm("Reset to YAML defaults? Local changes will be lost.")) {
             localStorage.removeItem('localResumeDraft');
             this.resume = JSON.parse(JSON.stringify(getSafeDefaults()));
+            // Re-run migration immediately on reset data
+            if (this.resume.experience) {
+                this.resume.experience.forEach(job => {
+                    if (job.dates && !job.startDate) {
+                        const parts = job.dates.split(' - ');
+                        job.startDate = parseLegacyDate(parts[0]);
+                        job.isCurrent = (parts[1] || "").toLowerCase().includes("present");
+                        if (!job.isCurrent) job.endDate = parseLegacyDate(parts[1]);
+                    }
+                });
+            }
+            if (this.resume.education) {
+                this.resume.education.forEach(edu => {
+                    if (edu.dates && !edu.startDate) {
+                        const parts = edu.dates.split(' - ');
+                        edu.startDate = parseLegacyDate(parts[0]);
+                        edu.endDate = parseLegacyDate(parts[1]);
+                    }
+                });
+            }
             this.$nextTick(() => window.location.reload());
         }
     },
@@ -73,23 +132,27 @@ const resumeAppData = () => ({
         if (url !== null) this.resume.profile.image = url;
     },
 
+    formatDate(dateStr) { return formatDate(dateStr); },
+
     addItem(section) {
         const defaults = {
             experience: { 
                 role: "New Role", 
                 company: "Company", 
-                dates: "Jan 2024 - Present", // NEW DEFAULT
-                achievements: ["Add Experience details of this Role..."] 
+                startDate: new Date().toISOString().slice(0, 7), 
+                isCurrent: true, 
+                achievements: ["Add Experience details..."] 
             },
             education: { 
                 degree: "Degree", 
                 institution: "Institute", 
-                dates: "2020 - 2024", 
+                startDate: "2020-01", // Default to date pickers
+                endDate: "2024-05", 
                 details: "Details..." 
             },
             certifications: { 
                 name: "Certification Name", 
-                start: "Jan 2024", 
+                start: "2024", 
                 end: "Present", 
                 icon: "fas fa-certificate" 
             },
