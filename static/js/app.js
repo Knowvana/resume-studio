@@ -1,50 +1,44 @@
-// static/js/app.js
-
-// HELPER: Safely get defaults & ensure structure
 function getSafeDefaults() {
     let data = window.hugoDefaultData;
     if (typeof data === 'string') {
-        try { data = JSON.parse(data); } catch (e) { console.error("Bad data", e); data = null; }
+        try { data = JSON.parse(data); } catch (e) { data = null; }
     }
     
     const base = {
         profile: { name: "", tagline: "", location: "", email: "", phone: "", linkedin: "", summary: "", impact_statement: "", image: "" },
-        // New Section: Personal Details
-        personal_details: { dob: "", nationality: "", marital_status: "", languages: "" },
+        personal_details: { dob: "", nationality: "Indian", marital_status: "Single", languages: ["English"] },
         signature_achievements: [],
         experience: [],
         education: [],
         skills: [],
-        // New Section: Custom generic sections at the end
         custom_sections: [] 
     };
 
-    // Merge defaults with loaded data
-    return { ...base, ...data, profile: { ...base.profile, ...(data?.profile || {}) }, personal_details: { ...base.personal_details, ...(data?.personal_details || {}) } };
+    return { ...base, ...data, profile: { ...base.profile, ...(data?.profile || {}) } };
 }
 
 const resumeAppData = () => ({
     user: null,
     loading: false,
     isDirty: false,
-    // Professional Default Placeholder Image
-    defaultImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-
+    defaultImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
     resume: getSafeDefaults(),
 
     async init() {
-        console.log("Init...");
+        console.log("App Init");
         const localData = localStorage.getItem('localResumeDraft');
         if (localData) {
             try {
                 const parsed = JSON.parse(localData);
-                // Deep merge back into safe defaults
-                this.resume = { 
-                    ...this.resume, 
-                    ...parsed,
-                    profile: { ...this.resume.profile, ...parsed.profile },
-                    personal_details: { ...this.resume.personal_details, ...(parsed.personal_details || {}) }
-                };
+                this.resume = { ...this.resume, ...parsed };
+                
+                // MIGRATION: Convert old flat skills to new nested structure
+                if (this.resume.skills.length > 0 && !this.resume.skills[0].list) {
+                    this.resume.skills = this.resume.skills.map(s => ({
+                        category: s.category,
+                        list: [{ name: s.items || "Skill", level: 3 }]
+                    }));
+                }
             } catch (e) { console.error(e); }
         }
 
@@ -60,62 +54,62 @@ const resumeAppData = () => ({
             localStorage.setItem('localResumeDraft', JSON.stringify(value));
         });
 
-        // CRITICAL FIX FOR SCROLLBARS ON LOAD
-        // Wait for Vue/Alpine to render, then resize.
-        setTimeout(() => {
-            this.$nextTick(() => {
-                document.querySelectorAll('textarea').forEach(el => this.resize(el));
-            });
-        }, 300);
+        setTimeout(() => { this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); }); }, 300);
     },
 
     resetToDefaults() {
-        if (confirm("Reset to defaults? Local changes will be lost.")) {
+        if (confirm("Reset to YAML defaults? Local changes will be lost.")) {
             localStorage.removeItem('localResumeDraft');
             this.resume = JSON.parse(JSON.stringify(getSafeDefaults()));
             this.$nextTick(() => window.location.reload());
         }
     },
 
-    // IMPROVED RESIZE LOGIC
     resize(el) {
         if(!el) return;
-        // 1. Reset height to auto to shrink if content was deleted
         el.style.height = 'auto'; 
-        // 2. Set to scrollHeight to expand to fit content
-        // Add a tiny buffer (2px) to prevent occasional flicker
         el.style.height = (el.scrollHeight + 2) + 'px';
     },
 
     promptImage() {
-        const url = prompt("Paste photo URL:", this.resume.profile.image || "");
+        const url = prompt("Photo URL:", this.resume.profile.image || "");
         if (url !== null) this.resume.profile.image = url;
     },
 
     addItem(section) {
         const defaults = {
-            experience: { role: "New Role", company: "Company", dates: "Dates", achievements: ["Result..."] },
-            education: { degree: "Degree / Certificate", institution: "University / Institute", dates: "Year", details: "Optional details..." },
-            skills: { category: "CATEGORY", items: "List skills..." },
-            signature_achievements: { title: "New Achievement", icon: "fas fa-star", description: "Description..." },
-            // Default for custom section
-            custom_sections: { title: "New Section Title", content: ["Add content points..."] }
+            experience: { 
+                role: "New Role", 
+                company: "Company", 
+                dates: "Dates", 
+                achievements: ["Add Experience details of this Role..."] 
+            },
+            education: { 
+                degree: "Degree / Certificate", 
+                institution: "University / Institute", 
+                dates: "Year", 
+                details: "Add Education details..." 
+            },
+            skills: { category: "NEW CATEGORY", list: [{ name: "New Skill", level: 3 }] },
+            signature_achievements: { title: "Title", icon: "fas fa-star", description: "Impact..." },
+            custom_sections: { title: "Section", content: ["Point 1"] }
         };
         
         if (this.resume[section]) {
             this.resume[section].push(JSON.parse(JSON.stringify(defaults[section])));
-            // Wait for DOM update then resize new textareas
             this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); });
         }
     },
 
-    removeItem(section, index) {
-        if (confirm("Remove this item?")) {
-            this.resume[section].splice(index, 1);
-        }
+    // Add a single skill item to an existing category
+    addSkillItem(catIndex) {
+        this.resume.skills[catIndex].list.push({ name: "New Skill", level: 3 });
     },
 
-    // Cloud actions (omitted for brevity, kept same as before)
+    removeItem(section, index) {
+        if (confirm("Remove?")) this.resume[section].splice(index, 1);
+    },
+
     async login() { const e = prompt("Email:"); if(e) window.AuthService.login(e).then(()=>alert("Check email")); },
     async logout() { if(confirm("Logout?")){await window.AuthService.logout();window.location.reload();} },
     async saveToCloud() { if(!this.user)return this.login();this.loading=true;await window.AuthService.saveResume(this.user.id,this.resume);this.loading=false;this.isDirty=false;alert("Saved!"); },

@@ -5,7 +5,6 @@
     
     <body x-data="resumeApp">
         {{ partial "toolbar.html" . }}
-
         <script> window.hugoDefaultData = {{ .Site.Data.resume | jsonify | safeJS }}; </script>
 
         <div class="container pb-5">
@@ -19,67 +18,78 @@
                     </div>
 
                     <div class="mb-5 text-center">
-                        <input x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center serif-font fw-bold display-6 mb-2" style="line-height: 1.1;" placeholder="Your Name">
-                        <input x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase ls-2 small opacity-75" placeholder="Role Title">
+                        <input x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center font-serif-bold sidebar-name" placeholder="Your Name">
+                        <input x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase sidebar-role" placeholder="Role Title">
                     </div>
 
-                    <div class="sidebar-header">Contact Details</div>
-                    <div class="d-flex align-items-center mb-3"><i class="fas fa-map-marker-alt text-warning me-3" style="width:20px; text-align:center;"></i><input x-model="resume.profile.location" class="form-control-ghost form-control-ghost-dark"></div>
-                    <div class="d-flex align-items-center mb-3"><i class="fas fa-phone text-warning me-3" style="width:20px; text-align:center;"></i><input x-model="resume.profile.phone" class="form-control-ghost form-control-ghost-dark"></div>
-                    <div class="d-flex align-items-center mb-3"><i class="fas fa-envelope text-warning me-3" style="width:20px; text-align:center;"></i><input x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark"></div>
-                    <div class="d-flex align-items-center mb-3"><i class="fab fa-linkedin text-warning me-3" style="width:20px; text-align:center;"></i><input x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark"></div>
+                    <div class="section-group">
+                        <div class="sidebar-header">Contact Details</div>
+                        <div class="contact-row"><i class="fas fa-map-marker-alt contact-icon"></i><input x-model="resume.profile.location" class="form-control-ghost form-control-ghost-dark contact-input"></div>
+                        <div class="contact-row"><i class="fas fa-phone contact-icon"></i><input x-model="resume.profile.phone" class="form-control-ghost form-control-ghost-dark contact-input"></div>
+                        <div class="contact-row"><a :href="'mailto:'+resume.profile.email" class="text-white"><i class="fas fa-envelope contact-icon"></i></a><input x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark contact-input"></div>
+                        <div class="contact-row"><a :href="resume.profile.linkedin" target="_blank" class="text-white"><i class="fab fa-linkedin contact-icon"></i></a><input x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark contact-input"></div>
+                    </div>
                     
-                    <div class="sidebar-header mt-5 d-flex justify-content-between align-items-center"><span>Core Competencies</span><button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print opacity-50 hover-100"><i class="fas fa-plus"></i></button></div>
-                    <template x-for="(sk, i) in resume.skills" :key="i">
-                        <div class="mb-4">
-                            <input x-model="sk.category" class="form-control-ghost form-control-ghost-dark fw-bold text-warning small text-uppercase mb-1" placeholder="CATEGORY">
-                            <textarea x-model="sk.items" class="form-control-ghost form-control-ghost-dark small opacity-75" rows="1" @input="resize($event.target)" placeholder="List skills..."></textarea>
+                    <div class="sidebar-header mt-5 d-flex justify-content-between align-items-center">
+                        <span>Core Competencies</span>
+                        <button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print opacity-50"><i class="fas fa-folder-plus"></i></button>
+                    </div>
+                    
+                    <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
+                        <div class="mb-4 section-group">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY NAME">
+                                <div class="no-print">
+                                    <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0" title="Add Skill"><i class="fas fa-plus small"></i></button>
+                                    <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1" title="Remove Category"><i class="fas fa-times small"></i></button>
+                                </div>
+                            </div>
+                            <template x-for="(skill, sIndex) in cat.list" :key="sIndex">
+                                <div class="skill-item-row group-hover">
+                                    <input x-model="skill.name" class="form-control-ghost form-control-ghost-dark skill-name-input" placeholder="Skill">
+                                    <div class="skill-bar-wrapper">
+                                        <template x-for="level in 5">
+                                            <div class="skill-dot" :class="{'filled': level <= skill.level}" @click="skill.level = level"></div>
+                                        </template>
+                                    </div>
+                                    <i @click="cat.list.splice(sIndex, 1)" class="fas fa-minus-circle text-danger ms-1 small cursor-pointer opacity-0 hover-100 no-print"></i>
+                                </div>
+                            </template>
                         </div>
                     </template>
-
                 </div>
 
                 <div class="col-lg-8 main-content-wrapper">
                     
-                    <div class="mb-5">
+                    <div class="mb-5 section-group">
                         <h2 class="section-title">Professional Profile</h2>
                         <div class="beautiful-separator"></div>
-                        
-                        <textarea x-model="resume.profile.summary" class="form-control-ghost mb-4 text-muted fs-5" style="line-height: 1.8;" rows="4" @input="resize($event.target)" placeholder="Write your detailed professional summary here..."></textarea>
-
+                        <textarea x-model="resume.profile.summary" class="form-control-ghost mb-4 text-muted fs-5" style="line-height: 1.8;" rows="4" @input="resize($event.target)"></textarea>
                         <div class="highlight-box">
-                            <i class="fas fa-quote-left highlight-quote-start"></i>
-                            <textarea x-model="resume.profile.impact_statement" 
-                                      class="form-control-ghost position-relative impact-font text-center px-5" 
-                                      style="z-index: 1;" 
-                                      rows="3" 
-                                      @input="resize($event.target)" 
-                                      placeholder="Add a key impact statement or career highlight..."></textarea>
-                            <i class="fas fa-quote-right highlight-quote-end"></i>
+                            <div class="highlight-text-bg">
+                                <i class="fas fa-quote-left text-secondary mb-2"></i>
+                                <textarea x-model="resume.profile.impact_statement" class="form-control-ghost position-relative impact-font text-center" style="z-index: 1;" rows="3" @input="resize($event.target)"></textarea>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mb-5">
+                    <div class="mb-5 section-group">
                         <div class="d-flex justify-content-between align-items-end mb-2">
                             <h2 class="section-title mb-0">Signature Achievements</h2>
-                            <button @click="addItem('signature_achievements')" class="btn btn-sm text-primary no-print"><i class="fas fa-plus me-1"></i>Add Card</button>
+                            <button @click="addItem('signature_achievements')" class="btn btn-sm text-primary no-print">+ Add Card</button>
                         </div>
                         <div class="beautiful-separator"></div>
-                        
                         <div class="row g-3">
                             <template x-for="(ach, index) in resume.signature_achievements" :key="index">
                                 <div class="col-md-6">
                                     <div class="card h-100 border-0 shadow-sm position-relative group-hover achievement-card">
-                                        <button @click="removeItem('signature_achievements', index)" 
-                                                class="btn text-danger btn-remove-card no-print" 
-                                                title="Remove Card"><i class="fas fa-times"></i></button>
-
+                                        <button @click="removeItem('signature_achievements', index)" class="btn text-danger btn-remove-card no-print"><i class="fas fa-times"></i></button>
                                         <div class="card-body p-4">
                                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                                <input x-model="ach.title" class="form-control-ghost fw-bold text-dark fs-5" placeholder="Achievement Title">
+                                                <input x-model="ach.title" class="form-control-ghost fw-bold text-dark fs-5" placeholder="Title">
                                                 <div class="text-warning fs-4 ms-3"><i :class="ach.icon || 'fas fa-star'"></i></div>
                                             </div>
-                                            <textarea x-model="ach.description" class="form-control-ghost text-muted" style="line-height: 1.6;" rows="4" @input="resize($event.target)" placeholder="Describe the achievement..."></textarea>
+                                            <textarea x-model="ach.description" class="form-control-ghost text-muted" rows="4" @input="resize($event.target)"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -87,107 +97,122 @@
                         </div>
                     </div>
 
-                    <div class="mb-5">
+                    <div class="mb-5 section-group">
                         <div class="d-flex justify-content-between align-items-end mb-2">
-                            <h2 class="section-title mb-0">Professional Experience</h2>
-                            <button @click="addItem('experience')" class="btn btn-sm text-primary no-print"><i class="fas fa-plus me-1"></i>Add Role</button>
+                            <h2 class="section-title mb-0">Experience</h2>
+                            <button @click="addItem('experience')" class="btn btn-sm text-primary no-print">+ Role</button>
                         </div>
                         <div class="beautiful-separator"></div>
-
                         <div class="timeline-container">
                             <template x-for="(job, index) in resume.experience" :key="index">
-                                <div class="timeline-item">
-                                    <div class="timeline-icon"></div>
+                                <div class="timeline-item section-group"> <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
                                         <div class="col-8"><input x-model="job.role" class="form-control-ghost timeline-role" placeholder="Role Title"></div>
                                         <div class="col-4"><input x-model="job.dates" class="form-control-ghost timeline-date" placeholder="Dates"></div>
                                     </div>
                                     <input x-model="job.company" class="form-control-ghost timeline-company" placeholder="Company Name">
-                                    
                                     <ul class="list-unstyled detail-list mt-3 text-muted">
                                         <template x-for="(ach, i) in job.achievements">
-                                            <li class="d-flex">
-                                                <textarea x-model="job.achievements[i]" class="form-control-ghost py-0" rows="1" @input="resize($event.target)" placeholder="Key achievement or responsibility..."></textarea>
-                                            </li>
+                                            <li class="d-flex"><textarea x-model="job.achievements[i]" class="form-control-ghost py-0 font-sans-regular" rows="1" @input="resize($event.target)"></textarea></li>
                                         </template>
                                     </ul>
-                                    <button @click="removeItem('experience', index)" class="btn btn-link text-danger p-0 mt-2 small text-decoration-none no-print opacity-50 hover-100">Remove Role</button>
                                 </div>
                             </template>
                         </div>
                     </div>
 
-                    <div class="mb-5">
+                    <div class="mb-5 section-group">
                         <div class="d-flex justify-content-between align-items-end mb-2">
-                            <h2 class="section-title mb-0">Education & Certifications</h2>
-                            <button @click="addItem('education')" class="btn btn-sm text-primary no-print"><i class="fas fa-plus me-1"></i>Add</button>
+                            <h2 class="section-title mb-0">Education</h2>
+                            <button @click="addItem('education')" class="btn btn-sm text-primary no-print">+ Add</button>
                         </div>
                         <div class="beautiful-separator"></div>
-
                         <div class="timeline-container">
                             <template x-for="(edu, index) in resume.education" :key="index">
-                                <div class="timeline-item pb-4">
+                                <div class="timeline-item pb-4 section-group">
                                     <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
-                                        <div class="col-8"><input x-model="edu.degree" class="form-control-ghost timeline-role fs-5" placeholder="Degree / Certificate"></div>
-                                        <div class="col-4"><input x-model="edu.dates" class="form-control-ghost timeline-date" placeholder="Year"></div>
+                                        <div class="col-8"><input x-model="edu.degree" class="form-control-ghost timeline-role fs-5"></div>
+                                        <div class="col-4"><input x-model="edu.dates" class="form-control-ghost timeline-date"></div>
                                     </div>
-                                    <input x-model="edu.institution" class="form-control-ghost timeline-company text-muted" placeholder="University / Issuing Body">
-                                    <textarea x-model="edu.details" class="form-control-ghost text-muted small mt-2" rows="1" @input="resize($event.target)" placeholder="Additional details (optional)..."></textarea>
-                                    <button @click="removeItem('education', index)" class="btn btn-link text-danger p-0 mt-1 small text-decoration-none no-print opacity-50 hover-100">Remove</button>
+                                    <input x-model="edu.institution" class="form-control-ghost timeline-company text-muted">
+                                    <textarea x-model="edu.details" class="form-control-ghost text-muted small mt-2" rows="1" @input="resize($event.target)"></textarea>
                                 </div>
                             </template>
                         </div>
                     </div>
 
-                    <div class="mb-5">
+                    <div class="mb-5 section-group">
                         <h2 class="section-title">Personal Details</h2>
                         <div class="beautiful-separator"></div>
-                        <div class="personal-details-grid p-3 bg-light rounded-3">
-                            <div>
-                                <span class="detail-label">Date of Birth</span>
-                                <input x-model="resume.personal_details.dob" class="form-control-ghost text-dark fw-bold" placeholder="DD/MM/YYYY">
-                            </div>
-                            <div>
-                                <span class="detail-label">Nationality</span>
-                                <input x-model="resume.personal_details.nationality" class="form-control-ghost text-dark fw-bold" placeholder="Nationality">
-                            </div>
-                             <div>
-                                <span class="detail-label">Marital Status</span>
-                                <input x-model="resume.personal_details.marital_status" class="form-control-ghost text-dark fw-bold" placeholder="Status">
-                            </div>
-                            <div>
-                                <span class="detail-label">Languages Known</span>
-                                <input x-model="resume.personal_details.languages" class="form-control-ghost text-dark fw-bold" placeholder="English, Hindi, etc.">
+                        <div class="personal-details-card">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <span class="pd-label">Date of Birth</span>
+                                    <input x-model="resume.personal_details.dob" type="date" class="form-control-ghost pd-value">
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pd-label">Nationality</span>
+                                    <select x-model="resume.personal_details.nationality" class="form-control-ghost pd-value">
+                                        <option>Indian</option><option>American</option><option>British</option><option>German</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pd-label">Marital Status</span>
+                                    <select x-model="resume.personal_details.marital_status" class="form-control-ghost pd-value">
+                                        <option>Single</option><option>Married</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="pd-label">Languages</span>
+                                        <button @click="resume.personal_details.languages.push('')" class="btn btn-sm text-primary py-0 no-print">+ Add</button>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mt-2">
+                                        <template x-for="(lang, i) in resume.personal_details.languages" :key="i">
+                                            <div class="bg-light px-3 py-1 rounded-pill border d-flex align-items-center">
+                                                <input x-model="resume.personal_details.languages[i]" class="form-control-ghost p-0 fw-bold small text-center" style="width: 80px;">
+                                                <i @click="resume.personal_details.languages.splice(i, 1)" class="fas fa-times text-danger ms-2 cursor-pointer no-print small"></i>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <template x-for="(section, sIndex) in resume.custom_sections" :key="sIndex">
-                        <div class="mb-5 position-relative group-hover">
-                            <button @click="removeItem('custom_sections', sIndex)" class="btn btn-sm text-danger position-absolute top-0 end-0 no-print opacity-50 hover-100" title="Delete Section"><i class="fas fa-trash"></i> Delete Section</button>
-                            
-                            <input x-model="section.title" class="form-control-ghost section-title mb-2" placeholder="Section Title (e.g. Projects, Publications)">
+                        <div class="mb-5 position-relative group-hover section-group">
+                            <button @click="removeItem('custom_sections', sIndex)" class="btn btn-sm text-danger position-absolute top-0 end-0 no-print"><i class="fas fa-trash"></i></button>
+                            <input x-model="section.title" class="form-control-ghost section-title mb-2" placeholder="Section Title">
                             <div class="beautiful-separator"></div>
-                            
                             <ul class="list-unstyled detail-list text-muted ps-2">
                                 <template x-for="(item, iIndex) in section.content" :key="iIndex">
                                      <li class="d-flex mb-2 align-items-start">
-                                        <textarea x-model="section.content[iIndex]" class="form-control-ghost py-0" rows="1" @input="resize($event.target)" placeholder="Add details..."></textarea>
-                                        <button @click="section.content.splice(iIndex, 1)" class="btn btn-link text-danger p-0 ms-2 small no-print opacity-25 hover-100" style="font-size: 0.7rem;"><i class="fas fa-minus-circle"></i></button>
+                                        <textarea x-model="section.content[iIndex]" class="form-control-ghost py-0" rows="1" @input="resize($event.target)"></textarea>
+                                        <button @click="section.content.splice(iIndex, 1)" class="btn btn-link text-danger p-0 ms-2 small no-print"><i class="fas fa-minus-circle"></i></button>
                                     </li>
                                 </template>
                             </ul>
-                             <button @click="section.content.push('')" class="btn btn-sm btn-link text-primary no-print ms-4 ps-3"><i class="fas fa-plus-circle me-1"></i> Add Point</button>
+                            <button @click="section.content.push('')" class="btn btn-sm btn-link text-primary no-print ms-4 ps-3"><i class="fas fa-plus-circle me-1"></i> Add Point</button>
                         </div>
                     </template>
-
-                    <div class="text-center mt-5 no-print py-4 border-top border-light">
-                         <button @click="addItem('custom_sections')" class="btn btn-outline-primary px-4 rounded-pill"><i class="fas fa-plus me-2"></i> Add New Custom Section</button>
+                    
+                    <div class="text-center mt-5 no-print">
+                         <button @click="addItem('custom_sections')" class="btn btn-outline-primary px-4 rounded-pill"><i class="fas fa-plus me-2"></i> Add Custom Section</button>
                     </div>
 
                 </div>
             </div>
+
+            <footer class="app-footer no-print">
+                <div class="container">
+                    <p class="mb-1">&copy; 2026 Resume Architect by <a href="https://linkedin.com/in/atul-gupta" target="_blank">Atul Gupta</a></p>
+                    <p class="small opacity-75">
+                        <a href="https://github.com/Knowwvana" target="_blank"><i class="fab fa-github"></i> Knowwvana</a> | <a href="https://linkedin.com/in/atul-gupta" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    </p>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

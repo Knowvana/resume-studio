@@ -1,280 +1,221 @@
 :root {
     --navy-dark: #0b1120;
     --navy-light: #1e293b;
-    --gold-accent: #d4af37; /* Premium Gold */
-    --gold-muted: #aa8c2c;
+    --gold-accent: #d4af37;
     --bg-light: #f3f4f6;
     --text-dark: #334155;
-    --text-muted: #64748b;
 }
 
-/* Base Typography */
-body {
-    background-color: var(--bg-light);
-    font-family: 'Lato', sans-serif;
-    color: var(--text-dark);
-    padding-bottom: 80px;
-}
-
-h1, h2, h3, h4, .serif-font {
-    font-family: 'Playfair Display', serif;
-}
-
-/* =========================================
-   CUSTOM COMPONENT: The Resume Paper
-   ========================================= */
-.resume-paper {
-    background: white;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    min-height: 297mm;
-    margin-top: 2rem;
-    overflow: hidden;
-    border-radius: 4px;
-}
-
-/* =========================================
-   CUSTOM COMPONENT: Ghost Inputs (Fluidic)
-   ========================================= */
+/* Force removal of scrollbars on all ghost inputs */
 textarea.form-control-ghost {
-    resize: none; /* Disable manual resize handle */
-    overflow: hidden; /* Hide scrollbars */
-    min-height: 1.5em; /* Ensure single lines are visible */
+    overflow: hidden !important;
+    resize: none !important;
+    min-height: 1.5em;
 }
 
-.form-control-ghost {
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 0.3rem 0.5rem; /* Slightly more padding for breathing room */
-    transition: all 0.2s ease-in-out;
-    width: 100%;
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-}
+/* Typography */
+.font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
+.font-sans-regular { font-family: 'Lato', sans-serif; font-weight: 400; }
 
-.form-control-ghost:hover {
-    background: rgba(0, 0, 0, 0.02);
-    border-color: #e2e8f0;
-    cursor: text;
-}
-
-.form-control-ghost:focus {
-    background: white;
-    border-color: var(--gold-accent);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); /* Softer glow */
-    outline: none;
-    color: #000;
-}
-
-.form-control-ghost::placeholder {
-    color: rgba(0,0,0,0.3);
-    font-style: italic;
-}
-
-/* Dark Mode Inputs (Sidebar) */
-.form-control-ghost-dark { color: white; }
-.form-control-ghost-dark:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-.form-control-ghost-dark:focus { background: rgba(255,255,255,0.1); border-color: white; color: white; box-shadow: none; }
-.form-control-ghost-dark::placeholder { color: rgba(255,255,255,0.4); }
-
-/* The Highlight Input Font */
-.impact-font {
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    font-size: 1.15rem;
-    color: var(--text-dark);
-    line-height: 1.7;
-    padding: 0.5rem 2.5rem; /* Added horizontal padding for quotes */
-}
-
-/* =========================================
-   SIDEBAR STYLING
-   ========================================= */
-.sidebar-wrapper {
-    background-color: var(--navy-dark);
-    color: white;
-    min-height: 100%;
-    padding: 4rem 2.5rem; /* Increased padding */
-    display: flex;
-    flex-direction: column;
-    gap: 2rem; /* Better spacing between sections */
-}
-
-.profile-img-box {
-    width: 180px; height: 180px; /* Slightly larger */
-    border-radius: 50%;
-    border: 4px solid var(--gold-accent);
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    background: var(--navy-light);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-.profile-img-box:hover { transform: scale(1.03); }
-.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
-
+/* Sidebar */
+.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; }
+.sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
 .sidebar-header {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--gold-accent);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.25rem;
-    font-weight: 700;
+    font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem;
 }
 
-/* =========================================
-   MAIN CONTENT STYLING
-   ========================================= */
-.main-content-wrapper {
-    padding: 4rem 3.5rem; /* Increased padding */
-}
+/* Contact */
+.contact-row { display: flex; align-items: center; margin-bottom: 0.8rem; color: rgba(255,255,255,0.9); }
+.contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; }
+.contact-input { font-size: 0.95rem; font-weight: 400; color: white; }
 
-.section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.85rem;
-    color: var(--navy-dark);
-    margin-bottom: 0.75rem;
-    font-weight: 700;
-}
+/* Skill Bars */
+.skill-category-input { color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.skill-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.skill-name-input { color: white; font-size: 0.9rem; font-weight: 500; width: 55%; }
+.skill-bar-wrapper { width: 40%; display: flex; gap: 2px; }
+.skill-dot { height: 6px; flex: 1; background: rgba(255,255,255,0.15); border-radius: 1px; cursor: pointer; transition: all 0.2s; }
+.skill-dot.filled { background: var(--gold-accent); box-shadow: 0 0 4px var(--gold-accent); }
+.skill-dot:hover { background: white; }
 
-.beautiful-separator {
-    height: 2px;
-    background: linear-gradient(to right, var(--gold-accent) 0%, transparent 90%);
-    margin-bottom: 2.5rem;
-    opacity: 0.7;
-    border-radius: 2px;
-}
-
-/* Highlight Box (Fixed Quotes & Spacing) */
+/* Highlight Box */
 .highlight-box {
-    background: #f8fafc;
-    border-left: 5px solid var(--gold-accent);
-    padding: 1rem 0.5rem;
-    border-radius: 0 12px 12px 0;
-    position: relative;
-    margin-top: 2rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    background: #fffbeb; border-left: 5px solid var(--gold-accent);
+    padding: 1.5rem; border-radius: 0 12px 12px 0; position: relative;
+    margin-top: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
 }
-.highlight-quote-start {
-    position: absolute; top: 15px; left: 15px;
-    color: #cbd5e1; font-size: 1.5rem; z-index: 0; opacity: 0.5;
-}
-.highlight-quote-end {
-    position: absolute; bottom: 15px; right: 15px;
-    color: #cbd5e1; font-size: 1.5rem; z-index: 0; opacity: 0.5;
-}
+.highlight-text-bg { background: rgba(255, 255, 255, 0.6); padding: 1rem; border-radius: 8px; display: block; }
+.impact-font { font-family: 'Merriweather', serif; font-style: italic; font-size: 1.1rem; line-height: 1.6; color: #334155; }
 
-/* Achievement Cards (Fixed Overlap & Added Border) */
-.achievement-card {
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
+/* Timeline */
+.timeline-role { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.25rem; color: var(--navy-dark); }
+.timeline-date { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; color: var(--text-dark); text-align: right; }
+.timeline-company { font-family: 'Lato', sans-serif; font-weight: 700; color: #aa8c2c; font-size: 1rem; margin-bottom: 0.5rem; }
+
+/* Personal Details */
+.personal-details-card {
+    background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--navy-dark);
+    padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
 }
-.achievement-card:hover {
-    border-color: var(--gold-accent); /* Highlighter effect */
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-.btn-remove-card {
-    position: absolute;
-    top: 8px; 
-    right: 8px;
-    z-index: 10;
-    background: rgba(255,255,255,0.8);
-    border-radius: 50%;
-    width: 24px; height: 24px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem;
-    padding: 0;
-    opacity: 0; /* Hide by default */
-    transition: opacity 0.2s;
-}
-.group-hover:hover .btn-remove-card { opacity: 1; } /* Show on hover */
+.pd-label { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.9rem; color: var(--navy-dark); margin-bottom: 2px; display: block; }
+.pd-value { font-family: 'Lato', sans-serif; font-weight: 600; color: var(--text-dark); }
+
+/* Footer */
+.app-footer { margin-top: 2rem; padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.8rem; border-top: 1px solid #e2e8f0; }
+
+/* Base Styles */
+body { background-color: var(--bg-light); font-family: 'Lato', sans-serif; padding-bottom: 40px; }
+.resume-paper { background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); min-height: 297mm; margin-top: 2rem; border-radius: 4px; overflow: hidden; }
+.sidebar-wrapper { background-color: var(--navy-dark); color: white; min-height: 100%; padding: 3.5rem 2.5rem; }
+.main-content-wrapper { padding: 4rem 3.5rem; }
+.profile-img-box { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; }
+.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.form-control-ghost { background: transparent; border: 1px solid transparent; width: 100%; color: inherit; transition: 0.2s; padding: 2px 5px; }
+.form-control-ghost:hover { background: rgba(0,0,0,0.02); border-color: #e2e8f0; }
+.form-control-ghost:focus { background: white; border-color: var(--gold-accent); outline: none; color: black; }
+.form-control-ghost-dark { color: white; }
+.form-control-ghost-dark:focus { background: rgba(255,255,255,0.1); color: white; border-color: white;}
+.section-title { font-family: 'Playfair Display', serif; font-size: 1.85rem; color: var(--navy-dark); font-weight: 700; }
+.beautiful-separator { height: 2px; background: linear-gradient(to right, var(--gold-accent), transparent); margin-bottom: 2rem; opacity: 0.7; }
+.timeline-container { border-left: 2px solid #e2e8f0; padding-left: 2rem; margin-left: 8px; }
+.timeline-item { position: relative; margin-bottom: 2rem; }
+.timeline-icon { position: absolute; left: -2.6rem; top: 4px; width: 18px; height: 18px; background: white; border: 3px solid var(--gold-accent); border-radius: 50%; }
 
 /* =========================================
-   REDESIGNED TIMELINE (Clean & Appealing)
+   CRITICAL PDF & LAYOUT FIX (FINAL V3)
    ========================================= */
-.timeline-container {
-    position: relative;
-    padding-left: 2rem;
-}
-
-/* The main vertical line */
-.timeline-container::before {
-    content: '';
-    position: absolute;
-    left: 7px; /* Center line with dots */
-    top: 5px;
-    bottom: 0;
-    width: 2px;
-    background: #e2e8f0;
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 2.5rem;
-}
-
-/* The Dot */
-.timeline-icon {
-    position: absolute;
-    left: -2.1rem;
-    top: 4px;
-    width: 18px; height: 18px;
-    background: white;
-    border: 3px solid var(--gold-accent);
-    border-radius: 50%;
-    z-index: 2;
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.8); /* White ring to separate from line */
-}
-
-.timeline-role { font-weight: 700; font-size: 1.2rem; color: var(--navy-dark); }
-.timeline-company { font-weight: 600; color: var(--gold-muted); font-size: 1rem; margin-bottom: 0.5rem; }
-.timeline-date { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; text-align: right; }
-
-/* Lists */
-.detail-list li {
-    margin-bottom: 0.5rem;
-    position: relative;
-    padding-left: 1.2rem;
-}
-.detail-list li::before {
-    content: '•';
-    position: absolute; left: 0;
-    color: var(--gold-accent);
-    font-weight: bold; font-size: 1.2rem; line-height: 1; top: -2px;
-}
-
-/* Personal Details Grid */
-.personal-details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-.detail-label {
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.25rem;
-    display: block;
-}
-
-
-/* Print Fixes */
 @media print {
-    body { background: white; padding: 0; }
-    .resume-paper { margin: 0; box-shadow: none; width: 100%; border-radius: 0; }
-    .container { max-width: 100%; padding: 0; }
-    .sidebar-wrapper { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; background-color: #0b1120 !important; padding: 3rem 2rem !important; }
-    .main-content-wrapper { padding: 3rem 2rem !important; }
-    .no-print { display: none !important; }
-    .beautiful-separator { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .highlight-box { box-shadow: none; border: 1px solid #eee; }
+    /* 1. Full Bleed Setup */
+    @page {
+        margin: 0; 
+        size: A4;
+    }
+    
+    html, body {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        overflow: visible !important;
+    }
+
+    /* Reset Container */
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* 2. MAIN LAYOUT (Sidebar + Content) */
+    /* Only apply nowrap to the main container to keep sidebar left and content right */
+    .resume-paper {
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        flex-wrap: nowrap !important; /* CRITICAL: Keeps columns side-by-side */
+        overflow: visible !important;
+    }
+
+    /* Column Widths */
+    .col-lg-4 {
+        width: 28% !important;
+        flex: 0 0 28% !important;
+        max-width: 28% !important;
+    }
+
+    .col-lg-8 {
+        width: 72% !important;
+        flex: 0 0 72% !important;
+        max-width: 72% !important;
+    }
+
+    /* Sidebar Styling */
+    .sidebar-wrapper {
+        background-color: #0b1120 !important;
+        color: white !important;
+        min-height: 100vh !important;
+        height: 100%; 
+        padding: 3rem 1.5rem !important;
+    }
+
+    /* Main Content Styling */
+    .main-content-wrapper {
+        /* Added 5rem bottom padding to simulate bottom margin on the last page */
+        padding: 3rem 2.5rem 5rem 2.5rem !important; 
+    }
+
+    /* 3. FIX FOR PERSONAL DETAILS OVERFLOW */
+    /* Reset wrapping for inner rows (like Personal Details grid) */
+    .main-content-wrapper .row {
+        display: flex !important;
+        flex-wrap: wrap !important; /* ALLOW WRAPPING HERE */
+        margin-right: -10px !important;
+        margin-left: -10px !important;
+    }
+    
+    /* Ensure columns inside cards fit properly */
+    .personal-details-card .col-md-4 {
+        width: 33.33% !important; /* Force 3 columns */
+        flex: 0 0 33.33% !important;
+        max-width: 33.33% !important;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+    .personal-details-card .col-12 {
+        width: 100% !important;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+
+    /* 4. TOP & BOTTOM MARGIN FIX */
+    .section-group {
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+        display: block;
+        margin-top: 0 !important;
+        /* TOP MARGIN FIX: Transparent border acts as spacing after a page break */
+        border-top: 2.5rem solid transparent !important; 
+        /* BOTTOM MARGIN FIX: Add padding to push content away from bottom edge before breaking */
+        padding-bottom: 2rem !important; 
+        margin-bottom: -2rem !important; /* Compensate for the border/padding visual on same page */
+    }
+
+    .section-group:first-child {
+        padding-top: 0 !important;
+        border-top: none !important;
+    }
+
+    /* Prevent breaking inside individual cards */
+    .timeline-item, 
+    .personal-details-card, 
+    .highlight-box,
+    .card {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Cleanup UI */
+    .navbar, .app-footer, .no-print, .btn, .beautiful-separator { display: none !important; }
+    input, textarea { border: none !important; background: transparent !important; padding: 0 !important; }
+    
+    /* Clean up form elements for print */
+    select { 
+        -webkit-appearance: none; 
+        appearance: none; 
+        border: none !important; 
+        background: transparent !important;
+        padding: 0 !important;
+        font-weight: bold;
+    }
+    
+    .skill-dot { border: 1px solid rgba(255,255,255,0.2); }
 }

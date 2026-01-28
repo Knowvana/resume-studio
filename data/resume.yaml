@@ -6,14 +6,15 @@ profile:
   email: "atul0085@gmail.com"
   linkedin: "linkedin.com/in/atul-gupta"
   image: ""
-  
-  # 1. The Long Summary
   summary: "Visionary and Seasoned IAM Leader and Architect with 18+ years of extensive experience architecting, leading, and delivering enterprise-scale identity management, governance, and CIAM/WIAM solutions. Expert in transforming legacy systems to cloud-native deployments on GCP using industry-leading products like ForgeRock, SailPoint, and Okta."
-  
-  # 2. The Highlight Box (The "Hello how are you" replacement)
   impact_statement: "Recognized for driving digital transformation, delivering $10M+ in operational efficiencies, and aligning solutions with Zero Trust and regulatory standards (GDPR, SOC 2)."
 
-# 3. Dynamic Signature Achievements
+personal_details:
+  dob: "1985-08-15"
+  nationality: "Indian"
+  marital_status: "Married"
+  languages: ["English", "Hindi"]
+
 signature_achievements:
   - title: "Global IAM Transformation"
     icon: "fas fa-rocket"
@@ -27,16 +28,55 @@ experience:
     company: "Accenture | Client: Deutsche Bank"
     dates: "Oct 2021 - Present"
     achievements:
-      - "Architected and deployed ForgeRock IGA on GCP to replace legacy systems."
-      - "Operationalized enterprise-wide recertification frameworks."
+      - "Architected and deployed ForgeRock IGA on GCP to replace legacy systems, improving compliance by 30%."
+      - "Operationalized enterprise-wide recertification frameworks, enhancing audit readiness."
+      - "Lead a global 24/7 cross-functional team, ensuring 99.9% uptime for critical IAM services."
+      - "Collaborated with enterprise architecture teams to align IAM modernization with Zero Trust standards."
+
+  - role: "Technical Architect - IAM"
+    company: "Infosys | Client: PwC"
+    dates: "Aug 2014 - Oct 2021"
+    achievements:
+      - "Architected multi-phase migration of 20,000+ apps to ForgeRock & Optimal IdM from CA SiteMinder."
+      - "Designed federated identity framework (SAML, OAuth, OIDC) for 100+ client ecosystems."
+      - "Developed custom .NET UI for ForgeRock AM, enhancing federation setup efficiency by 35%."
+      - "Resolved 95% of complex SSO issues within SLAs using Fiddler/Wireshark analysis."
+
+  - role: "Technical Lead - CA SiteMinder"
+    company: "PwC (Boston, USA & Offshore)"
+    dates: "Jan 2008 - Dec 2014"
+    achievements:
+      - "Led end-to-end CA SiteMinder implementations for 50+ customers."
+      - "Developed custom SSO solutions using Windows Identity Foundation (WIF) for AMEX."
+      - "Worked on-site in Boston delivering Policy Server setups and Web Agent integrations."
+      - "Provided L1.5 support, driving $500K in cost savings through process optimization."
 
 skills:
   - category: "IAM PRODUCTS"
-    items: "ForgeRock (AM, IDM, IGA), SailPoint, Okta, Saviynt"
-  - category: "CLOUD & DEV"
-    items: "GCP, Azure, Docker, Kubernetes, Jenkins"
+    list:
+      - name: "ForgeRock (AM, IDM)"
+        level: 5
+      - name: "SailPoint IIQ"
+        level: 4
+      - name: "Okta"
+        level: 4
+      - name: "Saviynt IGA"
+        level: 3
+  - category: "CLOUD & PROTOCOLS"
+    list:
+      - name: "GCP & Azure"
+        level: 5
+      - name: "SAML / OIDC / OAuth"
+        level: 5
+      - name: "Zero Trust Architecture"
+        level: 4
 
 education:
   - degree: "B.Tech - Computer Science"
     institution: "IET Bhaddal, Punjab Technical University"
     dates: "2003 - 2007"
+    details: "Gold Medalist. Graduated with Honors."
+  - degree: "Google Cloud Certified"
+    institution: "Cloud Digital Leader"
+    dates: "2023"
+    details: "Certification ID: XXXXX-XXXXX"
