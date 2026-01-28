@@ -1,167 +1,140 @@
 // static/js/app.js
-import { AuthService } from './auth-service.js';
+
+// HELPER: Safely get the default data (Handles String vs Object issue)
+function getSafeDefaults() {
+    let data = window.hugoDefaultData;
+    // If it's a string, parse it. If it's an object, use it.
+    if (typeof data === 'string') {
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            console.error("Failed to parse Hugo defaults:", e);
+            data = null;
+        }
+    }
+    // Fallback structure if data is missing
+    return data || {
+        profile: { name: "", tagline: "", location: "", email: "", phone: "", linkedin: "", summary: "", impact_statement: "", image: "" },
+        signature_achievements: [],
+        experience: [],
+        education: [],
+        skills: []
+    };
+}
+
+const resumeAppData = () => ({
+    user: null,
+    loading: false,
+    isDirty: false,
+    
+    // 1. Initialize with safe defaults
+    resume: getSafeDefaults(),
+
+    async init() {
+        console.log("Resume App Initializing...");
+
+        // 2. CHECK LOCAL STORAGE
+        const localData = localStorage.getItem('localResumeDraft');
+        if (localData) {
+            try {
+                const parsed = JSON.parse(localData);
+                this.resume = { 
+                    ...this.resume, 
+                    ...parsed,
+                    profile: { ...this.resume.profile, ...parsed.profile }
+                };
+            } catch (e) { console.error("Local data corrupted", e); }
+        }
+
+        if (window.AuthService) {
+            try {
+                this.user = await window.AuthService.getUser();
+                if (this.user) await this.syncFromCloud();
+            } catch (error) { console.error(error); }
+        }
+
+        this.$watch('resume', (value) => {
+            this.isDirty = true;
+            localStorage.setItem('localResumeDraft', JSON.stringify(value));
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll('textarea').forEach(el => this.resize(el));
+        }, 500);
+    },
+
+    // 3. ROBUST RESET FUNCTION
+    resetToDefaults() {
+        if (confirm("This will RESET your resume to the default YAML data and clear your local changes. Are you sure?")) {
+            localStorage.removeItem('localResumeDraft');
+            // Use the helper to ensure we get a clean object, not a string
+            this.resume = JSON.parse(JSON.stringify(getSafeDefaults()));
+            
+            // Force a UI update
+            this.$nextTick(() => {
+                window.location.reload();
+            });
+        }
+    },
+
+    resize(el) {
+        if(!el) return;
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    },
+
+    promptImage() {
+        const url = prompt("Paste your photo URL:", this.resume.profile.image || "");
+        if (url) this.resume.profile.image = url;
+    },
+
+    addItem(section) {
+        const defaults = {
+            experience: { role: "New Role", company: "Company", dates: "Dates", achievements: ["Result"] },
+            education: { degree: "Degree", institution: "University", dates: "Year" },
+            skills: { category: "CATEGORY", items: "Skills..." },
+            signature_achievements: { title: "New Achievement", icon: "fas fa-star", description: "Describe the impact..." }
+        };
+        
+        if (this.resume[section]) {
+            this.resume[section].push(JSON.parse(JSON.stringify(defaults[section])));
+            this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); });
+        }
+    },
+
+    removeItem(section, index) {
+        if (confirm("Remove this item?")) {
+            this.resume[section].splice(index, 1);
+        }
+    },
+
+    async login() {
+        const email = prompt("Enter email:");
+        if (email) window.AuthService.login(email).then(() => alert("Check email!"));
+    },
+    async logout() {
+        if (confirm("Logout?")) { window.AuthService.logout(); window.location.reload(); }
+    },
+    async saveToCloud() {
+        if (!this.user) return this.login();
+        this.loading = true;
+        await window.AuthService.saveResume(this.user.id, this.resume);
+        this.loading = false;
+        this.isDirty = false;
+        alert("Saved!");
+    },
+    async syncFromCloud() {
+        this.loading = true;
+        const { data } = await window.AuthService.loadResume(this.user.id);
+        this.loading = false;
+        if (data) {
+            if (this.isDirty && !confirm("Overwrite local changes?")) return;
+            this.resume = data;
+            this.$nextTick(() => document.querySelectorAll('textarea').forEach(el => this.resize(el)));
+        }
+    }
+});
 
 document.addEventListener('alpine:init', () => {
-    Alpine.data('resumeApp', () => ({
-        // ==========================================
-        // 1. STATE MANAGEMENT
-        // ==========================================
-        user: null,
-        loading: false,
-        isDirty: false, // Tracks if changes are unsaved
-        
-        // The Core Resume Data Structure
-        resume: {
-            profile: {
-                name: "",
-                tagline: "",
-                location: "",
-                email: "",
-                phone: "",
-                linkedin: "",
-                summary: "",
-                image: "" // URL for the profile picture
-            },
-            experience: [],
-            education: [],
-            skills: []
-        },
-
-        // ==========================================
-        // 2. LIFECYCLE (Runs on Page Load)
-        // ==========================================
-        async init() {
-            // A. Load LocalStorage backup (Offline Support)
-            const localData = localStorage.getItem('localResumeDraft');
-            if (localData) {
-                try {
-                    // Merge local data with default structure to prevent errors if fields are missing
-                    const parsed = JSON.parse(localData);
-                    this.resume = { ...this.resume, ...parsed };
-                } catch (e) {
-                    console.error("Error parsing local data", e);
-                }
-            }
-
-            // B. Check Cloud Auth (Supabase)
-            try {
-                this.user = await AuthService.getUser();
-                if (this.user) {
-                    await this.syncFromCloud();
-                }
-            } catch (error) {
-                console.error("Auth check failed:", error);
-            }
-
-            // C. Auto-save to LocalStorage on ANY change
-            this.$watch('resume', (value) => {
-                this.isDirty = true;
-                localStorage.setItem('localResumeDraft', JSON.stringify(value));
-            });
-        },
-
-        // ==========================================
-        // 3. UI ACTIONS
-        // ==========================================
-        
-        // Change Profile Picture URL
-        promptImage() {
-            const current = this.resume.profile.image || "";
-            const url = prompt("Enter the URL of your profile picture (e.g. from LinkedIn or GitHub):", current);
-            if (url !== null) { // Only update if user didn't cancel
-                this.resume.profile.image = url;
-            }
-        },
-
-        // Add dynamic items (Experience, Edu, Skills)
-        addItem(section) {
-            if (section === 'experience') {
-                this.resume.experience.unshift({ 
-                    role: "New Role", 
-                    company: "Company Name", 
-                    dates: "Dates", 
-                    achievements: ["New Achievement"] 
-                });
-            } else if (section === 'education') {
-                this.resume.education.push({ 
-                    degree: "Degree / Course", 
-                    institution: "University / Institute", 
-                    dates: "Year" 
-                });
-            } else if (section === 'skills') {
-                this.resume.skills.push({ 
-                    category: "CATEGORY", 
-                    items: "Skill 1, Skill 2, Skill 3" 
-                });
-            }
-        },
-
-        // Remove dynamic items
-        removeItem(section, index) {
-            if (confirm("Are you sure you want to remove this item?")) {
-                this.resume[section].splice(index, 1);
-            }
-        },
-
-        // ==========================================
-        // 4. AUTHENTICATION & CLOUD SYNC
-        // ==========================================
-        
-        async login() {
-            const email = prompt("Enter your email to receive a secure login link:");
-            if (!email) return;
-            
-            this.loading = true;
-            const { error } = await AuthService.login(email);
-            this.loading = false;
-            
-            if (error) {
-                alert("Login Error: " + error.message);
-            } else {
-                alert("Check your email for the magic login link!");
-            }
-        },
-
-        async logout() {
-            if (confirm("Are you sure you want to logout?")) {
-                await AuthService.logout();
-                this.user = null;
-                // Optional: Clear local storage on logout if you want privacy
-                // localStorage.removeItem('localResumeDraft'); 
-                window.location.reload();
-            }
-        },
-
-        async saveToCloud() {
-            if (!this.user) return this.login();
-            
-            this.loading = true;
-            const { error } = await AuthService.saveResume(this.user.id, this.resume);
-            this.loading = false;
-
-            if (error) {
-                alert("Cloud Save Failed: " + error.message);
-            } else {
-                this.isDirty = false; // Changes are now saved
-                alert("Resume successfully saved to the cloud!");
-            }
-        },
-
-        async syncFromCloud() {
-            this.loading = true;
-            const { data, error } = await AuthService.loadResume(this.user.id);
-            this.loading = false;
-
-            if (error && error.code !== 'PGRST116') { // Ignore "Row not found" error for new users
-                console.error("Sync Error:", error.message);
-            } else if (data) {
-                // Confirm before overwriting local work if it's dirty
-                if (this.isDirty && !confirm("You have unsaved local changes. Overwrite them with cloud data?")) {
-                    return;
-                }
-                this.resume = data;
-                this.isDirty = false;
-            }
-        }
-    }));
+    Alpine.data('resumeApp', resumeAppData);
 });

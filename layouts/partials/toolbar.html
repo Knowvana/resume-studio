@@ -1,35 +1,42 @@
-<nav class="toolbar">
-    <div class="brand">
-        <i class="fas fa-layer-group"></i> Resume Architect <span style="opacity:0.6; font-weight:400;">Studio</span>
-    </div>
+<nav class="navbar navbar-dark bg-dark sticky-top shadow-sm p-3">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="fas fa-layer-group text-warning me-2"></i>
+            Resume Architect <span class="fw-light text-white-50">Studio</span>
+        </a>
 
-    <div class="actions">
-        <span x-show="loading" class="text-light" style="margin-right:1rem;">
-            <i class="fas fa-circle-notch fa-spin"></i> Syncing...
-        </span>
+        <div class="d-flex align-items-center gap-2">
+            
+            <span x-show="loading" class="text-white-50 small me-3">
+                <i class="fas fa-circle-notch fa-spin"></i> Syncing...
+            </span>
 
-        <template x-if="!user">
-            <button @click="login()" class="btn btn-secondary">
-                <i class="fas fa-sign-in-alt"></i> Login
+            <button @click="resetToDefaults()" class="btn btn-sm btn-outline-danger me-2" title="Reset to YAML Defaults">
+                <i class="fas fa-undo"></i> Reset
             </button>
-        </template>
 
-        <template x-if="user">
-            <div style="display:flex; gap:0.5rem; align-items:center;">
-                <span x-text="user.email" style="font-size:0.8rem; opacity:0.8;"></span>
-                
-                <button @click="saveToCloud()" class="btn" :class="isDirty ? 'btn-primary' : 'btn-secondary'">
-                    <i class="fas fa-cloud-upload-alt"></i> Save
+            <template x-if="!user">
+                <button @click="login()" class="btn btn-sm btn-outline-light">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
-                
-                <button @click="logout()" class="btn btn-danger">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </template>
+            </template>
 
-        <button onclick="window.print()" class="btn btn-primary" style="margin-left:1rem;">
-            <i class="fas fa-file-pdf"></i> PDF
-        </button>
+            <template x-if="user">
+                <div class="d-flex align-items-center gap-2">
+                    <span x-text="user.email" class="text-white-50 small d-none d-md-block"></span>
+                    <button @click="saveToCloud()" class="btn btn-sm" :class="isDirty ? 'btn-warning' : 'btn-outline-light'">
+                        <i class="fas fa-cloud-upload-alt"></i> Save
+                    </button>
+                    <button @click="logout()" class="btn btn-sm btn-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </template>
+
+            <button onclick="window.print()" class="btn btn-sm btn-primary ms-2">
+                <i class="fas fa-file-pdf"></i> PDF
+            </button>
+        </div>
     </div>
 </nav>

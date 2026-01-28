@@ -1,123 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
     {{ partial "head.html" . }}
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
     
     <body x-data="resumeApp">
-        <div class="app-container">
-            {{ partial "toolbar.html" . }}
+        {{ partial "toolbar.html" . }}
 
-            <main class="resume-paper">
+        <script>
+            // Added | safeJS to prevent Hugo from turning this into a string
+            window.hugoDefaultData = {{ .Site.Data.resume | jsonify | safeJS }};
+        </script>
+
+        <div class="container pb-5">
+            <div class="resume-paper row g-0">
                 
-                <aside class="left-col">
+                <div class="col-lg-4 sidebar-wrapper text-center text-lg-start">
+                    <div class="profile-img-box" @click="promptImage()">
+                        <template x-if="resume.profile.image"><img :src="resume.profile.image"></template>
+                        <template x-if="!resume.profile.image"><div class="profile-placeholder"><i class="fas fa-camera"></i></div></template>
+                    </div>
+                    <div class="mb-4 text-center">
+                        <input x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center serif-font fw-bold fs-2" placeholder="Name">
+                        <input x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase fs-6 ls-2" placeholder="Role">
+                    </div>
+                     <div class="sidebar-header">Contact</div>
+                    <div class="d-flex align-items-center mb-2"><i class="fas fa-map-marker-alt text-warning me-3" style="width:20px;"></i><input x-model="resume.profile.location" class="form-control-ghost form-control-ghost-dark"></div>
+                    <div class="d-flex align-items-center mb-2"><i class="fas fa-phone text-warning me-3" style="width:20px;"></i><input x-model="resume.profile.phone" class="form-control-ghost form-control-ghost-dark"></div>
+                    <div class="d-flex align-items-center mb-2"><i class="fas fa-envelope text-warning me-3" style="width:20px;"></i><input x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark"></div>
+                    <div class="d-flex align-items-center mb-2"><i class="fab fa-linkedin text-warning me-3" style="width:20px;"></i><input x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark"></div>
                     
-                    <div class="profile-img-container" @click="promptImage()" title="Click to change photo">
-                        <template x-if="resume.profile.image">
-                            <img :src="resume.profile.image" class="profile-img">
-                        </template>
-                        <template x-if="!resume.profile.image">
-                            <i class="fas fa-user img-placeholder"></i>
-                        </template>
-                    </div>
+                    <div class="sidebar-header mt-5 d-flex justify-content-between"><span>Education</span><button @click="addItem('education')" class="btn btn-sm btn-outline-light border-0 py-0 no-print">+</button></div>
+                    <template x-for="(edu, i) in resume.education" :key="i"><div class="mb-3"><input x-model="edu.degree" class="form-control-ghost form-control-ghost-dark fw-bold"><input x-model="edu.institution" class="form-control-ghost form-control-ghost-dark small"><input x-model="edu.dates" class="form-control-ghost form-control-ghost-dark small text-white-50"></div></template>
 
-                    <input x-model="resume.profile.name" class="clean-input name-input" placeholder="Your Name">
-                    <input x-model="resume.profile.tagline" class="clean-input role-input" placeholder="Your Professional Title">
-
-                    <div class="sidebar-section">
-                        <div class="sidebar-header">Contact Info</div>
-                        
-                        <div class="contact-row">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <input x-model="resume.profile.location" class="clean-input sidebar-input" placeholder="City, Country">
-                        </div>
-                        <div class="contact-row">
-                            <i class="fas fa-phone"></i>
-                            <input x-model="resume.profile.phone" class="clean-input sidebar-input" placeholder="Phone Number">
-                        </div>
-                        <div class="contact-row">
-                            <i class="fas fa-envelope"></i>
-                            <input x-model="resume.profile.email" class="clean-input sidebar-input" placeholder="Email Address">
-                        </div>
-                        <div class="contact-row">
-                            <i class="fab fa-linkedin"></i>
-                            <input x-model="resume.profile.linkedin" class="clean-input sidebar-input" placeholder="LinkedIn Profile">
-                        </div>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <div class="sidebar-header">
-                            Education 
-                            <button @click="addItem('education')" class="btn-control no-print">+</button>
-                        </div>
-                        <template x-for="(edu, index) in resume.education" :key="index">
-                            <div class="sidebar-item">
-                                <input x-model="edu.degree" class="clean-input sidebar-input" style="font-weight:600; color:#fff;" placeholder="Degree">
-                                <input x-model="edu.institution" class="clean-input sidebar-input" style="opacity:0.8;" placeholder="University">
-                                <input x-model="edu.dates" class="clean-input sidebar-input" style="opacity:0.6; font-size:0.8rem;" placeholder="Year">
-                            </div>
-                        </template>
-                    </div>
-
-                    <div class="sidebar-section">
-                        <div class="sidebar-header">
-                            Core Competencies
-                            <button @click="addItem('skills')" class="btn-control no-print">+</button>
-                        </div>
-                        <template x-for="(skill, index) in resume.skills" :key="index">
-                            <div class="sidebar-item">
-                                <input x-model="skill.category" class="clean-input sidebar-input" style="font-weight:600; color:var(--accent); text-transform:uppercase; font-size:0.75rem;" placeholder="Category">
-                                <textarea x-model="skill.items" class="clean-input sidebar-input" rows="2" placeholder="List skills..."></textarea>
-                            </div>
-                        </template>
-                    </div>
-
-                </aside>
-
-                <div class="right-col">
-                    
-                    <div class="main-header">Professional Profile</div>
-                    <textarea x-model="resume.profile.summary" class="clean-input summary-text" rows="4" placeholder="Craft a compelling summary of your career achievements..."></textarea>
-
-                    <div class="main-header">
-                        Signature Achievements
-                    </div>
-                    
-                    <div class="highlight-grid">
-                        <div class="highlight-card">
-                            <i class="fas fa-rocket card-icon"></i>
-                            <input class="clean-input card-title" value="Global IAM Transformation">
-                            <textarea class="clean-input card-body" rows="4">Led the migration of 20,000+ apps from Legacy systems to Modern Cloud Architecture.</textarea>
-                        </div>
-                        <div class="highlight-card">
-                            <i class="fas fa-layer-group card-icon"></i>
-                            <input class="clean-input card-title" value="Architecture & Design">
-                            <textarea class="clean-input card-body" rows="4">Engineered bespoke UI and API integrations improving efficiency by 78%.</textarea>
-                        </div>
-                    </div>
-
-                    <div class="main-header">
-                        Professional Experience
-                        <button @click="addItem('experience')" class="btn-control no-print" style="margin-left:10px;">+ Add Role</button>
-                    </div>
-
-                    <template x-for="(job, index) in resume.experience" :key="index">
-                        <div class="timeline-item">
-                            <div class="job-header">
-                                <input x-model="job.role" class="clean-input job-role" placeholder="Job Title">
-                                <input x-model="job.dates" class="clean-input job-dates" style="width:150px;" placeholder="Dates">
-                            </div>
-                            <input x-model="job.company" class="clean-input job-company" placeholder="Company Name">
-                            
-                            <ul class="bullet-list">
-                                <template x-for="(ach, i) in job.achievements">
-                                    <li><input x-model="job.achievements[i]" class="clean-input" placeholder="Key achievement..."></li>
-                                </template>
-                            </ul>
-                            <button @click="removeItem('experience', index)" class="btn-control no-print" style="color:red; margin-top:5px;">Remove</button>
-                        </div>
-                    </template>
-
+                    <div class="sidebar-header mt-5 d-flex justify-content-between"><span>Skills</span><button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print">+</button></div>
+                    <template x-for="(sk, i) in resume.skills" :key="i"><div class="mb-3"><input x-model="sk.category" class="form-control-ghost form-control-ghost-dark fw-bold text-warning small"><textarea x-model="sk.items" class="form-control-ghost form-control-ghost-dark small" rows="2" @input="resize($event.target)"></textarea></div></template>
                 </div>
-            </main>
+
+                <div class="col-lg-8 main-content-wrapper">
+                    
+                    <div class="mb-5">
+                        <h2 class="section-title">Professional Profile</h2>
+                        <div class="beautiful-separator"></div>
+                        
+                        <textarea x-model="resume.profile.summary" class="form-control-ghost mb-4 text-muted" rows="4" @input="resize($event.target)" placeholder="Write your detailed professional summary here..."></textarea>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-quote-left highlight-quote"></i>
+                            <textarea x-model="resume.profile.impact_statement" class="form-control-ghost position-relative impact-font" style="z-index: 1;" rows="3" @input="resize($event.target)" placeholder="Add a key impact statement..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h2 class="section-title mb-0">Signature Achievements</h2>
+                            <button @click="addItem('signature_achievements')" class="btn btn-sm btn-outline-primary no-print">+ Add Card</button>
+                        </div>
+                        <div class="beautiful-separator"></div>
+                        
+                        <div class="row g-3">
+                            <template x-for="(ach, index) in resume.signature_achievements" :key="index">
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-light shadow-sm position-relative group-hover">
+                                        <button @click="removeItem('signature_achievements', index)" class="position-absolute top-0 end-0 btn btn-link text-danger p-2 no-print" style="z-index: 10;" title="Remove Card"><i class="fas fa-times"></i></button>
+
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <input x-model="ach.title" class="form-control-ghost fw-bold text-dark" placeholder="Achievement Title">
+                                                <div class="text-warning" style="width: 30px; text-align:right;"><i :class="ach.icon || 'fas fa-star'"></i></div>
+                                            </div>
+                                            <textarea x-model="ach.description" class="form-control-ghost text-muted small" rows="4" @input="resize($event.target)" placeholder="Describe the achievement..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h2 class="section-title mb-0">Experience</h2>
+                            <button @click="addItem('experience')" class="btn btn-sm btn-outline-primary no-print">+ Add Role</button>
+                        </div>
+                        <div class="beautiful-separator"></div>
+
+                        <div class="ps-2">
+                            <template x-for="(job, index) in resume.experience" :key="index">
+                                <div class="timeline-item">
+                                    <div class="row mb-1">
+                                        <div class="col-8"><input x-model="job.role" class="form-control-ghost fw-bold fs-5 text-dark" placeholder="Role"></div>
+                                        <div class="col-4 text-end"><input x-model="job.dates" class="form-control-ghost text-end text-muted small fw-bold" placeholder="Dates"></div>
+                                    </div>
+                                    <input x-model="job.company" class="form-control-ghost text-primary fw-bold mb-2" placeholder="Company">
+                                    <ul class="list-unstyled ps-1">
+                                        <template x-for="(ach, i) in job.achievements">
+                                            <li class="d-flex mb-1"><span class="text-warning me-2">•</span><textarea x-model="job.achievements[i]" class="form-control-ghost py-0" rows="1" @input="resize($event.target)"></textarea></li>
+                                        </template>
+                                    </ul>
+                                    <button @click="removeItem('experience', index)" class="btn btn-link text-danger p-0 ms-2 small text-decoration-none no-print">Remove Role</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

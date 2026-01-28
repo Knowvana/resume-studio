@@ -1,270 +1,189 @@
 :root {
-    /* Color Palette - Premium Slate & Gold */
-    --sidebar-bg: #0f172a;       /* Deep Navy/Black */
-    --sidebar-glass: rgba(15, 23, 42, 0.95);
-    --text-on-dark: #f1f5f9;
-    --text-muted-dark: #94a3b8;
-    
-    --paper-bg: #ffffff;
-    --text-main: #334155;        /* Slate 700 */
-    --text-headings: #1e293b;    /* Slate 800 */
-    
-    --accent: #d97706;           /* Muted Gold/Amber for elegance */
-    --accent-light: #fffbeb;     /* Very light amber background */
-    --accent-blue: #3b82f6;      /* Modern Blue for UI controls */
-    
-    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-    --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    
-    /* Font Stack */
-    --font-heading: 'Cormorant Garamond', serif;
-    --font-body: 'Outfit', sans-serif;
+    --navy-dark: #0b1120;
+    --navy-light: #1e293b;
+    --gold-accent: #d4af37; /* Premium Gold */
+    --gold-muted: #aa8c2c;
+    --bg-light: #f3f4f6;
 }
 
-/* 1. Global Fluidity */
+/* Base Typography */
 body {
-    background: #f1f5f9; /* Light Slate Background */
-    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-    background-size: 20px 20px;
-    font-family: var(--font-body);
-    color: var(--text-main);
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    -webkit-font-smoothing: antialiased;
+    background-color: var(--bg-light);
+    font-family: 'Lato', sans-serif;
+    color: #334155;
+    padding-bottom: 80px;
 }
 
-.app-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 4rem; }
+h1, h2, h3, h4, .serif-font {
+    font-family: 'Playfair Display', serif;
+}
 
-/* 2. The Paper (The Stage) */
+/* =========================================
+   CUSTOM COMPONENT: The Resume Paper
+   ========================================= */
 .resume-paper {
-    width: 210mm;
+    background: white;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
     min-height: 297mm;
-    background: var(--paper-bg);
-    display: flex;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); /* Deep Lift */
     margin-top: 2rem;
-    border-radius: 2px; /* Slight softening of corners */
-    overflow: hidden;
-    transition: transform 0.3s ease;
+    overflow: hidden; /* Keeps sidebar contained */
+    border-radius: 4px;
 }
 
-/* 3. The Invisible Input System (WYSIWYG) */
-.clean-input {
-    width: 100%;
+/* =========================================
+   CUSTOM COMPONENT: Ghost Inputs
+   (Fluid, Invisible until focused)
+   ========================================= */
+.form-control-ghost {
     background: transparent;
-    border: none;
-    border-bottom: 1px solid transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
     color: inherit;
     font-family: inherit;
-    font-weight: inherit;
     font-size: inherit;
-    padding: 2px 0;
-    transition: all 0.3s ease;
-    resize: none;
+    font-weight: inherit;
 }
-.clean-input:hover {
-    border-bottom: 1px solid #e2e8f0; /* Subtle guide line on hover */
-    background: rgba(0,0,0,0.005);
+
+.form-control-ghost:hover {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: #e2e8f0;
+    cursor: text;
 }
-.clean-input:focus {
+
+.form-control-ghost:focus {
+    background: white;
+    border-color: var(--gold-accent);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
     outline: none;
-    border-bottom: 2px solid var(--accent-blue); /* Active Edit State */
-}
-.clean-input::placeholder { opacity: 0.3; font-style: italic; }
-
-/* ============================
-   LEFT SIDEBAR (Elegant Dark)
-   ============================ */
-.left-col {
-    width: 34%;
-    background: var(--sidebar-bg);
-    color: var(--text-on-dark);
-    padding: 3.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-}
-/* Subtle texture overlay for premium feel */
-.left-col::before {
-    content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-    pointer-events: none;
+    color: #000;
 }
 
-/* Avatar - Glowing Ring */
-.profile-img-container {
-    width: 140px; height: 140px;
+.form-control-ghost::placeholder {
+    color: rgba(0,0,0,0.3);
+    font-style: italic;
+}
+
+/* Dark Mode Inputs (Sidebar) */
+.form-control-ghost-dark {
+    color: white;
+}
+.form-control-ghost-dark:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+.form-control-ghost-dark:focus { background: rgba(255,255,255,0.1); border-color: white; color: white; }
+.form-control-ghost-dark::placeholder { color: rgba(255,255,255,0.4); }
+
+/* =========================================
+   SIDEBAR STYLING
+   ========================================= */
+.sidebar-wrapper {
+    background-color: var(--navy-dark);
+    color: white;
+    min-height: 100%;
+    padding: 3rem 2rem;
+}
+
+.profile-img-box {
+    width: 160px; height: 160px;
     border-radius: 50%;
+    border: 3px solid var(--gold-accent);
+    margin: 0 auto 2rem auto;
     overflow: hidden;
-    border: 3px solid rgba(255,255,255,0.1);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    margin-bottom: 2rem;
     position: relative;
+    background: var(--navy-light);
     cursor: pointer;
     transition: transform 0.2s;
-    background: #1e293b;
-    display: flex; align-items: center; justify-content: center;
 }
-.profile-img-container:hover { transform: scale(1.02); border-color: var(--accent); }
-.profile-img { width: 100%; height: 100%; object-fit: cover; }
-.img-placeholder { font-size: 3rem; color: rgba(255,255,255,0.1); }
+.profile-img-box:hover { transform: scale(1.02); }
+.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.profile-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem; color: rgba(255,255,255,0.1); }
 
-/* Typography - Left */
-.name-input {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.1;
-    color: #ffffff;
-    text-align: center;
-    margin-bottom: 0.25rem;
-    letter-spacing: -0.5px;
-}
-.role-input {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-/* Sidebar Sections */
-.sidebar-section { width: 100%; text-align: left; margin-bottom: 2.5rem; }
 .sidebar-header {
-    font-family: var(--font-body);
     font-size: 0.75rem;
-    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-muted-dark);
+    letter-spacing: 2px;
+    color: var(--gold-accent);
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
     margin-bottom: 1rem;
-}
-.sidebar-item { margin-bottom: 0.75rem; }
-.sidebar-input { color: #e2e8f0; font-size: 0.9rem; font-weight: 300; }
-.contact-row { display: flex; align-items: center; gap: 12px; margin-bottom: 0.8rem; color: var(--accent); font-size: 0.9rem; }
-.contact-row i { width: 15px; text-align: center; opacity: 0.8; }
-
-/* ============================
-   RIGHT CONTENT (Clean White)
-   ============================ */
-.right-col {
-    width: 66%;
-    padding: 3.5rem;
-    background: var(--paper-bg);
+    margin-top: 2rem;
 }
 
-/* Headings */
-.main-header {
-    font-family: var(--font-heading);
+/* =========================================
+   MAIN CONTENT STYLING
+   ========================================= */
+.main-content-wrapper {
+    padding: 3rem;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
     font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-headings);
-    margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-.main-header::after {
-    content: ''; flex: 1; height: 1px;
-    background: linear-gradient(to right, #e2e8f0, transparent);
-}
-.main-header:first-child { margin-top: 0; }
-
-/* Summary */
-.summary-text {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: var(--text-main);
-    font-weight: 300;
-}
-
-/* Cards (Achievements) - The "Float" Effect */
-.highlight-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-.highlight-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-card);
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 1px solid #f1f5f9;
-}
-.highlight-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
-}
-.card-icon {
-    font-size: 1.5rem;
-    color: var(--accent); /* Gold icon */
-    margin-bottom: 1rem;
-    display: block;
-}
-.card-title {
-    font-weight: 600;
-    color: var(--text-headings);
-    font-size: 1rem;
+    color: var(--navy-dark);
     margin-bottom: 0.5rem;
+    display: flex; align-items: center; justify-content: space-between;
 }
-.card-body {
-    font-size: 0.9rem;
-    color: var(--text-main);
+
+/* The Beautiful Separator */
+.beautiful-separator {
+    height: 1px;
+    background: linear-gradient(to right, var(--gold-accent) 0%, rgba(255,255,255,0) 100%);
+    margin-bottom: 2rem;
+    opacity: 0.6;
+}
+
+/* Highlight Box */
+.highlight-box {
+    background: #f8fafc;
+    border-left: 4px solid var(--gold-accent);
+    padding: 1.5rem;
+    border-radius: 0 8px 8px 0;
+    position: relative;
+}
+.highlight-quote {
+    position: absolute; top: 10px; left: 10px;
+    color: #cbd5e1; font-size: 2rem; z-index: 0;
+}
+
+/* Timeline */
+.timeline-item {
+    position: relative;
+    border-left: 2px solid #e2e8f0;
+    padding-left: 2rem;
+    padding-bottom: 2rem;
+}
+.timeline-item::before {
+    content: ''; position: absolute; left: -9px; top: 5px;
+    width: 16px; height: 16px;
+    background: white; border: 3px solid var(--gold-accent);
+    border-radius: 50%;
+}
+.timeline-item:last-child { border-left-color: transparent; }
+
+/* Print Fixes */
+@media print {
+    body { background: white; padding: 0; }
+    .resume-paper { margin: 0; box-shadow: none; width: 100%; }
+    .container { max-width: 100%; padding: 0; }
+    .sidebar-wrapper { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; background-color: #0b1120 !important; }
+    .no-print { display: none !important; }
+}
+
+/* Add this to your existing CSS */
+
+/* The Highlight Input Font */
+.impact-font {
+    font-family: 'Merriweather', serif; /* Distinct, professional serif */
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #334155;
     line-height: 1.6;
 }
 
-/* Experience List */
-.timeline-item {
-    position: relative;
-    padding-left: 1.5rem;
-    margin-bottom: 2rem;
-    border-left: 2px solid #f1f5f9;
+/* Ensure icons in the achievement cards look good */
+.achievement-icon-btn {
+    cursor: pointer;
+    transition: color 0.2s;
 }
-.timeline-item::before {
-    content: '';
-    position: absolute; left: -5px; top: 8px;
-    width: 8px; height: 8px;
-    background: var(--text-headings);
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px #ffffff; /* Cutout effect */
-}
-.job-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
-.job-role { font-weight: 700; font-size: 1.1rem; color: var(--text-headings); }
-.job-dates { font-size: 0.85rem; color: var(--text-muted-dark); text-align: right; font-weight: 500; letter-spacing: 0.5px; }
-.job-company { font-weight: 500; font-size: 0.95rem; color: var(--accent); margin-bottom: 0.75rem; }
-.bullet-list li { margin-bottom: 0.4rem; position: relative; padding-left: 0.5rem; }
-.bullet-list li::before { content: '•'; position: absolute; left: -0.8rem; color: var(--text-muted-dark); }
-
-/* Buttons & UI Controls */
-.btn-control {
-    opacity: 0; transition: opacity 0.2s;
-    font-size: 0.7rem; color: var(--accent-blue);
-    background: rgba(59, 130, 246, 0.1);
-    padding: 4px 8px; border-radius: 4px;
-}
-.resume-paper:hover .btn-control { opacity: 1; }
-
-/* Mobile & Print */
-@media print {
-    body { background: white; padding: 0; }
-    .app-container { padding: 0; display: block; }
-    .resume-paper { margin: 0; box-shadow: none; width: 100%; min-height: 100%; border-radius: 0; }
-    .toolbar, .btn-control { display: none !important; }
-    .left-col { -webkit-print-color-adjust: exact; background-color: #0f172a !important; color: white !important; }
-}
-@media (max-width: 768px) {
-    .resume-paper { flex-direction: column; width: 100%; height: auto; border-radius: 0; }
-    .left-col, .right-col { width: 100%; padding: 2rem; }
-    .highlight-grid { grid-template-columns: 1fr; }
-}
+.achievement-icon-btn:hover { color: var(--gold-accent); }
