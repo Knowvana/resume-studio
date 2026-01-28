@@ -21,7 +21,7 @@ function getSafeDefaults() {
     }
     
     const base = {
-        theme: { font: "Lato", sidebar_color: "#0b1120" }, // DEFAULT THEME
+        theme: { font: "Lato", sidebar_color: "#0b1120" },
         profile: { name: "", tagline: "", location: "", email: "", phone: "", linkedin: "", summary: "", impact_statement: "", image: "" },
         personal_details: { dob: "", nationality: "Indian", marital_status: "Single", languages: ["English"] },
         signature_achievements: [],
@@ -33,9 +33,7 @@ function getSafeDefaults() {
     };
 
     const merged = { ...base, ...data, profile: { ...base.profile, ...(data?.profile || {}) } };
-    // CRITICAL: Ensure theme exists
     if (!merged.theme) merged.theme = base.theme;
-    
     return merged;
 }
 
@@ -43,22 +41,19 @@ const resumeAppData = () => ({
     user: null,
     loading: false,
     isDirty: false,
-    showThemePanel: false, // UI State
+    showThemePanel: false,
     defaultImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
     resume: getSafeDefaults(),
 
     async init() {
-        console.log("App Init");
         const localData = localStorage.getItem('localResumeDraft');
         if (localData) {
             try {
                 const parsed = JSON.parse(localData);
                 this.resume = { ...this.resume, ...parsed };
-                
-                // REPAIR: If theme is missing, add it
                 if(!this.resume.theme) this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
-
-                // ... (Migration logic same as before) ...
+                
+                // MIGRATIONS
                 if (this.resume.experience) {
                     this.resume.experience.forEach(job => {
                         if (job.dates && !job.startDate) {
@@ -81,12 +76,8 @@ const resumeAppData = () => ({
             } catch (e) { console.error(e); }
         }
 
-        // APPLY THEME INSTANTLY
         this.updateTheme();
-
-        // Watch for changes
         this.$watch('resume.theme', () => this.updateTheme());
-
         this.$watch('resume', (value) => {
             this.isDirty = true;
             localStorage.setItem('localResumeDraft', JSON.stringify(value));
@@ -110,33 +101,31 @@ const resumeAppData = () => ({
         }
     },
 
+    resetThemeOnly() {
+        this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
+        this.updateTheme();
+    },
+
+    // GLOBAL RESET (Top Bar)
     resetToDefaults() {
-        if (confirm("Reset to YAML defaults? Local changes will be lost.")) {
+        if (confirm("Reset everything to default? All local changes will be lost.")) {
             localStorage.removeItem('localResumeDraft');
-            this.resume = JSON.parse(JSON.stringify(getSafeDefaults()));
-            // Re-run migration
-            if (this.resume.experience) {
-                this.resume.experience.forEach(job => {
-                    if (job.dates && !job.startDate) {
-                        const parts = job.dates.split(' - ');
-                        job.startDate = parseLegacyDate(parts[0]);
-                        job.isCurrent = (parts[1] || "").toLowerCase().includes("present");
-                        if (!job.isCurrent) job.endDate = parseLegacyDate(parts[1]);
-                    }
-                });
-            }
-            if (this.resume.education) {
-                this.resume.education.forEach(edu => {
-                    if (edu.dates && !edu.startDate) {
-                        const parts = edu.dates.split(' - ');
-                        edu.startDate = parseLegacyDate(parts[0]);
-                        edu.endDate = parseLegacyDate(parts[1]);
-                    }
-                });
-            }
+            
+            // Force a clean state from defaults
+            const defaults = getSafeDefaults();
+            this.resume = JSON.parse(JSON.stringify(defaults));
+            
             this.updateTheme();
+            
+            // Reload to ensure clean slate
             this.$nextTick(() => window.location.reload());
         }
+    },
+
+    // Icon Prompt
+    promptIcon(item) {
+        const icon = prompt("Enter FontAwesome Icon Class (e.g. 'fab fa-google', 'fas fa-certificate'):", item.icon || "");
+        if(icon !== null) item.icon = icon;
     },
 
     resize(el) {
@@ -154,23 +143,13 @@ const resumeAppData = () => ({
 
     addItem(section) {
         const defaults = {
-            experience: { 
-                role: "New Role", company: "Company", 
-                startDate: new Date().toISOString().slice(0, 7), isCurrent: true, 
-                achievements: ["Add details..."] 
-            },
-            education: { 
-                degree: "Degree", institution: "Institute", 
-                startDate: "2020-01", endDate: "2024-05", details: "Details..." 
-            },
-            certifications: { 
-                name: "Certification Name", start: "2024", end: "Present", icon: "fas fa-certificate" 
-            },
+            experience: { role: "New Role", company: "Company", startDate: new Date().toISOString().slice(0, 7), isCurrent: true, achievements: ["Add details..."] },
+            education: { degree: "Degree", institution: "Institute", startDate: "2020-01", endDate: "2024-05", details: "Details..." },
+            certifications: { name: "Certification Name", start: "2024", end: "Present", icon: "fas fa-certificate" },
             skills: { category: "NEW CATEGORY", list: [{ name: "New Skill", level: 3 }] },
             signature_achievements: { title: "Title", icon: "fas fa-star", description: "Impact..." },
             custom_sections: { title: "Section", content: ["Point 1"] }
         };
-        
         if (this.resume[section]) {
             this.resume[section].push(JSON.parse(JSON.stringify(defaults[section])));
             this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); });
@@ -184,7 +163,8 @@ const resumeAppData = () => ({
     removeItem(section, index) {
         if (confirm("Remove?")) this.resume[section].splice(index, 1);
     },
-
+    
+    // ... auth ...
     async login() { const e = prompt("Email:"); if(e) window.AuthService.login(e).then(()=>alert("Check email")); },
     async logout() { if(confirm("Logout?")){await window.AuthService.logout();window.location.reload();} },
     async saveToCloud() { if(!this.user)return this.login();this.loading=true;await window.AuthService.saveResume(this.user.id,this.resume);this.loading=false;this.isDirty=false;alert("Saved!"); },
