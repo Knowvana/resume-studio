@@ -1,0 +1,35 @@
+<nav class="toolbar">
+    <div class="brand">
+        <i class="fas fa-layer-group"></i> Resume Architect <span style="opacity:0.6; font-weight:400;">Studio</span>
+    </div>
+
+    <div class="actions">
+        <span x-show="loading" class="text-light" style="margin-right:1rem;">
+            <i class="fas fa-circle-notch fa-spin"></i> Syncing...
+        </span>
+
+        <template x-if="!user">
+            <button @click="login()" class="btn btn-secondary">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </template>
+
+        <template x-if="user">
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <span x-text="user.email" style="font-size:0.8rem; opacity:0.8;"></span>
+                
+                <button @click="saveToCloud()" class="btn" :class="isDirty ? 'btn-primary' : 'btn-secondary'">
+                    <i class="fas fa-cloud-upload-alt"></i> Save
+                </button>
+                
+                <button @click="logout()" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </template>
+
+        <button onclick="window.print()" class="btn btn-primary" style="margin-left:1rem;">
+            <i class="fas fa-file-pdf"></i> PDF
+        </button>
+    </div>
+</nav>

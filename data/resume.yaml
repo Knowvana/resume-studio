@@ -1,0 +1,29 @@
+profile:
+  name: "Your Name"
+  image: ""  # Empty by default
+  tagline: "Professional Title (e.g. Cloud Architect)"
+  location: "City, Country"
+  phone: "+1 234 567 890"
+  email: "email@example.com"
+  linkedin: "linkedin.com/in/username"
+  summary: "A brief professional summary of your expertise..."
+
+experience:
+  - role: "Senior Architect"
+    company: "Tech Corp"
+    location: "New York"
+    dates: "2020 - Present"
+    achievements:
+      - "Led the migration of 50+ apps to Azure."
+      - "Reduced cloud costs by 30%."
+
+skills:
+  - category: "Cloud"
+    items: "AWS, Azure, Google Cloud"
+  - category: "DevOps"
+    items: "Docker, Kubernetes, Jenkins"
+
+education:
+  - degree: "B.Tech Computer Science"
+    institution: "University of Tech"
+    dates: "2010 - 2014"
