@@ -2,12 +2,55 @@
 <html lang="en">
     {{ partial "head.html" . }}
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:ital,wght@0,300;0,700;1,300&family=Open+Sans:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Roboto:wght@400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <body x-data="resumeApp">
-        {{ partial "toolbar.html" . }}
         <script> window.hugoDefaultData = {{ .Site.Data.resume | jsonify | safeJS }}; </script>
 
-        <div class="theme-fab no-print" @click="showThemePanel = !showThemePanel" title="Design Settings"><i class="fas fa-palette fs-4"></i></div>
+        <nav class="app-header no-print">
+            <a href="/" class="app-brand"><i class="fas fa-layer-group me-2"></i>Resume Architect Studio</a>
+            
+            <div class="header-info">
+                <div class="d-none d-md-flex align-items-center gap-3 me-4 border-end pe-4">
+                    <span><i class="fas fa-code me-1"></i>Dev: Atul Gupta</span>
+                    <a href="https://linkedin.com/in/atul-gupta" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fs-5"></i></a>
+                    <a href="mailto:insurgent0012@gmail.com" title="Email Developer"><i class="fas fa-envelope fs-5"></i></a>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button @click="resetToDefaults()" class="btn btn-sm btn-outline-danger border-0 text-white opacity-75 header-btn">
+                        <i class="fas fa-trash-restore me-1"></i> Reset
+                    </button>
+                    <button onclick="window.print()" class="btn btn-sm btn-outline-light border-0 header-btn">
+                        <i class="fas fa-file-pdf me-1"></i> Print / PDF
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="theme-fab no-print" @click="showThemePanel = !showThemePanel" title="Design Settings">
+            <i class="fas fa-palette fs-4"></i>
+        </div>
+
+        <div class="modal-overlay" x-show="showImageModal" @click="showImageModal = false" style="display:none;" x-transition.opacity></div>
+        <div class="image-modal" x-show="showImageModal" style="display:none;" x-transition.scale>
+            <h5 class="mb-3 fw-bold text-dark">Update Photo</h5>
+            <div class="d-grid gap-2 mb-3">
+                <button @click="triggerFileUpload()" class="btn btn-primary btn-sm"><i class="fas fa-upload me-2"></i>Upload from Computer</button>
+                <button @click="promptImageUrl()" class="btn btn-outline-secondary btn-sm"><i class="fas fa-link me-2"></i>Enter Image URL</button>
+            </div>
+            <div class="border-top pt-3">
+                <label class="form-label small fw-bold text-muted mb-2">Image Position</label>
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-sm border" @click="resume.profile.image_align = 'top center'" :class="{'btn-dark': resume.profile.image_align === 'top center', 'btn-light': resume.profile.image_align !== 'top center'}" title="Top"><i class="fas fa-arrow-up"></i></button>
+                    <button class="btn btn-sm border" @click="resume.profile.image_align = 'center center'" :class="{'btn-dark': resume.profile.image_align === 'center center', 'btn-light': resume.profile.image_align !== 'center center'}" title="Center"><i class="fas fa-crosshairs"></i></button>
+                    <button class="btn btn-sm border" @click="resume.profile.image_align = 'bottom center'" :class="{'btn-dark': resume.profile.image_align === 'bottom center', 'btn-light': resume.profile.image_align !== 'bottom center'}" title="Bottom"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+            <button @click="showImageModal = false" class="btn btn-link text-muted btn-sm mt-3">Close</button>
+            <input type="file" id="hidden-file-input" @change="handleFileUpload($event)" accept="image/*" style="display:none;">
+        </div>
+
         <div class="theme-panel no-print" x-show="showThemePanel" @click.outside="showThemePanel = false" x-transition style="display:none;">
             <div class="d-flex justify-content-between align-items-center mb-3"><h6 class="mb-0 fw-bold text-white">Resume Design</h6><button @click="showThemePanel = false" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-times"></i></button></div>
             <div class="mb-4">
@@ -15,8 +58,8 @@
                 <div class="d-flex flex-column gap-2">
                     <div class="d-flex align-items-center gap-2"><input type="color" class="form-control form-control-color w-100" x-model="resume.theme.sidebar_color" style="height: 38px; border:none; padding:2px;" title="Pick any custom color"></div>
                     <div class="d-flex flex-wrap gap-2 justify-content-start px-1">
-                        <div @click="resume.theme.sidebar_color = '#0b1120'" style="width:20px; height:20px; background:#0b1120; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Navy"></div>
-                        <div @click="resume.theme.sidebar_color = '#1e293b'" style="width:20px; height:20px; background:#1e293b; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Slate"></div>
+                        <div @click="resume.theme.sidebar_color = '#0b1120'" style="width:20px; height:20px; background:#0b1120; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Classic Navy"></div>
+                        <div @click="resume.theme.sidebar_color = '#1e293b'" style="width:20px; height:20px; background:#1e293b; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Slate Grey"></div>
                         <div @click="resume.theme.sidebar_color = '#374151'" style="width:20px; height:20px; background:#374151; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Charcoal"></div>
                         <div @click="resume.theme.sidebar_color = '#172554'" style="width:20px; height:20px; background:#172554; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Deep Blue"></div>
                         <div @click="resume.theme.sidebar_color = '#1e40af'" style="width:20px; height:20px; background:#1e40af; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Royal Blue"></div>
@@ -26,7 +69,7 @@
                         <div @click="resume.theme.sidebar_color = '#14532d'" style="width:20px; height:20px; background:#14532d; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Forest Green"></div>
                         <div @click="resume.theme.sidebar_color = '#0f766e'" style="width:20px; height:20px; background:#0f766e; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Teal"></div>
                         <div @click="resume.theme.sidebar_color = '#451a03'" style="width:20px; height:20px; background:#451a03; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Brown"></div>
-                        <div @click="resume.theme.sidebar_color = '#000000'" style="width:20px; height:20px; background:#000000; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Black"></div>
+                        <div @click="resume.theme.sidebar_color = '#000000'" style="width:20px; height:20px; background:#000000; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Pitch Black"></div>
                     </div>
                 </div>
             </div>
@@ -51,10 +94,12 @@
         <div class="container pb-5">
             <div class="resume-paper row g-0">
                 <div class="col-lg-4 sidebar-wrapper text-center text-lg-start">
-                    <div class="profile-img-box mb-4" @click="promptImage()">
-                        <template x-if="resume.profile.image"><img :src="resume.profile.image"></template>
-                        <template x-if="!resume.profile.image"><img :src="defaultImage"></template>
+                    
+                    <div class="profile-img-box mb-4" @click="openImageModal()">
+                        <template x-if="resume.profile.image"><img :src="resume.profile.image" :style="'object-position: ' + (resume.profile.image_align || 'center center')"></template>
+                        <template x-if="!resume.profile.image"><img :src="defaultImage" :style="'object-position: ' + (resume.profile.image_align || 'center center')"></template>
                     </div>
+
                     <div class="mb-5 text-center">
                         <input x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center font-serif-bold sidebar-name" placeholder="Your Name">
                         <input x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase sidebar-role" placeholder="Role Title">
@@ -261,7 +306,6 @@
                     <div class="text-center mt-5 no-print"><button @click="addItem('custom_sections')" class="btn btn-outline-primary px-4 rounded-pill"><i class="fas fa-plus me-2"></i> Add Custom Section</button></div>
                 </div>
             </div>
-            <footer class="app-footer no-print"><div class="container"><p class="mb-1">&copy; 2026 Resume Architect</p></div></footer>
         </div>
     </body>
 </html>
