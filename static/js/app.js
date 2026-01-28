@@ -2,20 +2,16 @@
 function formatDate(dateStr) {
     if (!dateStr) return "";
     const date = new Date(dateStr + "-01");
-    // Handle Year only or Month-Year
     if(dateStr.length === 4) return dateStr; 
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
-// Helper to attempt parsing old dates
 function parseLegacyDate(dateStr) {
     if(!dateStr || dateStr.toLowerCase() === 'present') return "";
-    // Check if it's just a year "2007"
     if(dateStr.trim().match(/^\d{4}$/)) return dateStr.trim() + "-01";
-    
     const date = new Date(dateStr);
     if(isNaN(date.getTime())) return "";
-    return date.toISOString().slice(0, 7); // Returns YYYY-MM
+    return date.toISOString().slice(0, 7); 
 }
 
 function getSafeDefaults() {
@@ -25,6 +21,7 @@ function getSafeDefaults() {
     }
     
     const base = {
+        theme: { font: "Lato", sidebar_color: "#0b1120" }, // DEFAULT THEME
         profile: { name: "", tagline: "", location: "", email: "", phone: "", linkedin: "", summary: "", impact_statement: "", image: "" },
         personal_details: { dob: "", nationality: "Indian", marital_status: "Single", languages: ["English"] },
         signature_achievements: [],
@@ -35,13 +32,18 @@ function getSafeDefaults() {
         custom_sections: [] 
     };
 
-    return { ...base, ...data, profile: { ...base.profile, ...(data?.profile || {}) } };
+    const merged = { ...base, ...data, profile: { ...base.profile, ...(data?.profile || {}) } };
+    // CRITICAL: Ensure theme exists
+    if (!merged.theme) merged.theme = base.theme;
+    
+    return merged;
 }
 
 const resumeAppData = () => ({
     user: null,
     loading: false,
     isDirty: false,
+    showThemePanel: false, // UI State
     defaultImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
     resume: getSafeDefaults(),
 
@@ -53,7 +55,10 @@ const resumeAppData = () => ({
                 const parsed = JSON.parse(localData);
                 this.resume = { ...this.resume, ...parsed };
                 
-                // MIGRATION: Convert old experience strings
+                // REPAIR: If theme is missing, add it
+                if(!this.resume.theme) this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
+
+                // ... (Migration logic same as before) ...
                 if (this.resume.experience) {
                     this.resume.experience.forEach(job => {
                         if (job.dates && !job.startDate) {
@@ -64,8 +69,6 @@ const resumeAppData = () => ({
                         }
                     });
                 }
-                
-                // MIGRATION: Convert old Education strings
                 if (this.resume.education) {
                     this.resume.education.forEach(edu => {
                         if (edu.dates && !edu.startDate) {
@@ -78,6 +81,17 @@ const resumeAppData = () => ({
             } catch (e) { console.error(e); }
         }
 
+        // APPLY THEME INSTANTLY
+        this.updateTheme();
+
+        // Watch for changes
+        this.$watch('resume.theme', () => this.updateTheme());
+
+        this.$watch('resume', (value) => {
+            this.isDirty = true;
+            localStorage.setItem('localResumeDraft', JSON.stringify(value));
+        });
+
         if (window.AuthService) {
             try {
                 this.user = await window.AuthService.getUser();
@@ -85,19 +99,22 @@ const resumeAppData = () => ({
             } catch (e) { console.error(e); }
         }
 
-        this.$watch('resume', (value) => {
-            this.isDirty = true;
-            localStorage.setItem('localResumeDraft', JSON.stringify(value));
-        });
-
         setTimeout(() => { this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); }); }, 300);
+    },
+
+    updateTheme() {
+        const r = document.documentElement;
+        if(this.resume.theme) {
+            r.style.setProperty('--sidebar-bg', this.resume.theme.sidebar_color);
+            r.style.setProperty('--doc-font', this.resume.theme.font);
+        }
     },
 
     resetToDefaults() {
         if (confirm("Reset to YAML defaults? Local changes will be lost.")) {
             localStorage.removeItem('localResumeDraft');
             this.resume = JSON.parse(JSON.stringify(getSafeDefaults()));
-            // Re-run migration immediately on reset data
+            // Re-run migration
             if (this.resume.experience) {
                 this.resume.experience.forEach(job => {
                     if (job.dates && !job.startDate) {
@@ -117,6 +134,7 @@ const resumeAppData = () => ({
                     }
                 });
             }
+            this.updateTheme();
             this.$nextTick(() => window.location.reload());
         }
     },
@@ -137,24 +155,16 @@ const resumeAppData = () => ({
     addItem(section) {
         const defaults = {
             experience: { 
-                role: "New Role", 
-                company: "Company", 
-                startDate: new Date().toISOString().slice(0, 7), 
-                isCurrent: true, 
-                achievements: ["Add Experience details..."] 
+                role: "New Role", company: "Company", 
+                startDate: new Date().toISOString().slice(0, 7), isCurrent: true, 
+                achievements: ["Add details..."] 
             },
             education: { 
-                degree: "Degree", 
-                institution: "Institute", 
-                startDate: "2020-01", // Default to date pickers
-                endDate: "2024-05", 
-                details: "Details..." 
+                degree: "Degree", institution: "Institute", 
+                startDate: "2020-01", endDate: "2024-05", details: "Details..." 
             },
             certifications: { 
-                name: "Certification Name", 
-                start: "2024", 
-                end: "Present", 
-                icon: "fas fa-certificate" 
+                name: "Certification Name", start: "2024", end: "Present", icon: "fas fa-certificate" 
             },
             skills: { category: "NEW CATEGORY", list: [{ name: "New Skill", level: 3 }] },
             signature_achievements: { title: "Title", icon: "fas fa-star", description: "Impact..." },

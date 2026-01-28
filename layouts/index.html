@@ -1,11 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
     {{ partial "head.html" . }}
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:ital,wght@0,300;0,700;1,300&family=Open+Sans:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Roboto:wght@400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
     
     <body x-data="resumeApp">
         {{ partial "toolbar.html" . }}
         <script> window.hugoDefaultData = {{ .Site.Data.resume | jsonify | safeJS }}; </script>
+
+        <div class="theme-fab no-print" @click="showThemePanel = !showThemePanel" title="Design Settings">
+            <i class="fas fa-palette fs-4"></i>
+        </div>
+
+        <div class="theme-panel no-print" x-show="showThemePanel" @click.outside="showThemePanel = false" x-transition style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0 fw-bold text-white">Resume Design</h6>
+                <button @click="showThemePanel = false" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-uppercase text-white-50">Sidebar Color</label>
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="color" class="form-control form-control-color w-100" 
+                               x-model="resume.theme.sidebar_color" 
+                               style="height: 38px; border:none; padding:2px;" 
+                               title="Pick any color">
+                    </div>
+                    
+                    <div class="d-flex justify-content-between px-1">
+                        <div @click="resume.theme.sidebar_color = '#0b1120'" style="width:20px; height:20px; background:#0b1120; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Navy"></div>
+                        <div @click="resume.theme.sidebar_color = '#1e293b'" style="width:20px; height:20px; background:#1e293b; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Slate"></div>
+                        <div @click="resume.theme.sidebar_color = '#0f172a'" style="width:20px; height:20px; background:#0f172a; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Dark Blue"></div>
+                        <div @click="resume.theme.sidebar_color = '#3730a3'" style="width:20px; height:20px; background:#3730a3; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Indigo"></div>
+                        <div @click="resume.theme.sidebar_color = '#000000'" style="width:20px; height:20px; background:#000000; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Black"></div>
+                        <div @click="resume.theme.sidebar_color = '#7f1d1d'" style="width:20px; height:20px; background:#7f1d1d; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Dark Red"></div>
+                        <div @click="resume.theme.sidebar_color = '#14532d'" style="width:20px; height:20px; background:#14532d; border-radius:50%; cursor:pointer; border:2px solid #555;" title="Dark Green"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-uppercase text-white-50">Global Font</label>
+                <select class="form-select form-select-sm" x-model="resume.theme.font">
+                    <option value="'Lato', sans-serif">Lato (Clean)</option>
+                    <option value="'Roboto', sans-serif">Roboto (Modern)</option>
+                    <option value="'Open Sans', sans-serif">Open Sans (Standard)</option>
+                    <option value="'Montserrat', sans-serif">Montserrat (Geometric)</option>
+                    <option value="'Source Sans Pro', sans-serif">Source Sans (Professional)</option>
+                    <option value="'Raleway', sans-serif">Raleway (Elegant)</option>
+                    <option value="'Merriweather', serif">Merriweather (Serif)</option>
+                    <option value="'Playfair Display', serif">Playfair Display (Fancy)</option>
+                </select>
+            </div>
+            
+            <div class="border-top border-secondary pt-3 mt-2">
+                <button @click="resetToDefaults()" class="btn btn-sm btn-outline-light w-100 opacity-75">
+                    <i class="fas fa-undo me-2"></i>Reset to Defaults
+                </button>
+            </div>
+        </div>
 
         <div class="container pb-5">
             <div class="resume-paper row g-0">
@@ -64,7 +117,6 @@
                             <span>Core Competencies</span>
                             <button @click="addItem('skills')" class="btn btn-sm btn-outline-light border-0 py-0 no-print opacity-50"><i class="fas fa-folder-plus"></i></button>
                         </div>
-                        
                         <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
                             <div class="mb-4 skill-category-wrapper">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -78,7 +130,6 @@
                                     <div class="skill-item-row group-hover">
                                         <input x-model="skill.name" class="form-control-ghost form-control-ghost-dark skill-name-input no-print" placeholder="Skill">
                                         <div class="print-only skill-name-text" x-text="skill.name"></div>
-
                                         <div class="skill-bar-wrapper">
                                             <template x-for="level in 5">
                                                 <div class="skill-dot" :class="{'filled': level <= skill.level}" @click="skill.level = level"></div>
@@ -203,9 +254,14 @@
                                         </div>
                                         
                                         <div class="cert-main-date-badge d-flex align-items-center gap-1">
-                                            <input x-model="cert.start" class="form-control-ghost p-0 text-center" style="width: 40px; font-weight:bold; color:inherit;" placeholder="Start">
-                                            <span>-</span>
-                                            <input x-model="cert.end" class="form-control-ghost p-0 text-center" style="width: 50px; font-weight:bold; color:inherit;" placeholder="End">
+                                            <div class="print-only">
+                                                <span x-text="cert.start"></span> - <span x-text="cert.end"></span>
+                                            </div>
+                                            <div class="d-flex gap-1 no-print">
+                                                <input x-model="cert.start" class="form-control-ghost p-0 text-center" style="width: 40px; font-weight:bold; color:inherit;" placeholder="Start">
+                                                <span>-</span>
+                                                <input x-model="cert.end" class="form-control-ghost p-0 text-center" style="width: 50px; font-weight:bold; color:inherit;" placeholder="End">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -225,6 +281,7 @@
                                     <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
                                         <div class="col-8"><input x-model="edu.degree" class="form-control-ghost timeline-role fs-5"></div>
+                                        
                                         <div class="col-4 text-end">
                                             <div class="timeline-date print-only">
                                                 <span x-text="formatDate(edu.startDate)"></span>

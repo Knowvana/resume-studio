@@ -1,9 +1,20 @@
 :root {
-    --navy-dark: #0b1120;
+    /* --- DYNAMIC THEME VARIABLES (With Defaults) --- */
+    --sidebar-bg: #0b1120;
+    --doc-font: 'Lato', sans-serif;
+    
+    /* Static Colors */
     --navy-light: #1e293b;
     --gold-accent: #d4af37;
     --bg-light: #f3f4f6;
     --text-dark: #334155;
+}
+
+/* Base Styles */
+body { 
+    background-color: var(--bg-light); 
+    font-family: var(--doc-font); 
+    padding-bottom: 40px; 
 }
 
 /* Force removal of scrollbars */
@@ -11,17 +22,47 @@ textarea.form-control-ghost { overflow: hidden !important; resize: none !importa
 
 /* Typography */
 .font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
-.font-sans-regular { font-family: 'Lato', sans-serif; font-weight: 400; }
+.font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
 
 /* Sidebar */
+.sidebar-wrapper { 
+    background-color: var(--sidebar-bg); /* Dynamic Color */
+    color: white; 
+    min-height: 100%; 
+    padding: 3.5rem 2.5rem; 
+}
 .sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; }
 .sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
-.sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+.sidebar-header { 
+    font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; 
+    color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); 
+    padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; 
+}
+
+/* Inputs & Forms */
+textarea.form-control-ghost, 
+input.form-control-ghost { 
+    background-color: transparent !important;
+    border: 1px solid transparent; 
+    width: 100%; color: inherit; transition: 0.2s; padding: 2px 5px; 
+    resize: none; overflow: hidden; min-height: 1.5em;
+}
+.form-control-ghost:hover { background-color: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.2); }
+.form-control-ghost:focus { background-color: #fff !important; border-color: var(--gold-accent); outline: none; color: black !important; }
+.form-control-ghost-dark { color: white; }
+.form-control-ghost-dark:focus { background-color: rgba(255,255,255,0.1) !important; color: white !important; border-color: white; }
 
 /* Contact */
 .contact-row { display: flex; align-items: center; margin-bottom: 0.8rem; color: rgba(255,255,255,0.9); }
 .contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; flex-shrink: 0; }
 .contact-input { font-size: 0.95rem; font-weight: 400; color: white; word-break: break-word; }
+
+/* Profile Image */
+.profile-img-box { 
+    width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); 
+    margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; 
+}
+.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Skill Bars */
 .skill-category-input { color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; }
@@ -34,60 +75,30 @@ textarea.form-control-ghost { overflow: hidden !important; resize: none !importa
 .skill-dot:nth-child(4).filled { background: #4ade80; box-shadow: 0 0 5px rgba(74, 222, 128, 0.5); }
 .skill-dot:nth-child(5).filled { background: #166534; box-shadow: 0 0 5px rgba(22, 101, 52, 0.5); }
 
-/* Sidebar Certifications Inputs (Hidden by default) */
-.cert-icon-input { opacity: 0; width: 0; height: 0; overflow: hidden; transition: opacity 0.2s; }
-.group-hover:hover .cert-icon-input { opacity: 1; width: 100%; height: auto; margin-bottom: 5px; background: rgba(255,255,255,0.1); color: #fff; font-size: 0.7rem; }
+/* Sidebar Cert Inputs */
+.cert-icon-input { display: none; width: 100%; margin-bottom: 5px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.7rem; padding: 2px 5px; }
+.group-hover:hover .cert-icon-input { display: block; }
 
-/* === MAIN PAGE CERTIFICATION CARD DESIGN === */
+/* Main Cert Card */
 .cert-main-card {
-    display: flex;
-    align-items: center; /* Center vertically */
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-left: 4px solid var(--gold-accent);
-    padding: 1.25rem;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    transition: transform 0.2s;
-    break-inside: avoid;
+    display: flex; align-items: center; background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--gold-accent);
+    padding: 1.25rem; border-radius: 0 8px 8px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; break-inside: avoid;
 }
 .cert-main-card:hover { transform: translateX(5px); }
 .cert-main-icon-box {
-    width: 50px; height: 50px;
-    background: var(--bg-light);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; color: var(--navy-dark);
-    margin-right: 1.5rem; flex-shrink: 0;
+    width: 50px; height: 50px; background: var(--bg-light); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--navy-dark); margin-right: 1.5rem; flex-shrink: 0;
 }
 .cert-main-date-badge {
-    background: #f1f5f9;
-    color: #64748b;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0; /* Prevent shrinking */
-    margin-left: 10px;
+    background: #f1f5f9; color: #64748b; font-size: 0.75rem; font-weight: 700; padding: 4px 10px;
+    border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-left: 10px;
 }
-
-/* Hide Main Cert Icon Input by default */
-.cert-main-icon-input {
-    font-size: 0.75rem; color: #94a3b8; 
-    opacity: 0; height: 0; transition: opacity 0.2s;
-}
-.group-hover:hover .cert-main-icon-input { opacity: 1; height: auto; margin-bottom: 0.25rem; }
-
+.cert-main-icon-input { font-size: 0.75rem; color: #94a3b8; display: none; }
+.group-hover:hover .cert-main-icon-input { display: block; margin-bottom: 0.25rem; }
 
 /* Remove Button */
 .achievement-card { position: relative; }
-.btn-remove-card {
-    position: absolute; top: -10px !important; right: -10px !important; z-index: 50; padding: 0;
-    background: white; border: 1px solid #ddd; border-radius: 50%; width: 24px; height: 24px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.2s; color: red;
-}
+.btn-remove-card { position: absolute; top: -10px !important; right: -10px !important; z-index: 50; padding: 0; background: white; border: 1px solid #ddd; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.2s; color: red; }
 .group-hover:hover .btn-remove-card { opacity: 1; }
 
 /* Highlight Box */
@@ -106,7 +117,7 @@ textarea.form-control-ghost { overflow: hidden !important; resize: none !importa
 .timeline-icon { position: absolute; left: -2.6rem; top: 4px; width: 18px; height: 18px; background: white; border: 3px solid var(--gold-accent); border-radius: 50%; z-index: 1; }
 
 /* Date Picker */
-.date-picker-modern { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; font-family: 'Lato', sans-serif; color: #64748b; background: white; font-size: 0.9rem; cursor: pointer; }
+.date-picker-modern { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; font-family: var(--doc-font); color: #64748b; background: white; font-size: 0.9rem; cursor: pointer; }
 .date-picker-modern:focus { border-color: var(--gold-accent); outline: none; }
 
 /* Personal Details */
@@ -117,30 +128,48 @@ textarea.form-control-ghost { overflow: hidden !important; resize: none !importa
 /* Footer */
 .app-footer { margin-top: 2rem; padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.8rem; border-top: 1px solid #e2e8f0; }
 
-/* Base Styles */
-body { background-color: var(--bg-light); font-family: 'Lato', sans-serif; padding-bottom: 40px; }
 .resume-paper { background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); min-height: 297mm; margin-top: 2rem; border-radius: 4px; overflow: hidden; }
-.sidebar-wrapper { background-color: var(--navy-dark); color: white; min-height: 100%; padding: 3.5rem 2.5rem; }
 .main-content-wrapper { padding: 4rem 3.5rem; }
-.profile-img-box { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; }
-.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.form-control-ghost { background: transparent; border: 1px solid transparent; width: 100%; color: inherit; transition: 0.2s; padding: 2px 5px; }
-.form-control-ghost:hover { background: rgba(0,0,0,0.02); border-color: #e2e8f0; }
-.form-control-ghost:focus { background: white; border-color: var(--gold-accent); outline: none; color: black; }
-.form-control-ghost-dark { color: white; }
-.form-control-ghost-dark:focus { background: rgba(255,255,255,0.1); color: white; border-color: white;}
-.section-title { font-family: 'Playfair Display', serif; font-size: 1.85rem; color: var(--navy-dark); font-weight: 700; }
-.beautiful-separator { height: 2px; background: linear-gradient(to right, var(--gold-accent), transparent); margin-bottom: 2rem; opacity: 0.7; }
+
+/* === UPDATED THEME SETTINGS UI (Dark Mode) === */
+.theme-fab {
+    position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+    background: #1e293b; color: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000;
+    transition: transform 0.2s; border: 2px solid white;
+}
+.theme-fab:hover { transform: scale(1.1); background: #0f172a; }
+
+.theme-panel {
+    position: fixed; bottom: 100px; right: 30px; width: 320px;
+    background: #1e293b; /* Dark Background */
+    color: white;         /* White Text */
+    padding: 20px; border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 1000;
+    border: 1px solid #334155;
+}
+.theme-panel .form-label { color: #cbd5e1; }
+.theme-panel .form-select {
+    background-color: #334155; color: white; border-color: #475569;
+}
+.theme-panel .form-select:focus { background-color: #334155; color: white; border-color: var(--gold-accent); box-shadow: none; }
 
 /* =========================================
-   CRITICAL PDF & LAYOUT FIX (FINAL V11)
+   CRITICAL PDF & LAYOUT FIX
    ========================================= */
 @media print {
     @page { margin: 0; size: A4; }
     html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
-    .resume-paper { margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important; display: flex !important; flex-wrap: nowrap !important; overflow: visible !important; background: linear-gradient(to right, #0b1120 32%, white 32%) !important; }
+    /* FLEX LAYOUT & SIDEBAR COLOR FIX */
+    .resume-paper { 
+        margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important; 
+        display: flex !important; flex-wrap: nowrap !important; overflow: visible !important; 
+        /* DYNAMIC SIDEBAR COLOR IN PRINT */
+        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; 
+    }
     .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
 
@@ -155,40 +184,24 @@ body { background-color: var(--bg-light); font-family: 'Lato', sans-serif; paddi
     .beautiful-separator { display: block !important; break-after: avoid !important; page-break-after: avoid !important; margin-bottom: 1.5rem !important; }
     .main-content-wrapper { padding: 3rem 2rem 5rem 2rem !important; }
 
+    /* Page Breaks */
     .section-group { break-inside: auto !important; page-break-inside: auto !important; display: block; margin-top: 0 !important; border-top: 3.5rem solid transparent !important; padding-bottom: 2rem !important; margin-bottom: -2rem !important; }
     .section-group:first-child { padding-top: 0 !important; border-top: none !important; }
     .sidebar-wrapper .section-group { break-inside: avoid !important; page-break-inside: avoid !important; }
 
-    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 1rem !important; }
+    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper, .cert-main-card { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 1rem !important; }
 
-    /* === CERTIFICATION PRINT FIXES === */
-    /* Reduce padding and margin specifically for print to close gaps */
-    .cert-main-card {
-        padding: 0.75rem 1rem !important; /* Compact padding */
-        margin-bottom: 0.5rem !important; /* Reduce gap */
-        break-inside: avoid !important;
-        align-items: flex-start !important; /* Align to top for wrapping */
-    }
-    .cert-main-icon-box {
-        width: 35px !important; height: 35px !important; /* Smaller icon box */
-        font-size: 1rem !important;
-        margin-right: 1rem !important;
-    }
-    .cert-main-date-badge {
-        font-size: 0.7rem !important;
-        padding: 2px 8px !important;
-        background: transparent !important;
-        border: 1px solid #cbd5e1 !important;
-        margin-left: 5px !important;
-    }
-    /* Hide icon inputs entirely in print */
+    /* Compact Main Certs for Print */
+    .cert-main-card { padding: 0.75rem 1rem !important; margin-bottom: 0.5rem !important; break-inside: avoid !important; align-items: flex-start !important; }
+    .cert-main-icon-box { width: 35px !important; height: 35px !important; font-size: 1rem !important; margin-right: 1rem !important; }
+    .cert-main-date-badge { font-size: 0.7rem !important; padding: 2px 8px !important; background: transparent !important; border: 1px solid #cbd5e1 !important; margin-left: 5px !important; }
     .cert-icon-input, .cert-main-icon-input { display: none !important; }
 
     .main-content-wrapper .row { display: flex !important; flex-wrap: wrap !important; margin-right: -10px !important; margin-left: -10px !important; }
     .personal-details-card .col-md-4 { width: 33.33% !important; flex: 0 0 33.33% !important; max-width: 33.33% !important; }
     .personal-details-card .col-12 { width: 100% !important; }
 
-    .navbar, .app-footer, .no-print, .btn { display: none !important; }
+    .navbar, .app-footer, .no-print, .btn, .theme-fab, .theme-panel { display: none !important; }
     .print-only { display: block !important; }
     
     .timeline-badge-top, .timeline-badge-bottom { display: block !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; border: 1px solid white; }
