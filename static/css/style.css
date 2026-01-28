@@ -6,12 +6,8 @@
     --text-dark: #334155;
 }
 
-/* Force removal of scrollbars on all ghost inputs */
-textarea.form-control-ghost {
-    overflow: hidden !important;
-    resize: none !important;
-    min-height: 1.5em;
-}
+/* Force removal of scrollbars */
+textarea.form-control-ghost { overflow: hidden !important; resize: none !important; min-height: 1.5em; }
 
 /* Typography */
 .font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
@@ -20,32 +16,49 @@ textarea.form-control-ghost {
 /* Sidebar */
 .sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; }
 .sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
-.sidebar-header {
-    font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15);
-    padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem;
-}
+.sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
 
 /* Contact */
 .contact-row { display: flex; align-items: center; margin-bottom: 0.8rem; color: rgba(255,255,255,0.9); }
-.contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; }
-.contact-input { font-size: 0.95rem; font-weight: 400; color: white; }
+.contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; flex-shrink: 0; }
+.contact-input { font-size: 0.95rem; font-weight: 400; color: white; word-break: break-word; }
 
-/* Skill Bars */
+/* === UPDATED SKILL BARS (Color Logic) === */
 .skill-category-input { color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; }
-.skill-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.skill-name-input { color: white; font-size: 0.9rem; font-weight: 500; width: 55%; }
-.skill-bar-wrapper { width: 40%; display: flex; gap: 2px; }
+.skill-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.skill-name-input { color: white; font-size: 0.85rem; font-weight: 500; width: 60%; padding-right: 5px; }
+.skill-bar-wrapper { width: 38%; display: flex; gap: 3px; }
+
+/* Base Dot */
 .skill-dot { height: 6px; flex: 1; background: rgba(255,255,255,0.15); border-radius: 1px; cursor: pointer; transition: all 0.2s; }
-.skill-dot.filled { background: var(--gold-accent); box-shadow: 0 0 4px var(--gold-accent); }
 .skill-dot:hover { background: white; }
 
-/* Highlight Box */
-.highlight-box {
-    background: #fffbeb; border-left: 5px solid var(--gold-accent);
-    padding: 1.5rem; border-radius: 0 12px 12px 0; position: relative;
-    margin-top: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+/* 1-3 Yellow */
+.skill-dot:nth-child(-n+3).filled { background: #facc15; box-shadow: 0 0 5px rgba(250, 204, 21, 0.5); }
+/* 4 Light Green */
+.skill-dot:nth-child(4).filled { background: #4ade80; box-shadow: 0 0 5px rgba(74, 222, 128, 0.5); }
+/* 5 Dark Green */
+.skill-dot:nth-child(5).filled { background: #166534; box-shadow: 0 0 5px rgba(22, 101, 52, 0.5); }
+
+/* Signature Card Remove Button (Top Right) */
+.achievement-card { position: relative; }
+.btn-remove-card {
+    position: absolute;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 50;
+    padding: 5px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    width: 25px; height: 25px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    opacity: 0; transition: opacity 0.2s;
 }
+.group-hover:hover .btn-remove-card { opacity: 1; }
+
+/* Highlight Box */
+.highlight-box { background: #fffbeb; border-left: 5px solid var(--gold-accent); padding: 1.5rem; border-radius: 0 12px 12px 0; position: relative; margin-top: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
 .highlight-text-bg { background: rgba(255, 255, 255, 0.6); padding: 1rem; border-radius: 8px; display: block; }
 .impact-font { font-family: 'Merriweather', serif; font-style: italic; font-size: 1.1rem; line-height: 1.6; color: #334155; }
 
@@ -55,10 +68,7 @@ textarea.form-control-ghost {
 .timeline-company { font-family: 'Lato', sans-serif; font-weight: 700; color: #aa8c2c; font-size: 1rem; margin-bottom: 0.5rem; }
 
 /* Personal Details */
-.personal-details-card {
-    background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--navy-dark);
-    padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-}
+.personal-details-card { background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--navy-dark); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
 .pd-label { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.9rem; color: var(--navy-dark); margin-bottom: 2px; display: block; }
 .pd-value { font-family: 'Lato', sans-serif; font-weight: 600; color: var(--text-dark); }
 
@@ -68,6 +78,7 @@ textarea.form-control-ghost {
 /* Base Styles */
 body { background-color: var(--bg-light); font-family: 'Lato', sans-serif; padding-bottom: 40px; }
 .resume-paper { background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); min-height: 297mm; margin-top: 2rem; border-radius: 4px; overflow: hidden; }
+/* Screen Layout */
 .sidebar-wrapper { background-color: var(--navy-dark); color: white; min-height: 100%; padding: 3.5rem 2.5rem; }
 .main-content-wrapper { padding: 4rem 3.5rem; }
 .profile-img-box { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; }
@@ -84,138 +95,42 @@ body { background-color: var(--bg-light); font-family: 'Lato', sans-serif; paddi
 .timeline-icon { position: absolute; left: -2.6rem; top: 4px; width: 18px; height: 18px; background: white; border: 3px solid var(--gold-accent); border-radius: 50%; }
 
 /* =========================================
-   CRITICAL PDF & LAYOUT FIX (FINAL V3)
+   CRITICAL PDF & LAYOUT FIX
    ========================================= */
 @media print {
-    /* 1. Full Bleed Setup */
-    @page {
-        margin: 0; 
-        size: A4;
-    }
+    @page { margin: 0; size: A4; }
+    html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
+    .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
     
-    html, body {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        overflow: visible !important;
-    }
-
-    /* Reset Container */
-    .container {
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* 2. MAIN LAYOUT (Sidebar + Content) */
-    /* Only apply nowrap to the main container to keep sidebar left and content right */
     .resume-paper {
-        margin: 0 !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        width: 100% !important;
-        min-height: 100vh !important;
-        display: flex !important;
-        flex-wrap: nowrap !important; /* CRITICAL: Keeps columns side-by-side */
-        overflow: visible !important;
+        margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important;
+        display: flex !important; flex-wrap: nowrap !important; overflow: visible !important;
+        background: linear-gradient(to right, #0b1120 32%, white 32%) !important;
     }
 
-    /* Column Widths */
-    .col-lg-4 {
-        width: 28% !important;
-        flex: 0 0 28% !important;
-        max-width: 28% !important;
-    }
+    .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; }
+    .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
 
-    .col-lg-8 {
-        width: 72% !important;
-        flex: 0 0 72% !important;
-        max-width: 72% !important;
-    }
+    .sidebar-wrapper { background-color: transparent !important; color: white !important; height: 100%; padding: 3rem 1.5rem !important; }
+    .sidebar-name { font-size: 2rem !important; }
+    .sidebar-role { font-size: 0.8rem !important; }
+    .contact-input { word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 0.85rem !important; white-space: normal !important; }
+    .skill-name-input { width: 58% !important; font-size: 0.8rem !important; }
+    .skill-bar-wrapper { width: 38% !important; }
 
-    /* Sidebar Styling */
-    .sidebar-wrapper {
-        background-color: #0b1120 !important;
-        color: white !important;
-        min-height: 100vh !important;
-        height: 100%; 
-        padding: 3rem 1.5rem !important;
-    }
+    .section-title, .sidebar-header, .d-flex.align-items-end.mb-2 { break-after: avoid !important; page-break-after: avoid !important; }
+    .beautiful-separator { display: block !important; break-after: avoid !important; page-break-after: avoid !important; margin-bottom: 1.5rem !important; }
+    .main-content-wrapper { padding: 3rem 2rem 5rem 2rem !important; }
 
-    /* Main Content Styling */
-    .main-content-wrapper {
-        /* Added 5rem bottom padding to simulate bottom margin on the last page */
-        padding: 3rem 2.5rem 5rem 2.5rem !important; 
-    }
+    .section-group { break-inside: auto !important; page-break-inside: auto !important; display: block; margin-top: 0 !important; border-top: 2.5rem solid transparent !important; padding-bottom: 2rem !important; margin-bottom: -2rem !important; }
+    .section-group:first-child { padding-top: 0 !important; border-top: none !important; }
+    .timeline-item, .personal-details-card, .highlight-box, .card { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 1rem !important; }
 
-    /* 3. FIX FOR PERSONAL DETAILS OVERFLOW */
-    /* Reset wrapping for inner rows (like Personal Details grid) */
-    .main-content-wrapper .row {
-        display: flex !important;
-        flex-wrap: wrap !important; /* ALLOW WRAPPING HERE */
-        margin-right: -10px !important;
-        margin-left: -10px !important;
-    }
-    
-    /* Ensure columns inside cards fit properly */
-    .personal-details-card .col-md-4 {
-        width: 33.33% !important; /* Force 3 columns */
-        flex: 0 0 33.33% !important;
-        max-width: 33.33% !important;
-        padding-right: 10px !important;
-        padding-left: 10px !important;
-    }
-    .personal-details-card .col-12 {
-        width: 100% !important;
-        padding-right: 10px !important;
-        padding-left: 10px !important;
-    }
+    .main-content-wrapper .row { display: flex !important; flex-wrap: wrap !important; margin-right: -10px !important; margin-left: -10px !important; }
+    .personal-details-card .col-md-4 { width: 33.33% !important; flex: 0 0 33.33% !important; max-width: 33.33% !important; }
+    .personal-details-card .col-12 { width: 100% !important; }
 
-    /* 4. TOP & BOTTOM MARGIN FIX */
-    .section-group {
-        break-inside: auto !important;
-        page-break-inside: auto !important;
-        display: block;
-        margin-top: 0 !important;
-        /* TOP MARGIN FIX: Transparent border acts as spacing after a page break */
-        border-top: 2.5rem solid transparent !important; 
-        /* BOTTOM MARGIN FIX: Add padding to push content away from bottom edge before breaking */
-        padding-bottom: 2rem !important; 
-        margin-bottom: -2rem !important; /* Compensate for the border/padding visual on same page */
-    }
-
-    .section-group:first-child {
-        padding-top: 0 !important;
-        border-top: none !important;
-    }
-
-    /* Prevent breaking inside individual cards */
-    .timeline-item, 
-    .personal-details-card, 
-    .highlight-box,
-    .card {
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        margin-bottom: 1rem !important;
-    }
-
-    /* Cleanup UI */
-    .navbar, .app-footer, .no-print, .btn, .beautiful-separator { display: none !important; }
+    .navbar, .app-footer, .no-print, .btn { display: none !important; }
     input, textarea { border: none !important; background: transparent !important; padding: 0 !important; }
-    
-    /* Clean up form elements for print */
-    select { 
-        -webkit-appearance: none; 
-        appearance: none; 
-        border: none !important; 
-        background: transparent !important;
-        padding: 0 !important;
-        font-weight: bold;
-    }
-    
-    .skill-dot { border: 1px solid rgba(255,255,255,0.2); }
+    select { -webkit-appearance: none; appearance: none; border: none !important; background: transparent !important; padding: 0 !important; font-weight: bold; }
 }

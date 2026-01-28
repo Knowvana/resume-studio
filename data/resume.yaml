@@ -6,7 +6,9 @@ profile:
   email: "atul0085@gmail.com"
   linkedin: "linkedin.com/in/atul-gupta"
   image: ""
+  # Restored Detailed Summary
   summary: "Visionary and Seasoned IAM Leader and Architect with 18+ years of extensive experience architecting, leading, and delivering enterprise-scale identity management, governance, and CIAM/WIAM solutions. Expert in transforming legacy systems to cloud-native deployments on GCP using industry-leading products like ForgeRock, SailPoint, and Okta."
+  # Restored Impact Statement
   impact_statement: "Recognized for driving digital transformation, delivering $10M+ in operational efficiencies, and aligning solutions with Zero Trust and regulatory standards (GDPR, SOC 2)."
 
 personal_details:
@@ -42,14 +44,15 @@ experience:
       - "Developed custom .NET UI for ForgeRock AM, enhancing federation setup efficiency by 35%."
       - "Resolved 95% of complex SSO issues within SLAs using Fiddler/Wireshark analysis."
 
-  - role: "Technical Lead - CA SiteMinder"
-    company: "PwC (Boston, USA & Offshore)"
-    dates: "Jan 2008 - Dec 2014"
-    achievements:
-      - "Led end-to-end CA SiteMinder implementations for 50+ customers."
-      - "Developed custom SSO solutions using Windows Identity Foundation (WIF) for AMEX."
-      - "Worked on-site in Boston delivering Policy Server setups and Web Agent integrations."
-      - "Provided L1.5 support, driving $500K in cost savings through process optimization."
+certifications:
+  - name: "Google Cloud Certified - Digital Leader"
+    start: "2023"
+    end: "Present"
+    icon: "fab fa-google"
+  - name: "Certified Scrum Master (CSM)"
+    start: "2021"
+    end: "2024"
+    icon: "fas fa-certificate"
 
 skills:
   - category: "IAM PRODUCTS"
@@ -76,7 +79,3 @@ education:
     institution: "IET Bhaddal, Punjab Technical University"
     dates: "2003 - 2007"
     details: "Gold Medalist. Graduated with Honors."
-  - degree: "Google Cloud Certified"
-    institution: "Cloud Digital Leader"
-    dates: "2023"
-    details: "Certification ID: XXXXX-XXXXX"

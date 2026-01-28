@@ -29,6 +29,28 @@
                         <div class="contact-row"><a :href="'mailto:'+resume.profile.email" class="text-white"><i class="fas fa-envelope contact-icon"></i></a><input x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark contact-input"></div>
                         <div class="contact-row"><a :href="resume.profile.linkedin" target="_blank" class="text-white"><i class="fab fa-linkedin contact-icon"></i></a><input x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark contact-input"></div>
                     </div>
+
+                    <div class="section-group">
+                        <div class="sidebar-header d-flex justify-content-between align-items-center">
+                            <span>Certifications</span>
+                            <button @click="addItem('certifications')" class="btn btn-sm btn-link text-white-50 p-0 no-print"><i class="fas fa-plus small"></i></button>
+                        </div>
+                        <template x-for="(cert, index) in resume.certifications" :key="index">
+                            <div class="mb-3 group-hover position-relative">
+                                <button @click="removeItem('certifications', index)" class="btn btn-link text-danger p-0 position-absolute top-0 end-0 no-print opacity-50 hover-100" style="font-size:0.7rem"><i class="fas fa-times"></i></button>
+                                
+                                <div class="d-flex align-items-center mb-1">
+                                    <i :class="cert.icon || 'fas fa-certificate'" class="text-warning small me-2"></i>
+                                    <input x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0" placeholder="Certification Name">
+                                </div>
+                                <div class="d-flex gap-1 ps-4">
+                                    <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" placeholder="Start">
+                                    <span class="text-white-50 small">-</span>
+                                    <input x-model="cert.end" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" placeholder="End">
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                     
                     <div class="sidebar-header mt-5 d-flex justify-content-between align-items-center">
                         <span>Core Competencies</span>
@@ -38,10 +60,10 @@
                     <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
                         <div class="mb-4 section-group">
                             <div class="d-flex justify-content-between align-items-center">
-                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY NAME">
+                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY">
                                 <div class="no-print">
-                                    <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0" title="Add Skill"><i class="fas fa-plus small"></i></button>
-                                    <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1" title="Remove Category"><i class="fas fa-times small"></i></button>
+                                    <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-plus small"></i></button>
+                                    <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1"><i class="fas fa-times small"></i></button>
                                 </div>
                             </div>
                             <template x-for="(skill, sIndex) in cat.list" :key="sIndex">
@@ -105,7 +127,8 @@
                         <div class="beautiful-separator"></div>
                         <div class="timeline-container">
                             <template x-for="(job, index) in resume.experience" :key="index">
-                                <div class="timeline-item section-group"> <div class="timeline-icon"></div>
+                                <div class="timeline-item section-group">
+                                    <div class="timeline-icon"></div>
                                     <div class="row mb-1 align-items-baseline">
                                         <div class="col-8"><input x-model="job.role" class="form-control-ghost timeline-role" placeholder="Role Title"></div>
                                         <div class="col-4"><input x-model="job.dates" class="form-control-ghost timeline-date" placeholder="Dates"></div>

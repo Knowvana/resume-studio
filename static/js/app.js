@@ -10,6 +10,7 @@ function getSafeDefaults() {
         signature_achievements: [],
         experience: [],
         education: [],
+        certifications: [],
         skills: [],
         custom_sections: [] 
     };
@@ -31,13 +32,9 @@ const resumeAppData = () => ({
             try {
                 const parsed = JSON.parse(localData);
                 this.resume = { ...this.resume, ...parsed };
-                
-                // MIGRATION: Convert old flat skills to new nested structure
-                if (this.resume.skills.length > 0 && !this.resume.skills[0].list) {
-                    this.resume.skills = this.resume.skills.map(s => ({
-                        category: s.category,
-                        list: [{ name: s.items || "Skill", level: 3 }]
-                    }));
+                // Fix old cert structure if needed
+                if(this.resume.certifications && this.resume.certifications.length > 0 && !this.resume.certifications[0].icon) {
+                     this.resume.certifications = this.resume.certifications.map(c => ({...c, start: c.year, end: "Present", icon: "fas fa-certificate"}));
                 }
             } catch (e) { console.error(e); }
         }
@@ -81,14 +78,20 @@ const resumeAppData = () => ({
             experience: { 
                 role: "New Role", 
                 company: "Company", 
-                dates: "Dates", 
+                dates: "Jan 2024 - Present", // NEW DEFAULT
                 achievements: ["Add Experience details of this Role..."] 
             },
             education: { 
-                degree: "Degree / Certificate", 
-                institution: "University / Institute", 
-                dates: "Year", 
-                details: "Add Education details..." 
+                degree: "Degree", 
+                institution: "Institute", 
+                dates: "2020 - 2024", 
+                details: "Details..." 
+            },
+            certifications: { 
+                name: "Certification Name", 
+                start: "Jan 2024", 
+                end: "Present", 
+                icon: "fas fa-certificate" 
             },
             skills: { category: "NEW CATEGORY", list: [{ name: "New Skill", level: 3 }] },
             signature_achievements: { title: "Title", icon: "fas fa-star", description: "Impact..." },
@@ -101,7 +104,6 @@ const resumeAppData = () => ({
         }
     },
 
-    // Add a single skill item to an existing category
     addSkillItem(catIndex) {
         this.resume.skills[catIndex].list.push({ name: "New Skill", level: 3 });
     },
