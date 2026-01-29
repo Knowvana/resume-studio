@@ -201,6 +201,7 @@ document.addEventListener('alpine:init', () => {
                     theme: 'snow',
                     modules: {
                         toolbar: [
+                            [{ 'font': [] }],
                             ['bold', 'italic', 'underline'],
                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                             ['clean']

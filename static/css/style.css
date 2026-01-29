@@ -8,7 +8,7 @@
     --sidebar-width: 250px; 
     --header-height: 60px;
     
-    /* Resume Paper Colors (Default) */
+    /* Resume Paper Colors */
     --sidebar-bg: #0b1120;
     --navy-light: #1e293b;
     --text-dark: #334155;
@@ -26,23 +26,8 @@ body {
     /* App Navigation Spacing */
     padding-top: var(--header-height);
     padding-left: var(--sidebar-width);
-    transition: padding-left 0.05s linear;
-    
-    /* SCROLLBAR FIX: Only show scrollbar if content exceeds viewport */
-    overflow-y: auto; 
+    transition: padding-left 0.05s linear; 
 }
-
-/* Main Content Area */
-.main-stage {
-    /* Fix: Subtract header (60px) + bottom padding (40px) to prevent default scrollbar */
-    min-height: calc(100vh - 100px); 
-    display: flex;
-    flex-direction: column;
-}
-
-/* Animation Helper */
-.transition-transform { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.transition-transform:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; }
 
 /* =========================================
    2. RICH TEXT EDITOR (Quill.js)
@@ -55,7 +40,7 @@ body {
     background: white;
 }
 .ql-editor { 
-    font-family: var(--doc-font) !important;
+    font-family: var(--doc-font);
     padding: 0.8rem; 
     min-height: auto; 
     line-height: 1.6;
@@ -84,7 +69,7 @@ body {
 }
 
 /* =========================================
-   3. RESUME PAPER (Restored from your Snippet)
+   3. RESUME PAPER STYLING
    ========================================= */
 .resume-paper { 
     background: white; 
@@ -93,7 +78,7 @@ body {
     margin-top: 2rem; 
     border-radius: 4px; 
     overflow: hidden; 
-    display: flex; /* Flexbox restored */
+    display: flex;
     flex-wrap: wrap;
 }
 
@@ -114,7 +99,7 @@ body {
 .font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
 .font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
 
-.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; }
+.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; word-wrap: break-word; }
 .sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
 .sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
 
@@ -147,30 +132,42 @@ body {
 
 .date-picker-modern { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; }
 
-/* Skills & Cards */
+/* Skills & Cards (RESTORED REMOVE BUTTON) */
 .skill-category-input { 
-    color: var(--gold-accent); 
-    font-weight: 800; 
-    text-transform: uppercase; 
-    font-size: 0.85rem; 
-    letter-spacing: 1px; 
-    margin-bottom: 0.5rem;
-    text-align: left !important; /* Force Left Align */
+    color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; text-align: left !important;
 }
 .skill-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; position: relative; }
 .skill-name-input { 
-    color: white; 
-    font-size: 0.85rem; 
-    font-weight: 500; 
-    width: 50% !important; 
-    padding-right: 5px; 
-    text-align: left !important; /* Force Left Align */
+    color: white; font-size: 0.85rem; font-weight: 500; width: 50% !important; padding-right: 5px; text-align: left !important;
 }
 .skill-bar-wrapper { width: 45%; display: flex; gap: 4px; position: relative; cursor: pointer; }
 .skill-dot { height: 6px; flex: 1; background: rgba(255,255,255,0.15); border-radius: 1px; }
 .skill-dot.filled:nth-of-type(-n+3) { background: #facc15 !important; }
 .skill-dot.filled:nth-of-type(4) { background: #4ade80 !important; }
 .skill-dot.filled:nth-of-type(5) { background: #166534 !important; }
+
+/* Achievement Cards & Buttons (RESTORED) */
+.achievement-card { position: relative; }
+.btn-remove-card { 
+    position: absolute; 
+    top: -10px !important; 
+    right: -10px !important; 
+    z-index: 50; 
+    padding: 0; 
+    background: white; 
+    border: 1px solid #ddd; 
+    border-radius: 50%; 
+    width: 24px; 
+    height: 24px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    opacity: 0; 
+    transition: opacity 0.2s; 
+    color: #ef4444; 
+}
+.group-hover:hover .btn-remove-card { opacity: 1; }
 
 .cert-main-card { display: flex; align-items: center; background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--gold-accent); padding: 1rem; border-radius: 0 8px 8px 0; }
 .cert-main-icon-box { width: 45px; height: 45px; background: #f8fafc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0b1120; margin-right: 1rem; flex-shrink: 0; }
@@ -189,6 +186,7 @@ body {
 .theme-panel { position: fixed; bottom: 100px; right: 30px; width: 320px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 1000; border: 1px solid #334155; }
 .image-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; width: 300px; text-align: center; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; }
+.main-stage { min-height: 100vh; }
 .view-wrapper { animation: fadeIn 0.4s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -197,17 +195,14 @@ body {
    4. PRINT OVERRIDES (SAFE)
    ========================================= */
 @media print {
-    @page { margin: 1cm 0; size: A4; } /* Standard Safe Margins */
+    @page { margin: 1cm 0; size: A4; } 
     
     html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
     
-    /* Hide UI Navigation */
-    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { display: none !important; }
+    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .format-toolbar { display: none !important; }
     
-    /* RESET CONTAINER & PAPER */
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
     
-    /* Resume Paper */
     .resume-paper { 
         margin: 0 !important; 
         box-shadow: none !important; 
@@ -215,14 +210,13 @@ body {
         width: 100% !important; 
         min-height: 100vh !important; 
         display: flex !important; 
-        flex-wrap: nowrap !important;
-        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important;
+        flex-wrap: nowrap !important; 
+        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; 
     }
     
     .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; background-color: transparent !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
     
-    /* Content Padding */
     .sidebar-wrapper { 
         padding: 40px 15px 40px 20px !important; 
         word-wrap: break-word !important; 
@@ -231,7 +225,10 @@ body {
         padding: 40px 40px !important; 
     }
     
-    /* Prevent Splitting */
+    .sidebar-name { font-size: 2rem !important; line-height: 1.1; }
+    .sidebar-role { font-size: 0.8rem !important; letter-spacing: 1px; }
+    .contact-input { font-size: 0.8rem !important; white-space: pre-wrap !important; }
+    
     .section-group, .card, .timeline-item, .personal-details-card, .highlight-box {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
@@ -240,7 +237,6 @@ body {
         margin-bottom: 2rem !important;
     }
     
-    /* Editor Cleanup */
     .ql-editor { padding: 0 !important; overflow: visible !important; border: none !important; }
     .ql-container { border: none !important; }
     .print-only { display: block !important; }
