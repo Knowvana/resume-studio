@@ -6,6 +6,8 @@
     --header-height: 60px;
     --sidebar-bg: #0b1120;
     --navy-light: #1e293b;
+    --text-dark: #334155;
+    --navy-dark: #0b1120;
 }
 
 /* === 1. GLOBAL LAYOUT === */
@@ -18,7 +20,7 @@ body {
     transition: padding-left 0.05s linear; 
 }
 
-/* === 2. RICH TEXT EDITOR (Quill) === */
+/* === 2. RICH TEXT EDITOR === */
 .ql-container { 
     font-family: var(--doc-font) !important;
     font-size: 1rem !important; 
@@ -54,7 +56,7 @@ body {
     border-color: var(--gold-accent) !important; 
 }
 
-/* === 3. RESUME PAPER STYLING === */
+/* === 3. RESUME PAPER === */
 .resume-paper { 
     background: white; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
@@ -62,7 +64,6 @@ body {
     margin-top: 2rem; 
     border-radius: 4px; 
     overflow: hidden; 
-    /* Critical: Return to Flexbox */
     display: flex;
     flex-wrap: wrap;
 }
@@ -72,12 +73,12 @@ body {
     color: white; 
     min-height: 100%; 
     padding: 3.5rem 2.5rem; 
-    width: 33.333%; /* Standard Bootstrap Col-4 size */
+    width: 33.333%; 
 }
 
 .main-content-wrapper { 
     padding: 4rem 3.5rem; 
-    width: 66.666%; /* Standard Bootstrap Col-8 size */
+    width: 66.666%; 
 }
 
 /* Typography */
@@ -85,7 +86,7 @@ body {
 .font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
 
 .sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; word-wrap: break-word; }
-.sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; text-transform: uppercase; word-wrap: break-word; line-height: 1.4; }
+.sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; text-transform: uppercase; word-wrap: break-word; }
 .sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
 
 /* Inputs */
@@ -100,7 +101,7 @@ body {
 .contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; flex-shrink: 0; margin-top: 3px; }
 .contact-input { font-size: 0.95rem; font-weight: 400; color: white; word-break: break-word; white-space: pre-wrap; line-height: 1.4; }
 
-/* Images & UI */
+/* Profile Image */
 .profile-img-box { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; position: relative; }
 .profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
 .profile-img-box:hover::after { content: "\f030"; font-family: "Font Awesome 5 Free"; font-weight: 900; position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; }
@@ -131,15 +132,15 @@ body {
 .cert-main-icon-box { width: 45px; height: 45px; background: #f8fafc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0b1120; margin-right: 1rem; flex-shrink: 0; }
 .cert-main-date-badge { background: #f1f5f9; color: #64748b; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-left: 10px; }
 
-.highlight-box { background: #fffbeb; border-left: 5px solid var(--gold-accent); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-top: 2rem; }
-.highlight-text-bg { background: rgba(255, 255, 255, 0.6); padding: 1rem; border-radius: 8px; }
+.highlight-box { background: #fffbeb; border-left: 5px solid var(--gold-accent); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-top: 2rem; position: relative; }
+.highlight-text-bg { background: rgba(255, 255, 255, 0.6); padding: 1rem; border-radius: 8px; display: block; }
 .impact-font { font-family: 'Merriweather', serif; font-style: italic; font-size: 1.1rem; line-height: 1.6; color: #334155; }
 .personal-details-card { background: white; border: 1px solid #e2e8f0; border-left: 4px solid #0b1120; padding: 1.5rem; border-radius: 8px; }
 .pd-label { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.85rem; color: #0b1120; margin-bottom: 2px; display: block; }
 .pd-value { font-family: 'Lato', sans-serif; font-weight: 600; color: #334155; }
 .beautiful-separator { height: 2px; background: linear-gradient(to right, var(--gold-accent), transparent); margin-bottom: 2rem; opacity: 0.7; }
 
-/* Helpers */
+/* UI Helpers */
 .theme-fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid white; }
 .theme-panel { position: fixed; bottom: 100px; right: 30px; width: 320px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 1000; border: 1px solid #334155; }
 .image-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; width: 300px; text-align: center; }
@@ -150,23 +151,20 @@ body {
 .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
 /* =========================================
-   4. PRINT OVERRIDES (SAFE & STABLE)
+   4. PRINT OVERRIDES (SAFE)
    ========================================= */
 @media print {
-    /* Safe Page Margins - Forces space at top/bottom of EVERY page */
-    @page { 
-        margin: 1cm 0; 
-        size: A4; 
-    }
+    @page { margin: 1cm 0; size: A4; } /* Standard Safe Margins */
     
     html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
     
     /* Hide UI */
     .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { display: none !important; }
     
+    /* Container Reset */
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
     
-    /* Standard Flex Layout */
+    /* Resume Paper */
     .resume-paper { 
         margin: 0 !important; 
         box-shadow: none !important; 
@@ -181,7 +179,7 @@ body {
     .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; background-color: transparent !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
     
-    /* Safe Padding for Content */
+    /* Content Padding */
     .sidebar-wrapper { 
         padding: 40px 15px 40px 20px !important; 
         word-wrap: break-word !important; 
@@ -190,20 +188,16 @@ body {
         padding: 40px 40px !important; 
     }
     
-    /* Typography Scaling for Print */
-    .sidebar-name { font-size: 2rem !important; line-height: 1.1; }
-    .sidebar-role { font-size: 0.8rem !important; letter-spacing: 1px; }
-    .contact-input { font-size: 0.8rem !important; white-space: pre-wrap !important; }
-    
     /* Prevent Splitting */
-    .section-group, .card, .timeline-item, .personal-details-card {
+    .section-group, .card, .timeline-item, .personal-details-card, .highlight-box {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
         display: block; 
+        position: relative;
         margin-bottom: 2rem !important;
     }
     
-    /* Cleanup */
+    /* Editor Cleanup */
     .ql-editor { padding: 0 !important; overflow: visible !important; border: none !important; }
     .ql-container { border: none !important; }
     .print-only { display: block !important; }

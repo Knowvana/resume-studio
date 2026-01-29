@@ -8,7 +8,9 @@
         <div class="mb-4">
             <label class="form-label small fw-bold text-uppercase text-white-50">Sidebar Color</label>
             <div class="d-flex flex-column gap-2">
-                <div class="d-flex align-items-center gap-2"><input type="color" class="form-control form-control-color w-100" x-model="resume.theme.sidebar_color" style="height: 38px; border:none; padding:2px;"></div>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="color" class="form-control form-control-color w-100" x-model="resume.theme.sidebar_color" style="height: 38px; border:none; padding:2px;" title="Pick any custom color">
+                </div>
                 <div class="d-flex flex-wrap gap-2 justify-content-start px-1">
                     <div @click="resume.theme.sidebar_color = '#0b1120'" style="width:20px; height:20px; background:#0b1120; border-radius:50%; cursor:pointer; border:2px solid #555;"></div>
                     <div @click="resume.theme.sidebar_color = '#1e293b'" style="width:20px; height:20px; background:#1e293b; border-radius:50%; cursor:pointer; border:2px solid #555;"></div>
@@ -47,16 +49,35 @@
                     <template x-if="!resume.profile.image"><img :src="defaultImage"></template>
                 </div>
                 <div class="mb-5 text-center">
-                    <input x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center font-serif-bold sidebar-name" placeholder="Your Name">
-                    <textarea x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase sidebar-role" placeholder="Role Title" rows="2"></textarea>
+                    <textarea x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center font-serif-bold sidebar-name no-print" placeholder="Your Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                    <div class="print-only font-serif-bold sidebar-name text-center" x-text="resume.profile.name"></div>
+                    
+                    <textarea x-model="resume.profile.tagline" class="form-control-ghost form-control-ghost-dark text-center text-uppercase sidebar-role no-print" placeholder="Role Title" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                    <div class="print-only text-uppercase sidebar-role text-center" x-text="resume.profile.tagline"></div>
                 </div>
                 
                 <div class="section-group">
                     <div class="sidebar-header">Contact Details</div>
-                    <div class="contact-row"><i class="fas fa-map-marker-alt contact-icon"></i><textarea x-model="resume.profile.location" class="form-control-ghost form-control-ghost-dark contact-input" rows="2"></textarea></div>
-                    <div class="contact-row"><i class="fas fa-phone contact-icon"></i><textarea x-model="resume.profile.phone" class="form-control-ghost form-control-ghost-dark contact-input" rows="1"></textarea></div>
-                    <div class="contact-row"><a :href="'mailto:'+resume.profile.email" class="text-white"><i class="fas fa-envelope contact-icon"></i></a><textarea x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark contact-input" rows="1"></textarea></div>
-                    <div class="contact-row"><a :href="resume.profile.linkedin" target="_blank" class="text-white"><i class="fab fa-linkedin contact-icon"></i></a><textarea x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark contact-input" rows="1"></textarea></div>
+                    <div class="contact-row">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <textarea x-model="resume.profile.location" class="form-control-ghost form-control-ghost-dark contact-input no-print" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                        <div class="print-only contact-input" x-text="resume.profile.location"></div>
+                    </div>
+                    <div class="contact-row">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <textarea x-model="resume.profile.phone" class="form-control-ghost form-control-ghost-dark contact-input no-print" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                        <div class="print-only contact-input" x-text="resume.profile.phone"></div>
+                    </div>
+                    <div class="contact-row">
+                        <a :href="'mailto:'+resume.profile.email" class="text-white"><i class="fas fa-envelope contact-icon"></i></a>
+                        <textarea x-model="resume.profile.email" class="form-control-ghost form-control-ghost-dark contact-input no-print" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                        <div class="print-only contact-input" x-text="resume.profile.email"></div>
+                    </div>
+                    <div class="contact-row">
+                        <a :href="resume.profile.linkedin" target="_blank" class="text-white"><i class="fab fa-linkedin contact-icon"></i></a>
+                        <textarea x-model="resume.profile.linkedin" class="form-control-ghost form-control-ghost-dark contact-input no-print" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                        <div class="print-only contact-input" x-text="resume.profile.linkedin"></div>
+                    </div>
                 </div>
 
                 <div class="section-group">
@@ -67,8 +88,9 @@
                             <div class="d-flex align-items-start mb-1 justify-content-start">
                                 <i :class="cert.icon || 'fas fa-certificate'" class="text-warning small me-2 mt-1 cursor-pointer" style="width: 15px; text-align:center; flex-shrink: 0;" @click="promptIcon(cert)" title="Click to change icon"></i>
                                 <div class="w-100">
-                                    <input x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0 no-print" placeholder="Name">
+                                    <textarea x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0 no-print" placeholder="Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
                                     <div class="print-only fw-bold small text-white" style="line-height: 1.2;" x-text="cert.name"></div>
+                                    
                                     <div class="d-flex gap-1 mt-1 align-items-center">
                                         <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="Start">
                                         <span class="text-white-50 small">-</span>
@@ -142,7 +164,13 @@
                                 <div class="card h-100 border-0 shadow-sm position-relative group-hover achievement-card">
                                     <button @click="removeItem('signature_achievements', index)" class="btn btn-remove-card no-print"><i class="fas fa-times"></i></button>
                                     <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-3"><input x-model="ach.title" class="form-control-ghost fw-bold text-dark fs-5" placeholder="Title"><div class="text-warning fs-4 ms-3"><i :class="ach.icon || 'fas fa-star'"></i></div></div>
+                                        <div class="d-flex align-items-start mb-3">
+                                            <div class="flex-grow-1 me-3">
+                                                <textarea x-model="ach.title" class="form-control-ghost fw-bold text-dark fs-5 w-100 no-print" placeholder="Title" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                                                <div class="print-only fw-bold text-dark fs-5" x-text="ach.title"></div>
+                                            </div>
+                                            <div class="text-warning fs-4 flex-shrink-0"><i :class="ach.icon || 'fas fa-star'"></i></div>
+                                        </div>
                                         
                                         <div class="no-print" x-data="richText(ach.description, (val) => ach.description = val)">
                                             <div x-ref="quillEditor" style="min-height: 100px; background:white;"></div>
@@ -165,7 +193,10 @@
                             <div class="timeline-item section-group">
                                 <div class="timeline-icon"></div>
                                 <div class="row mb-1 align-items-baseline">
-                                    <div class="col-8"><input x-model="job.role" class="form-control-ghost timeline-role" placeholder="Role Title"></div>
+                                    <div class="col-8">
+                                        <textarea x-model="job.role" class="form-control-ghost timeline-role no-print" placeholder="Role Title" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                                        <div class="print-only timeline-role" x-text="job.role"></div>
+                                    </div>
                                     <div class="col-4 text-end">
                                         <div class="timeline-date print-only"><span x-text="formatDate(job.startDate)"></span> - <span x-text="job.isCurrent ? 'Present' : formatDate(job.endDate)"></span></div>
                                         <div class="no-print d-flex flex-column align-items-end gap-1">
@@ -174,7 +205,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input x-model="job.company" class="form-control-ghost timeline-company" placeholder="Company Name">
+                                <textarea x-model="job.company" class="form-control-ghost timeline-company no-print" placeholder="Company Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                                <div class="print-only timeline-company" x-text="job.company"></div>
                                 
                                 <div class="mt-3">
                                     <div class="no-print w-100" x-data="richText(job.achievements, (val) => job.achievements = val)">
@@ -199,7 +231,10 @@
                             <div class="timeline-item pb-4 section-group">
                                 <div class="timeline-icon"></div>
                                 <div class="row mb-1 align-items-baseline">
-                                    <div class="col-8"><input x-model="edu.degree" class="form-control-ghost timeline-role fs-5"></div>
+                                    <div class="col-8">
+                                        <textarea x-model="edu.degree" class="form-control-ghost timeline-role fs-5 no-print" placeholder="Degree" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                                        <div class="print-only timeline-role fs-5" x-text="edu.degree"></div>
+                                    </div>
                                     <div class="col-4 text-end">
                                         <div class="timeline-date print-only"><span x-text="formatDate(edu.startDate)"></span> - <span x-text="formatDate(edu.endDate)"></span></div>
                                         <div class="no-print d-flex justify-content-end align-items-center gap-1">
@@ -207,7 +242,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <input x-model="edu.institution" class="form-control-ghost timeline-company text-muted">
+                                <textarea x-model="edu.institution" class="form-control-ghost timeline-company text-muted no-print" placeholder="Institution" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
+                                <div class="print-only timeline-company text-muted" x-text="edu.institution"></div>
                                 
                                 <div class="no-print mt-2" x-data="richText(edu.details, (val) => edu.details = val)">
                                     <div x-ref="quillEditor" style="background:white; min-height: 60px;"></div>
