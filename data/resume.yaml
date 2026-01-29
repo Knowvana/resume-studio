@@ -3,81 +3,88 @@ theme:
   sidebar_color: "#0b1120"
 
 profile:
-  name: "Atul Gupta"
-  tagline: "IAM Lead & Architect"
-  location: "Chandigarh, India"
-  phone: "+91 99883 09454"
-  email: "atul0085@gmail.com"
-  linkedin: "linkedin.com/in/atul-gupta"
+  name: "John Doe"
+  tagline: "Senior Software Engineer"
+  location: "New York, USA"
+  phone: "+1 555 010 9999"
+  email: "john.doe@example.com"
+  linkedin: "linkedin.com/in/johndoe"
   image: ""
-  summary: "Visionary and Seasoned IAM Leader and Architect with 18+ years of extensive experience architecting, leading, and delivering enterprise-scale identity management, governance, and CIAM/WIAM solutions. Expert in transforming legacy systems to cloud-native deployments on GCP using industry-leading products like ForgeRock, SailPoint, and Okta."
-  impact_statement: "Recognized for driving digital transformation, delivering $10M+ in operational efficiencies, and aligning solutions with Zero Trust and regulatory standards (GDPR, SOC 2)."
+  summary: "Results-oriented professional with over 10 years of experience in software development and system architecture. Proven track record of leading cross-functional teams to deliver scalable solutions. Expert in cloud computing, API design, and agile methodologies, dedicated to optimizing performance and driving business growth."
+  impact_statement: "Spearheaded critical system migrations resulting in 40% cost reduction and improved application response times by 50%."
 
 personal_details:
-  dob: "1985-08-15"
-  nationality: "Indian"
-  marital_status: "Married"
-  languages: ["English", "Hindi"]
+  dob: "1990-01-01"
+  nationality: "American"
+  marital_status: "Single"
+  languages: ["English", "Spanish"]
 
 signature_achievements:
-  - title: "Global IAM Transformation"
-    icon: "fas fa-rocket"
-    description: "Led migration of 20,000+ apps from CA SiteMinder to ForgeRock/Optimal IdM, reducing operational complexity by 40%."
-  - title: "Custom ForgeRock UI"
-    icon: "fas fa-code"
-    description: "Engineered a bespoke .NET-based UI for ForgeRock AM, improving admin efficiency by 78% and cutting partner onboarding time by 80%."
+  - title: "Cloud Migration Initiative"
+    icon: "fas fa-cloud-upload-alt"
+    description: "Successfully migrated legacy on-premise infrastructure to AWS, reducing operational costs by 30% and improving system reliability to 99.99%."
+  - title: "Automated Deployment Pipeline"
+    icon: "fas fa-cogs"
+    description: "Designed and implemented a CI/CD pipeline that reduced release cycle times from 2 weeks to 2 days, significantly increasing team velocity."
 
 experience:
-  - role: "Manager - IAM Governance & Strategy"
-    company: "Accenture | Client: Deutsche Bank"
-    dates: "Oct 2021 - Present"
+  - role: "Senior Software Architect"
+    company: "Tech Innovators Inc."
+    dates: "Jan 2020 - Present"
     achievements:
-      - "Architected and deployed ForgeRock IGA on GCP to replace legacy systems, improving compliance by 30%."
-      - "Operationalized enterprise-wide recertification frameworks, enhancing audit readiness."
-      - "Lead a global 24/7 cross-functional team, ensuring 99.9% uptime for critical IAM services."
-      - "Collaborated with enterprise architecture teams to align IAM modernization with Zero Trust standards."
+      - "Led the architectural design of a microservices-based platform handling 1M+ daily transactions."
+      - "Mentored a team of 10 developers, fostering a culture of code quality and continuous learning."
+      - "Optimized database queries resulting in a 60% reduction in data retrieval times."
+      - "Collaborated with product management to define roadmap and technical strategy."
 
-  - role: "Technical Architect - IAM"
-    company: "Infosys | Client: PwC"
-    dates: "Aug 2014 - Oct 2021"
+  - role: "Software Developer"
+    company: "Global Solutions Ltd."
+    dates: "Jun 2016 - Dec 2019"
     achievements:
-      - "Architected multi-phase migration of 20,000+ apps to ForgeRock & Optimal IdM from CA SiteMinder."
-      - "Designed federated identity framework (SAML, OAuth, OIDC) for 100+ client ecosystems."
-      - "Developed custom .NET UI for ForgeRock AM, enhancing federation setup efficiency by 35%."
-      - "Resolved 95% of complex SSO issues within SLAs using Fiddler/Wireshark analysis."
+      - "Developed and maintained customer-facing web applications using React and Node.js."
+      - "Integrated third-party payment gateways, increasing revenue streams by 15%."
+      - "Resolved critical production bugs, maintaining a 99% SLA adherence."
+      - "Participated in daily stand-ups and sprint planning sessions within an Agile framework."
+
+  - role: "Junior Developer"
+    company: "Startup Ventures"
+    dates: "May 2014 - May 2016"
+    achievements:
+      - "Assisted in the development of the company's flagship mobile application."
+      - "Wrote comprehensive unit tests achieving 90% code coverage."
+      - "Collaborated with UI/UX designers to implement responsive frontend designs."
+      - "Documented API endpoints and system workflows for internal knowledge base."
 
 certifications:
-  - name: "Google Cloud Certified - Digital Leader"
+  - name: "Certified Cloud Solutions Architect"
     start: "2023"
-    end: "Present"
-    icon: "fab fa-google"
-  - name: "Certified Scrum Master (CSM)"
-    start: "2021"
-    end: "2024"
+    end: "2026"
     icon: "fas fa-certificate"
+  - name: "Professional Scrum Master (PSM I)"
+    start: "2022"
+    end: "No Expiry"
+    icon: "fas fa-users-cog"
 
 skills:
-  - category: "IAM PRODUCTS"
+  - category: "PROGRAMMING"
     list:
-      - name: "ForgeRock (AM, IDM)"
+      - name: "Python / Django"
         level: 5
-      - name: "SailPoint IIQ"
-        level: 4
-      - name: "Okta"
-        level: 4
-      - name: "Saviynt IGA"
-        level: 3
-  - category: "CLOUD & PROTOCOLS"
+      - name: "JavaScript / React"
+        level: 5
+  - category: "INFRASTRUCTURE"
     list:
-      - name: "GCP & Azure"
-        level: 5
-      - name: "SAML / OIDC / OAuth"
-        level: 5
-      - name: "Zero Trust Architecture"
+      - name: "Docker & Kubernetes"
+        level: 4
+      - name: "AWS (EC2, S3, Lambda)"
         level: 4
 
 education:
-  - degree: "B.Tech - Computer Science"
-    institution: "IET Bhaddal, Punjab Technical University"
-    dates: "2003 - 2007"
-    details: "Gold Medalist. Graduated with Honors."
+  - degree: "Master of Science in Computer Science"
+    institution: "Tech University, California"
+    dates: "2012 - 2014"
+    details: "Specialized in Distributed Systems. Graduated with Distinction."
+  - degree: "Bachelor of Science in Information Technology"
+    institution: "State College, New York"
+    dates: "2008 - 2012"
+    details: "Dean's List for 6 consecutive semesters. Capstone project focused on Network Security."
