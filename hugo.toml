@@ -3,17 +3,19 @@ languageCode = 'en-us'
 title = 'Resume Studio'
 
 [module]
+  # 1. Mount the submodule files first (the "Shared" site)
+  [[module.mounts]]
+    source = 'themes/knowvana/layouts'
+    target = 'layouts'
+  [[module.mounts]]
+    source = 'themes/knowvana/static'
+    target = 'static'
+
+  # 2. Mount your local project files LAST
+  # This gives them "Highest Priority" so your newest changes appear
   [[module.mounts]]
     source = 'layouts'
     target = 'layouts'
   [[module.mounts]]
     source = 'static'
-    target = 'static'
-  
-  # This is the magic part: mount the OTHER folder directly
-  [[module.mounts]]
-    source = '../knowvana-site/layouts'
-    target = 'layouts'
-  [[module.mounts]]
-    source = '../knowvana-site/static'
     target = 'static'
