@@ -1,5 +1,5 @@
 /* =========================================
-   APP SIDEBAR STYLES (Light & Modern)
+   APP SIDEBAR STYLES (Modern & Redesigned)
    ========================================= */
 
 :root {
@@ -9,8 +9,12 @@
     --sb-text-main: #334155;
     --sb-text-muted: #64748b;
     --sb-hover-bg: #f8fafc;
-    --sb-active-bg: #fffbeb; /* Warm light tint */
-    --sb-active-border: #d4af37;
+    
+    /* New Active Theme: Beautiful Cyan/Teal */
+    --sb-active-bg: linear-gradient(to right, #ecfeff, #cffafe);
+    --sb-active-text: #0e7490;
+    --sb-active-icon: #0891b2;
+    --sb-active-accent: #06b6d4;
 }
 
 /* Container */
@@ -42,53 +46,78 @@
     cursor: col-resize; background: transparent; z-index: 1901;
     transition: background 0.2s;
 }
-.sidebar-resizer:hover, .sidebar-resizer.resizing { background: var(--sb-active-border); }
+.sidebar-resizer:hover, .sidebar-resizer.resizing { background: #cbd5e1; }
 
-/* --- 1. IDENTITY BADGE (Fixed Visibility) --- */
+/* --- 1. IDENTITY BADGE (REDESIGNED) --- */
 .project-badge {
-    background: #f1f5f9; /* Light gray background */
-    border: 1px solid #e2e8f0;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); /* Deep Navy Premium Gradient */
+    border: 1px solid #334155;
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-}
-.project-badge .app-title {
-    color: #0f172a; /* Dark Navy Text - High Contrast */
-    font-weight: 800;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-    display: flex; align-items: center; gap: 8px;
-}
-.project-badge .app-subtitle {
-    color: #64748b; /* Muted Slate */
-    font-size: 0.7rem;
-    margin-top: 4px;
-    margin-left: 2px;
-    font-weight: 500;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
 }
 
-/* --- 2. MENU ITEMS --- */
-.sidebar-item {
-    display: flex; align-items: center; width: 100%; padding: 10px 12px;
-    margin-bottom: 2px; border-radius: 6px; background: transparent; border: none;
-    color: var(--sb-text-main); font-size: 0.9rem; font-weight: 600;
-    text-decoration: none; transition: all 0.15s ease; cursor: pointer; text-align: left;
+/* Subtle top glow */
+.project-badge::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
 }
-.sidebar-item i { width: 22px; text-align: center; margin-right: 10px; color: #94a3b8; transition: color 0.2s; }
+
+.project-badge .app-title {
+    color: #f8fafc; /* Bright White */
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.project-badge .app-title i {
+    color: #d4af37; /* Gold Icon */
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+}
+
+.project-badge .app-subtitle {
+    color: #94a3b8; /* Muted Blue-Gray */
+    font-size: 0.7rem;
+    margin-top: 6px;
+    margin-left: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+}
+
+/* --- 2. MENU ITEMS (Updated Active State) --- */
+.sidebar-item {
+    display: flex; align-items: center; width: 100%; padding: 12px 14px;
+    margin-bottom: 4px; border-radius: 8px; background: transparent; border: none;
+    border-left: 3px solid transparent; /* Prepare for active border */
+    color: var(--sb-text-main); font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s ease; cursor: pointer; text-align: left;
+}
+.sidebar-item i { width: 24px; text-align: center; margin-right: 12px; color: #94a3b8; transition: color 0.2s; }
 
 /* Hover */
 .sidebar-item:hover { background: var(--sb-hover-bg); color: #0f172a; }
-.sidebar-item:hover i { color: var(--sb-active-border); }
+.sidebar-item:hover i { color: #64748b; }
 
-/* Active */
+/* Active (Create Resume - Greenish/Blueish) */
 .sidebar-item.active { 
     background: var(--sb-active-bg); 
-    color: #b45309; 
+    color: var(--sb-active-text); 
     font-weight: 700;
+    border-left-color: var(--sb-active-accent); /* Accent Border */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
-.sidebar-item.active i { color: #d97706; }
+.sidebar-item.active i { color: var(--sb-active-icon); }
 
 /* --- 3. SUBMENU (Nested Tree) --- */
 .submenu-wrapper {
@@ -107,14 +136,14 @@
 .submenu-label:first-child { margin-top: 0; }
 
 .submenu-link {
-    display: flex; align-items: center; width: 100%; padding: 7px 10px;
+    display: flex; align-items: center; width: 100%; padding: 8px 12px;
     color: #475569; font-size: 0.85rem; font-weight: 500;
-    background: transparent; border: none; border-radius: 4px;
+    background: transparent; border: none; border-radius: 6px;
     text-align: left; cursor: pointer; transition: all 0.15s;
 }
 .submenu-link:hover { background: #f1f5f9; color: #0f172a; }
-.submenu-link i { width: 18px; margin-right: 8px; font-size: 0.8rem; color: #cbd5e1; }
-.submenu-link:hover i { color: var(--sb-active-border); }
+.submenu-link i { width: 18px; margin-right: 10px; font-size: 0.8rem; color: #cbd5e1; }
+.submenu-link:hover i { color: var(--sb-active-accent); }
 
 /* Specific Colors */
 .submenu-link.danger:hover { background: #fef2f2; color: #ef4444; }
@@ -122,22 +151,22 @@
 
 /* --- 4. EMBEDDED CONTROLS (Fonts/Colors) --- */
 .sidebar-control-box {
-    padding: 4px 8px;
+    padding: 6px 8px;
 }
 .sidebar-select {
-    width: 100%; padding: 4px 8px; font-size: 0.8rem; border: 1px solid #cbd5e1;
-    border-radius: 4px; color: #334155; background: white; cursor: pointer;
+    width: 100%; padding: 6px 10px; font-size: 0.8rem; border: 1px solid #cbd5e1;
+    border-radius: 6px; color: #334155; background: white; cursor: pointer;
 }
-.sidebar-select:focus { outline: none; border-color: var(--sb-active-border); }
+.sidebar-select:focus { outline: none; border-color: var(--sb-active-accent); }
 
-.mini-theme-selector { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 8px; }
-.theme-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); transition: transform 0.2s; position: relative; }
-.theme-dot:hover { transform: scale(1.1); border-color: #000; }
+.mini-theme-selector { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 8px; }
+.theme-dot { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 0 0 1px rgba(0,0,0,0.1); transition: transform 0.2s; position: relative; }
+.theme-dot:hover { transform: scale(1.15); border-color: white; box-shadow: 0 0 0 1px #000; }
 .theme-dot.custom-picker-wrapper { overflow: hidden; display: flex; align-items: center; justify-content: center; background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); }
 .theme-dot input[type="color"] { opacity: 0; width: 150%; height: 150%; cursor: pointer; position: absolute; top: -5px; left: -5px;}
 
 /* --- 5. SEPARATOR --- */
-.sidebar-separator { height: 1px; background: #e2e8f0; margin: 1rem 0; width: 100%; }
+.sidebar-separator { height: 1px; background: #e2e8f0; margin: 1.5rem 0; width: 100%; }
 
 /* Mobile */
 @media (max-width: 992px) {

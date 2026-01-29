@@ -26,8 +26,23 @@ body {
     /* App Navigation Spacing */
     padding-top: var(--header-height);
     padding-left: var(--sidebar-width);
-    transition: padding-left 0.05s linear; 
+    transition: padding-left 0.05s linear;
+    
+    /* SCROLLBAR FIX: Only show scrollbar if content exceeds viewport */
+    overflow-y: auto; 
 }
+
+/* Main Content Area */
+.main-stage {
+    /* Fix: Subtract header (60px) + bottom padding (40px) to prevent default scrollbar */
+    min-height: calc(100vh - 100px); 
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animation Helper */
+.transition-transform { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.transition-transform:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; }
 
 /* =========================================
    2. RICH TEXT EDITOR (Quill.js)
@@ -69,7 +84,7 @@ body {
 }
 
 /* =========================================
-   3. RESUME PAPER STYLING (Screen & Print)
+   3. RESUME PAPER (Restored from your Snippet)
    ========================================= */
 .resume-paper { 
     background: white; 
@@ -78,7 +93,7 @@ body {
     margin-top: 2rem; 
     border-radius: 4px; 
     overflow: hidden; 
-    display: flex; /* Flexbox Layout */
+    display: flex; /* Flexbox restored */
     flex-wrap: wrap;
 }
 
@@ -99,7 +114,7 @@ body {
 .font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
 .font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
 
-.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; word-wrap: break-word; }
+.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; }
 .sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
 .sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
 
@@ -132,7 +147,7 @@ body {
 
 .date-picker-modern { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; }
 
-/* Skills & Cards (UPDATED FOR LEFT ALIGNMENT) */
+/* Skills & Cards */
 .skill-category-input { 
     color: var(--gold-accent); 
     font-weight: 800; 
@@ -174,25 +189,25 @@ body {
 .theme-panel { position: fixed; bottom: 100px; right: 30px; width: 320px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 1000; border: 1px solid #334155; }
 .image-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; width: 300px; text-align: center; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; }
-.main-stage { min-height: 100vh; }
 .view-wrapper { animation: fadeIn 0.4s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
 /* =========================================
-   4. PRINT OVERRIDES (SAFE & STABLE)
+   4. PRINT OVERRIDES (SAFE)
    ========================================= */
 @media print {
-    @page { margin: 0; size: A4; }
+    @page { margin: 1cm 0; size: A4; } /* Standard Safe Margins */
     
     html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
     
     /* Hide UI Navigation */
     .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { display: none !important; }
     
+    /* RESET CONTAINER & PAPER */
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
     
-    /* Flex Layout (Preserved) */
+    /* Resume Paper */
     .resume-paper { 
         margin: 0 !important; 
         box-shadow: none !important; 
@@ -200,48 +215,35 @@ body {
         width: 100% !important; 
         min-height: 100vh !important; 
         display: flex !important; 
-        flex-wrap: nowrap !important; 
-        overflow: visible !important; 
-        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; 
+        flex-wrap: nowrap !important;
+        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important;
     }
     
-    .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; }
+    .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; background-color: transparent !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
     
-    .sidebar-wrapper { background-color: transparent !important; color: white !important; height: 100%; padding: 3rem 1.5rem !important; }
+    /* Content Padding */
+    .sidebar-wrapper { 
+        padding: 40px 15px 40px 20px !important; 
+        word-wrap: break-word !important; 
+    }
+    .main-content-wrapper { 
+        padding: 40px 40px !important; 
+    }
     
-    .sidebar-name { font-size: 2rem !important; }
-    .sidebar-role { font-size: 0.8rem !important; }
-    .contact-input { word-wrap: break-word !important; overflow-wrap: break-word !important; font-size: 0.85rem !important; white-space: normal !important; }
-    .main-content-wrapper { padding: 3rem 2rem 5rem 2rem !important; }
-
-    /* Page Break Logic (The "Border Hack" - Restored) */
-    .section-group { 
-        break-inside: auto !important; 
-        page-break-inside: auto !important; 
+    /* Prevent Splitting */
+    .section-group, .card, .timeline-item, .personal-details-card, .highlight-box {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
         display: block; 
-        margin-top: 0 !important; 
-        border-top: 3.5rem solid transparent !important; 
-        padding-bottom: 2rem !important; 
-        margin-bottom: -2rem !important; 
+        position: relative;
+        margin-bottom: 2rem !important;
     }
-    
-    .section-group:first-child { padding-top: 0 !important; border-top: none !important; }
-    .sidebar-wrapper .section-group { break-inside: avoid !important; page-break-inside: avoid !important; }
-    
-    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper, .cert-main-card { 
-        break-inside: avoid !important; 
-        page-break-inside: avoid !important; 
-        margin-bottom: 1rem !important; 
-    }
-    
-    .cert-main-card { padding: 0.75rem 1rem !important; margin-bottom: 0.5rem !important; break-inside: avoid !important; align-items: flex-start !important; }
-    .cert-main-icon-box { width: 35px !important; height: 35px !important; font-size: 1rem !important; margin-right: 1rem !important; }
     
     /* Editor Cleanup */
     .ql-editor { padding: 0 !important; overflow: visible !important; border: none !important; }
     .ql-container { border: none !important; }
     .print-only { display: block !important; }
-    input, textarea, select { border: none !important; background: transparent !important; padding: 0 !important; }
+    input, textarea, select { border: none !important; background: transparent !important; padding: 0 !important; resize: none; }
 }
 .print-only { display: none; }

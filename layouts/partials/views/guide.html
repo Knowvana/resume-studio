@@ -1,46 +1,140 @@
 <div x-show="activeTab === 'guide'" class="view-wrapper animate-fade" style="display: none;">
-    <div class="container py-5" style="max-width: 800px;">
-        <h2 class="font-serif-bold mb-4 border-bottom pb-3">How to Use Resume Architect</h2>
+    <div class="container py-5">
         
-        <div class="guide-step mb-5 d-flex gap-4">
-            <div class="step-number display-4 fw-bold text-warning opacity-50">01</div>
-            <div>
-                <h4 class="fw-bold">Edit Content Directly</h4>
-                <p class="text-muted">Click on any text on the resume paper to edit it. The fields are "live".</p>
-                <ul class="text-muted small">
-                    <li>Click your <strong>Name</strong> to update it.</li>
-                    <li>Click the <strong>Icons</strong> in the sidebar to change them (using FontAwesome class names).</li>
-                    <li>Click the <strong>Skill Dots</strong> to change your proficiency level.</li>
-                </ul>
-            </div>
+        <div class="text-center mb-5">
+            <h1 class="font-serif-bold display-5 mb-3">Mastering Resume Architect</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                A comprehensive guide to crafting world-class resumes using our studio tools. 
+                Learn how to edit, customize, and export your professional story.
+            </p>
         </div>
 
-        <div class="guide-step mb-5 d-flex gap-4">
-            <div class="step-number display-4 fw-bold text-warning opacity-50">02</div>
-            <div>
-                <h4 class="fw-bold">Customize the Design</h4>
-                <p class="text-muted">Use the <strong>Left Menu</strong> to change the look and feel.</p>
-                <ul class="text-muted small">
-                    <li>Use <strong>Quick Theme</strong> to change the sidebar color instantly.</li>
-                    <li>Click the <strong>Palette Icon</strong> (bottom right floating button) for advanced font controls.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="guide-step mb-5 d-flex gap-4">
-            <div class="step-number display-4 fw-bold text-warning opacity-50">03</div>
-            <div>
-                <h4 class="fw-bold">Export & Share</h4>
-                <p class="text-muted">Once you are happy with your resume:</p>
-                <div class="bg-white p-3 border rounded">
-                    <ol class="mb-0 small text-muted">
-                        <li>Go to <strong>Create Resume</strong> tab.</li>
-                        <li>Click <strong>Download PDF</strong> in the sidebar.</li>
-                        <li>In the print dialog, ensure <strong>"Background Graphics"</strong> is CHECKED.</li>
-                        <li>Set margins to <strong>"None"</strong> for best results.</li>
-                    </ol>
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; margin-right: 1rem;">
+                                <i class="fas fa-magic fa-lg"></i>
+                            </div>
+                            <h3 class="mb-0 font-serif-bold h4">The Basics</h3>
+                        </div>
+                        <p class="text-secondary">
+                            Resume Architect Studio is a <strong>"What You See Is What You Get" (WYSIWYG)</strong> editor. 
+                            There are no complex forms to fill out separately. You edit your resume directly on the paper layout.
+                        </p>
+                        <ul class="list-unstyled text-muted mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Click to Edit:</strong> Simply click on any text (Name, Role, Description) to start typing.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Auto-Save:</strong> Your work is automatically saved to your browser's local storage.</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> <strong>Rich Text:</strong> formatting toolbars appear when you click into detailed sections (Experience, Summary).</li>
+                        </ul>
+                    </div>
                 </div>
+
+                <h4 class="font-serif-bold mb-4 mt-5 ps-2 border-start border-4 border-warning">Section Breakdown</h4>
+                
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <h5 class="mb-0 text-primary"><i class="fas fa-columns me-2"></i> The Sidebar (Left Column)</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold"><i class="fas fa-user-circle text-warning me-2"></i>Profile Image</h6>
+                                <p class="small text-muted">Click the round placeholder image to upload your own photo. For best results, use a square professional headshot.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold"><i class="fas fa-id-card text-warning me-2"></i>Contact Details</h6>
+                                <p class="small text-muted">Edit your Location, Phone, Email, and LinkedIn URL. Use standard formats (e.g., "New York, NY").</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold"><i class="fas fa-certificate text-warning me-2"></i>Certifications</h6>
+                                <p class="small text-muted">Click the <strong>(+)</strong> button to add new certs. Click the <i class="fas fa-certificate text-warning small"></i> icon next to a cert to change its FontAwesome icon class.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold"><i class="fas fa-chart-bar text-warning me-2"></i>Core Competencies</h6>
+                                <p class="small text-muted">Organize skills by category. Click the <strong>Dots</strong> to set your proficiency level (1-5).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <h5 class="mb-0 text-primary"><i class="fas fa-file-alt me-2"></i> Main Content (Right Column)</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <h6 class="fw-bold">Professional Profile</h6>
+                            <p class="small text-muted">A rich-text area for your executive summary. Use the formatting toolbar to add <strong>bold</strong> keywords or <em>italics</em>. The "Impact Statement" below it is for your unique value proposition quote.</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="fw-bold">Experience & Timeline</h6>
+                            <p class="small text-muted">
+                                Click <strong>"+ Role"</strong> to add a job. 
+                                <br>
+                                <span class="badge bg-light text-dark border me-1">Details</span> The description box supports bullet points. Press <code>Enter</code> to create new bullets.
+                                <br>
+                                <span class="badge bg-light text-dark border me-1">Dates</span> Use the date pickers. Check "Currently Working" to automatically set the end date to "Present".
+                            </p>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold">Signature Achievements</h6>
+                            <p class="small text-muted">Distinct cards to highlight major wins. Great for metrics (e.g., "Saved $1M", "Led 50+ Team"). You can change the icons by clicking on them.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="font-serif-bold mb-4 mt-5 ps-2 border-start border-4 border-success">Finalizing Your Resume</h4>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-palette text-success fs-3 me-3"></i>
+                                    <h5 class="mb-0">Design & Theme</h5>
+                                </div>
+                                <p class="small text-muted">
+                                    Click the floating <strong>Paint Brush</strong> icon (bottom right) to open the Theme Panel.
+                                </p>
+                                <ul class="small text-muted mb-0 ps-3">
+                                    <li>Change <strong>Sidebar Color</strong> (Navy, Slate, Green, Red).</li>
+                                    <li>Switch <strong>Typography</strong> (Lato, Roboto, Serif).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm bg-primary text-white">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-file-pdf text-white-50 fs-3 me-3"></i>
+                                    <h5 class="mb-0">Export to PDF</h5>
+                                </div>
+                                <p class="small text-white-50">
+                                    Press <strong>Ctrl + P</strong> (or Cmd + P on Mac) to print.
+                                </p>
+                                <div class="p-3 bg-white bg-opacity-10 rounded small">
+                                    <strong><i class="fas fa-star me-1"></i> Pro Tip:</strong>
+                                    Set paper size to <strong>A4</strong> and margins to <strong>None / Minimum</strong> in your browser print settings for the best layout.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
+        
+        <div class="text-center mt-5 pt-4 border-top">
+            <button @click="setTab('editor')" class="btn btn-warning btn-lg rounded-pill px-5 fw-bold shadow-sm">
+                Return to Editor
+            </button>
+        </div>
+
     </div>
 </div>

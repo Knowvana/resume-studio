@@ -1,43 +1,75 @@
 <div x-show="activeTab === 'about'" class="view-wrapper animate-fade" style="display: none;">
-    <div class="container py-5" style="max-width: 900px;">
-        <div class="text-center mb-5">
-            <div class="text-warning fw-bold small text-uppercase mb-2 tracking-wide">Knowvana Labs</div>
-            <h1 class="display-4 fw-bold text-dark mb-3 font-serif-bold">Resume Architect Studio</h1>
-            <p class="lead text-muted mx-auto" style="max-width: 600px;">
-                A privacy-first, professional resume builder designed for developers and creators. Build beautiful, ATS-friendly resumes in minutes.
-            </p>
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <button @click="setTab('editor')" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
-                    Start Building <i class="fas fa-arrow-right ms-2"></i>
-                </button>
-                <button @click="setTab('guide')" class="btn btn-outline-dark btn-lg rounded-pill px-4">
-                    Learn More
-                </button>
+    <div class="container py-5">
+        
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="p-5 bg-white rounded-4 shadow-lg border position-relative overflow-hidden text-center" style="border-top: 4px solid #d4af37 !important;">
+                    <div class="position-relative z-1">
+                        <div class="d-inline-block px-3 py-1 rounded-pill bg-warning bg-opacity-10 text-warning fw-bold small text-uppercase mb-3 border border-warning border-opacity-25">
+                            v2.0 Studio Edition
+                        </div>
+                        <h1 class="display-4 fw-bolder text-dark mb-3 font-serif-bold">
+                            Resume Architect <span class="text-warning">Studio</span>
+                        </h1>
+                        <p class="lead text-muted mb-4 mx-auto" style="max-width: 650px; line-height: 1.8;">
+                            The privacy-first, serverless resume builder for professionals. 
+                            Craft ATS-friendly, impeccably designed resumes directly in your browser—no sign-ups, no data mining, just pure creativity.
+                        </p>
+                        
+                        <div class="d-flex justify-content-center gap-3">
+                            <button @click="setTab('editor')" class="btn btn-dark btn-lg rounded-pill px-5 shadow-sm transition-transform">
+                                <i class="fas fa-pen-nib me-2"></i> Start Building
+                            </button>
+                            <button @click="setTab('guide')" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                                Documentation
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-light opacity-50" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; z-index: 0;"></div>
+                </div>
             </div>
         </div>
 
-        <div class="row g-4 mt-4">
+        <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
-                    <div class="feature-icon-lg mb-3 text-warning"><i class="fas fa-bolt fa-2x"></i></div>
-                    <h5 class="fw-bold">Real-time Editing</h5>
-                    <p class="text-muted small">Edit directly on the paper. What you see is exactly what you get. No forms, no preview buttons.</p>
+                <div class="h-100 p-4 bg-white rounded-3 shadow-sm border feature-card text-center transition-transform">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-bolt fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Real-Time Architecting</h5>
+                    <p class="text-muted small mb-0">Experience a "What You See Is What You Get" editor. Type directly onto the canvas with instant visual feedback.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
-                    <div class="feature-icon-lg mb-3 text-success"><i class="fas fa-shield-alt fa-2x"></i></div>
-                    <h5 class="fw-bold">100% Private</h5>
-                    <p class="text-muted small">Your data is stored in your browser's local storage. We don't see anything unless you choose to sync.</p>
+                <div class="h-100 p-4 bg-white rounded-3 shadow-sm border feature-card text-center transition-transform">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-shield-alt fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Privacy by Design</h5>
+                    <p class="text-muted small mb-0">Zero server storage by default. Your data lives exclusively in your browser's local storage unless you choose to sync.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
-                    <div class="feature-icon-lg mb-3 text-primary"><i class="fas fa-file-export fa-2x"></i></div>
-                    <h5 class="fw-bold">High-Res Export</h5>
-                    <p class="text-muted small">Export to PDF with selectable text, perfect for ATS systems and HR software.</p>
+                <div class="h-100 p-4 bg-white rounded-3 shadow-sm border feature-card text-center transition-transform">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-file-pdf fa-lg"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Vector-Perfect Export</h5>
+                    <p class="text-muted small mb-0">Generate high-fidelity, selectable text PDFs optimized for Applicant Tracking Systems (ATS) and retina displays.</p>
                 </div>
             </div>
         </div>
+
+        <div class="text-center pt-4 border-top">
+            <p class="small text-uppercase text-muted fw-bold mb-3 tracking-wide">Powered by Modern Tech</p>
+            <div class="d-flex justify-content-center gap-4 text-secondary opacity-75">
+                <span title="Hugo"><i class="fas fa-bolt"></i> Hugo</span>
+                <span title="Alpine.js"><i class="fas fa-code"></i> Alpine.js</span>
+                <span title="Netlify"><i class="fas fa-cloud"></i> Netlify</span>
+                <span title="Bootstrap 5"><i class="fab fa-bootstrap"></i> Bootstrap 5</span>
+            </div>
+        </div>
+
     </div>
 </div>
