@@ -1,126 +1,83 @@
+/* =========================================
+   5. IMAGE MODAL & CROPPER STYLES
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7); /* Dark Dim */
+    z-index: 2500; /* Above all */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.cropper-container {
+    max-width: 100%;
+}
+
+/* Ensure Profile Image area is clickable */
+.profile-img-box { 
+    width: 170px; height: 170px; 
+    border-radius: 50%; 
+    border: 4px solid var(--gold-accent); 
+    margin: 0 auto 1.5rem auto; 
+    overflow: hidden; 
+    background: var(--navy-light); 
+    cursor: pointer; 
+    position: relative; 
+}
+
+.profile-img-box img { 
+    width: 100%; height: 100%; 
+    object-fit: cover; 
+}
+
+/* ... (Keep existing Print and Layout styles) ... */
 :root {
     /* --- VARIABLES --- */
     --doc-font: 'Lato', sans-serif;
     --gold-accent: #d4af37;
     --bg-light: #f8fafc;
-    
-    /* Layout Dimensions */
-    --sidebar-width: 250px; 
+    --sidebar-width: 260px; 
     --header-height: 60px;
-    
-    /* Resume Paper Colors */
     --sidebar-bg: #0b1120;
     --navy-light: #1e293b;
     --text-dark: #334155;
     --navy-dark: #0b1120;
 }
 
-/* =========================================
-   1. GLOBAL LAYOUT (App Shell)
-   ========================================= */
-body { 
-    background-color: var(--bg-light); 
-    font-family: var(--doc-font); 
-    padding-bottom: 40px;
-    
-    /* App Navigation Spacing */
-    padding-top: var(--header-height);
-    padding-left: var(--sidebar-width);
-    transition: padding-left 0.05s linear; 
-}
+body { background-color: var(--bg-light); font-family: var(--doc-font); padding-bottom: 40px; padding-top: var(--header-height); padding-left: var(--sidebar-width); transition: padding-left 0.05s linear; overflow-y: auto; }
+.main-stage { min-height: calc(100vh - 100px); display: flex; flex-direction: column; }
 
-/* =========================================
-   2. RICH TEXT EDITOR (Quill.js)
-   ========================================= */
-.ql-container { 
-    font-family: var(--doc-font) !important;
-    font-size: 1rem !important; 
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    background: white;
-}
-.ql-editor { 
-    font-family: var(--doc-font);
-    padding: 0.8rem; 
-    min-height: auto; 
-    line-height: 1.6;
-    color: #334155; 
-    overflow-y: hidden;
-}
-.ql-editor p { margin-bottom: 0.5em; }
-.ql-editor ul { padding-left: 1.2rem; }
-.ql-editor li { padding-left: 0.2rem; }
-
-.ql-toolbar { 
-    border: 1px solid #e2e8f0 !important; 
-    border-bottom: 1px solid #e2e8f0 !important; 
-    background: #f8fafc; 
-    border-top-left-radius: 4px; 
-    border-top-right-radius: 4px; 
-    font-family: sans-serif !important;
-}
-.ql-container.ql-snow { 
-    border: 1px solid #e2e8f0 !important; 
-    border-top: none !important; 
-}
-.form-control-wrapper:focus-within .ql-toolbar,
-.form-control-wrapper:focus-within .ql-container { 
-    border-color: var(--gold-accent) !important; 
-}
-
-/* =========================================
-   3. RESUME PAPER STYLING
-   ========================================= */
-.resume-paper { 
-    background: white; 
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-    min-height: 297mm; 
-    margin-top: 2rem; 
-    border-radius: 4px; 
-    overflow: hidden; 
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.sidebar-wrapper { 
-    background-color: var(--sidebar-bg); 
-    color: white; 
-    min-height: 100%; 
-    padding: 3.5rem 2.5rem; 
-    width: 33.333%; 
-}
-
-.main-content-wrapper { 
-    padding: 4rem 3.5rem; 
-    width: 66.666%; 
-}
-
-/* Typography */
-.font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
-.font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
-
-.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; word-wrap: break-word; }
-.sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
-.sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
-
-/* Inputs */
+/* Editor Inputs */
+.ql-container { font-family: var(--doc-font) !important; font-size: 1rem !important; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; background: white; }
+.ql-editor { font-family: var(--doc-font); padding: 0.8rem; min-height: auto; line-height: 1.6; color: #334155; overflow-y: hidden; }
+.ql-toolbar { border: 1px solid #e2e8f0 !important; border-bottom: 1px solid #e2e8f0 !important; background: #f8fafc; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.ql-container.ql-snow { border: 1px solid #e2e8f0 !important; border-top: none !important; }
+.form-control-wrapper:focus-within .ql-toolbar, .form-control-wrapper:focus-within .ql-container { border-color: var(--gold-accent) !important; }
 .form-control-ghost { background-color: transparent !important; border: 1px solid transparent; width: 100%; color: inherit; padding: 2px 5px; resize: none; overflow: hidden; transition: 0.2s; }
 .form-control-ghost:hover { background-color: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.2); }
 .form-control-ghost:focus { background-color: #fff !important; border-color: var(--gold-accent); outline: none; color: black !important; }
 .form-control-ghost-dark { color: white; }
 .form-control-ghost-dark:focus { background-color: rgba(255,255,255,0.1) !important; color: white !important; border-color: white; }
 
-/* Contact Icons */
+/* Resume Paper */
+.resume-paper { background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); min-height: 297mm; margin-top: 2rem; border-radius: 4px; overflow: hidden; display: flex; flex-wrap: wrap; }
+.sidebar-wrapper { background-color: var(--sidebar-bg); color: white; min-height: 100%; padding: 3.5rem 2.5rem; width: 33.333%; }
+.main-content-wrapper { padding: 4rem 3.5rem; width: 66.666%; }
+
+/* Typography */
+.font-serif-bold { font-family: 'Playfair Display', serif; font-weight: 700; }
+.font-sans-regular { font-family: var(--doc-font); font-weight: 400; }
+.sidebar-name { font-size: 2.5rem; font-weight: 700; line-height: 1.1; color: white; word-wrap: break-word; }
+.sidebar-role { font-size: 0.9rem; letter-spacing: 3px; opacity: 0.8; margin-top: 10px; }
+.sidebar-header { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-accent); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+
+/* Elements */
 .contact-row { display: flex; align-items: flex-start; margin-bottom: 0.8rem; color: rgba(255,255,255,0.9); }
 .contact-icon { width: 20px; text-align: center; color: var(--gold-accent); margin-right: 12px; font-size: 1rem; flex-shrink: 0; margin-top: 3px; }
 .contact-input { font-size: 0.95rem; font-weight: 400; color: white; word-break: break-word; white-space: pre-wrap; line-height: 1.4; }
-
-/* Profile Image */
-.profile-img-box { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold-accent); margin: 0 auto 1.5rem auto; overflow: hidden; background: var(--navy-light); cursor: pointer; position: relative; }
-.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.profile-img-box:hover::after { content: "\f030"; font-family: "Font Awesome 5 Free"; font-weight: 900; position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; }
-
-/* Timeline */
 .timeline-role { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.2rem; color: #0b1120; }
 .timeline-date { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; color: #334155; text-align: right; white-space: nowrap; }
 .timeline-company { font-family: 'Lato', sans-serif; font-weight: 700; color: #aa8c2c; font-size: 0.95rem; margin-bottom: 0.5rem; }
@@ -129,114 +86,47 @@ body {
 .timeline-badge-bottom { position: absolute; bottom: -10px; left: -28px; background: #64748b; color: white; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; padding: 3px 8px; border-radius: 12px; z-index: 2; }
 .timeline-item { position: relative; margin-bottom: 2rem; }
 .timeline-icon { position: absolute; left: -2.1rem; top: 4px; width: 16px; height: 16px; background: white; border: 3px solid var(--gold-accent); border-radius: 50%; z-index: 1; }
-
 .date-picker-modern { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; }
-
-/* Skills & Cards (RESTORED REMOVE BUTTON) */
-.skill-category-input { 
-    color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; text-align: left !important;
-}
+.skill-category-input { color: var(--gold-accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 0.5rem; text-align: left !important; }
 .skill-item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; position: relative; }
-.skill-name-input { 
-    color: white; font-size: 0.85rem; font-weight: 500; width: 50% !important; padding-right: 5px; text-align: left !important;
-}
+.skill-name-input { color: white; font-size: 0.85rem; font-weight: 500; width: 50% !important; padding-right: 5px; text-align: left !important; }
 .skill-bar-wrapper { width: 45%; display: flex; gap: 4px; position: relative; cursor: pointer; }
 .skill-dot { height: 6px; flex: 1; background: rgba(255,255,255,0.15); border-radius: 1px; }
 .skill-dot.filled:nth-of-type(-n+3) { background: #facc15 !important; }
 .skill-dot.filled:nth-of-type(4) { background: #4ade80 !important; }
 .skill-dot.filled:nth-of-type(5) { background: #166534 !important; }
-
-/* Achievement Cards & Buttons (RESTORED) */
 .achievement-card { position: relative; }
-.btn-remove-card { 
-    position: absolute; 
-    top: -10px !important; 
-    right: -10px !important; 
-    z-index: 50; 
-    padding: 0; 
-    background: white; 
-    border: 1px solid #ddd; 
-    border-radius: 50%; 
-    width: 24px; 
-    height: 24px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-    opacity: 0; 
-    transition: opacity 0.2s; 
-    color: #ef4444; 
-}
+.btn-remove-card { position: absolute; top: -10px !important; right: -10px !important; z-index: 50; padding: 0; background: white; border: 1px solid #ddd; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.2s; color: #ef4444; }
 .group-hover:hover .btn-remove-card { opacity: 1; }
-
 .cert-main-card { display: flex; align-items: center; background: white; border: 1px solid #e2e8f0; border-left: 4px solid var(--gold-accent); padding: 1rem; border-radius: 0 8px 8px 0; }
 .cert-main-icon-box { width: 45px; height: 45px; background: #f8fafc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0b1120; margin-right: 1rem; flex-shrink: 0; }
 .cert-main-date-badge { background: #f1f5f9; color: #64748b; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-left: 10px; }
-
 .highlight-box { background: #fffbeb; border-left: 5px solid var(--gold-accent); padding: 1.5rem; border-radius: 0 12px 12px 0; margin-top: 2rem; position: relative; }
 .highlight-text-bg { background: rgba(255, 255, 255, 0.6); padding: 1rem; border-radius: 8px; display: block; }
-.impact-font { font-family: 'Merriweather', serif; font-style: italic; font-size: 1.1rem; line-height: 1.6; color: #334155; }
 .personal-details-card { background: white; border: 1px solid #e2e8f0; border-left: 4px solid #0b1120; padding: 1.5rem; border-radius: 8px; }
-.pd-label { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.85rem; color: #0b1120; margin-bottom: 2px; display: block; }
-.pd-value { font-family: 'Lato', sans-serif; font-weight: 600; color: #334155; }
 .beautiful-separator { height: 2px; background: linear-gradient(to right, var(--gold-accent), transparent); margin-bottom: 2rem; opacity: 0.7; }
-
-/* Helpers */
 .theme-fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #1e293b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid white; }
 .theme-panel { position: fixed; bottom: 100px; right: 30px; width: 320px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 1000; border: 1px solid #334155; }
-.image-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; width: 300px; text-align: center; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; }
-.main-stage { min-height: 100vh; }
-.view-wrapper { animation: fadeIn 0.4s ease-in-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.transition-transform { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.transition-transform:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important; }
 
-/* =========================================
-   4. PRINT OVERRIDES (SAFE)
-   ========================================= */
 @media print {
-    @page { margin: 1cm 0; size: A4; } 
-    
+    @page { margin: 1cm 0; size: A4; }
     html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: white; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; }
-    
-    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .format-toolbar { display: none !important; }
-    
+    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { display: none !important; }
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
-    
-    .resume-paper { 
-        margin: 0 !important; 
-        box-shadow: none !important; 
-        border-radius: 0 !important; 
-        width: 100% !important; 
-        min-height: 100vh !important; 
-        display: flex !important; 
-        flex-wrap: nowrap !important; 
-        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; 
-    }
-    
+    .resume-paper { margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important; display: flex !important; flex-wrap: nowrap !important; background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; }
     .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; max-width: 32% !important; background-color: transparent !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; max-width: 68% !important; }
-    
-    .sidebar-wrapper { 
-        padding: 40px 15px 40px 20px !important; 
-        word-wrap: break-word !important; 
-    }
-    .main-content-wrapper { 
-        padding: 40px 40px !important; 
-    }
-    
+    .sidebar-wrapper { padding: 40px 15px 40px 20px !important; word-wrap: break-word !important; }
+    .main-content-wrapper { padding: 40px 40px !important; }
     .sidebar-name { font-size: 2rem !important; line-height: 1.1; }
     .sidebar-role { font-size: 0.8rem !important; letter-spacing: 1px; }
     .contact-input { font-size: 0.8rem !important; white-space: pre-wrap !important; }
-    
-    .section-group, .card, .timeline-item, .personal-details-card, .highlight-box {
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        display: block; 
-        position: relative;
-        margin-bottom: 2rem !important;
-    }
-    
+    .section-group { break-inside: auto !important; page-break-inside: auto !important; display: block; margin-top: 0 !important; border-top: 3.5rem solid transparent !important; padding-bottom: 2rem !important; margin-bottom: -2rem !important; }
+    .section-group:first-child { padding-top: 0 !important; border-top: none !important; }
+    .sidebar-wrapper .section-group { break-inside: avoid !important; page-break-inside: avoid !important; }
+    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper, .cert-main-card { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 1rem !important; }
     .ql-editor { padding: 0 !important; overflow: visible !important; border: none !important; }
     .ql-container { border: none !important; }
     .print-only { display: block !important; }

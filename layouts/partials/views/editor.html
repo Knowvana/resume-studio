@@ -44,10 +44,15 @@
         <div class="resume-paper row g-0" :style="'font-family: ' + resume.theme.font">
             
             <div class="col-lg-4 sidebar-wrapper text-center text-lg-start" :style="'background-color: ' + (resume.theme.sidebar_color || '#0b1120')">
-                 <div class="profile-img-box mb-4" @click="promptImage()">
+                 
+                 <div class="profile-img-box mb-4 position-relative group-hover" @click="promptImage()">
                     <template x-if="resume.profile.image"><img :src="resume.profile.image"></template>
                     <template x-if="!resume.profile.image"><img :src="defaultImage"></template>
+                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center text-white opacity-0 hover-100 transition-all no-print rounded-circle">
+                        <i class="fas fa-camera fs-2"></i>
+                    </div>
                 </div>
+
                 <div class="mb-5 text-center">
                     <textarea x-model="resume.profile.name" class="form-control-ghost form-control-ghost-dark text-center font-serif-bold sidebar-name no-print" placeholder="Your Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
                     <div class="print-only font-serif-bold sidebar-name text-center" x-text="resume.profile.name"></div>
@@ -90,7 +95,6 @@
                                 <div class="w-100">
                                     <textarea x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0 no-print" placeholder="Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
                                     <div class="print-only fw-bold small text-white" style="line-height: 1.2;" x-text="cert.name"></div>
-                                    
                                     <div class="d-flex gap-1 mt-1 align-items-center">
                                         <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="Start">
                                         <span class="text-white-50 small">-</span>
@@ -296,6 +300,45 @@
                 <div class="text-center mt-5 no-print"><button @click="addItem('custom_sections')" class="btn btn-outline-primary px-4 rounded-pill"><i class="fas fa-plus me-2"></i> Add Custom Section</button></div>
             </div>
         </div>
+        
         <footer class="app-footer no-print"><div class="container"><p class="mb-1">&copy; 2026 Resume Architect</p></div></footer>
+    </div>
+
+    <div x-show="showImageModal" class="modal-overlay no-print" style="display:none;" x-transition>
+        <div class="bg-white rounded-3 shadow-lg overflow-hidden" style="width: 90%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column;">
+            
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-crop-alt me-2 text-primary"></i> Edit Profile Photo</h5>
+                <button @click="closeImageEditor()" class="btn btn-sm btn-close"></button>
+            </div>
+
+            <div class="p-0 position-relative flex-grow-1" style="background: #1e293b; min-height: 300px;">
+                <div class="h-100 d-flex align-items-center justify-content-center">
+                    <img id="cropper-target" src="" style="max-width: 100%; display: block;">
+                </div>
+            </div>
+
+            <div class="p-3 bg-white border-top">
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-8">
+                        <input type="text" x-model="imageUrlInput" class="form-control form-control-sm" placeholder="Paste Image URL here...">
+                    </div>
+                    <div class="col-4">
+                        <button @click="loadImageFromUrl()" class="btn btn-sm btn-outline-secondary w-100">Load URL</button>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex gap-2">
+                        <button @click="triggerFileUpload()" class="btn btn-outline-primary"><i class="fas fa-upload me-2"></i> Upload</button>
+                        <input type="file" id="hidden-file-input" @change="handleFileSelect($event)" accept="image/*" hidden>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button @click="closeImageEditor()" class="btn btn-link text-secondary text-decoration-none">Cancel</button>
+                        <button @click="saveCroppedImage()" class="btn btn-primary px-4 fw-bold">Save Photo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

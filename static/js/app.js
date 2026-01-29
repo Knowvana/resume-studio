@@ -1,4 +1,6 @@
-// ... (Helper functions remain the same: formatDate, parseLegacyDate, getSafeDefaults) ...
+// ==============================================
+// 1. HELPER FUNCTIONS
+// ==============================================
 function formatDate(dateStr) {
     if (!dateStr) return "";
     if (dateStr.length === 4) return dateStr;
@@ -42,8 +44,14 @@ function getSafeDefaults() {
 
 const resumeAppData = () => ({
     user: null, loading: false, isDirty: false,
-    activeTab: 'about', showThemePanel: false, showImageModal: false,
+    activeTab: 'about', showThemePanel: false, 
+    
+    // IMAGE EDITOR STATE
+    showImageModal: false,
+    imageUrlInput: '',
+    cropperInstance: null,
     defaultImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Atul&backgroundColor=c0aede",
+    
     resume: getSafeDefaults(),
 
     async init() {
@@ -92,24 +100,6 @@ const resumeAppData = () => ({
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    exportToWord() { alert("Word export is coming soon! Please use PDF export for now."); },
-
-    startResizing(e) {
-        e.preventDefault();
-        const startX = e.clientX;
-        const startWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 250;
-        const onMouseMove = (ev) => {
-            const newWidth = Math.max(180, Math.min(500, startWidth + (ev.clientX - startX)));
-            document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
-        };
-        const onMouseUp = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        };
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    },
-
     updateTheme() {
         const r = document.documentElement;
         if (this.resume.theme) {
@@ -140,21 +130,93 @@ const resumeAppData = () => ({
         }
     },
 
-    openImageModal() { this.showImageModal = true; },
-    promptImageUrl() { const url = prompt("Enter Image URL:", this.resume.profile.image || ""); if (url !== null) { this.resume.profile.image = url; this.showImageModal = false; } },
-    triggerFileUpload() { document.getElementById('hidden-file-input').click(); },
-    handleFileUpload(event) {
+    // === IMAGE EDITOR LOGIC (CROPPING) ===
+    openImageEditor() {
+        this.showImageModal = true;
+        const currentSrc = this.resume.profile.image || this.defaultImage;
+        // Wait for modal to render in DOM
+        this.$nextTick(() => {
+            this.initCropper(currentSrc);
+        });
+    },
+
+    closeImageEditor() {
+        this.showImageModal = false;
+        if (this.cropperInstance) {
+            this.cropperInstance.destroy();
+            this.cropperInstance = null;
+        }
+    },
+
+    triggerFileUpload() {
+        document.getElementById('hidden-file-input').click();
+    },
+
+    handleFileSelect(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => { this.resume.profile.image = e.target.result; this.showImageModal = false; };
+            reader.onload = (e) => {
+                this.initCropper(e.target.result);
+            };
             reader.readAsDataURL(file);
         }
+        event.target.value = ''; // Reset
     },
+
+    loadImageFromUrl() {
+        if (this.imageUrlInput) {
+            this.initCropper(this.imageUrlInput);
+            this.imageUrlInput = '';
+        }
+    },
+
+    initCropper(imageSrc) {
+        const imageElement = document.getElementById('cropper-target');
+        
+        if (this.cropperInstance) {
+            this.cropperInstance.destroy();
+        }
+
+        imageElement.src = imageSrc;
+
+        // Initialize Cropper.js with LinkedIn-style box
+        this.cropperInstance = new Cropper(imageElement, {
+            aspectRatio: 1, // Force square
+            viewMode: 1,    // Restrict crop box to canvas
+            dragMode: 'move',
+            autoCropArea: 1,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false,
+        });
+    },
+
+    saveCroppedImage() {
+        if (this.cropperInstance) {
+            // High quality export
+            const canvas = this.cropperInstance.getCroppedCanvas({
+                width: 400,
+                height: 400
+            });
+            
+            this.resume.profile.image = canvas.toDataURL('image/png');
+            this.closeImageEditor();
+        }
+    },
+
+    promptImage() { 
+        this.openImageEditor(); 
+    },
+
+    // ... (Keep existing helpers) ...
     promptIcon(item) { const i = prompt("Icon Class:", item.icon); if (i !== null) item.icon = i; },
     resize(el) { if (!el) return; el.style.height = 'auto'; el.style.height = (el.scrollHeight + 2) + 'px'; },
-    promptImage() { this.openImageModal(); },
     formatDate(dateStr) { return formatDate(dateStr); },
+    exportToWord() { alert("Word export is coming soon! Please use PDF export for now."); },
 
     addItem(section) {
         const defaults = {
