@@ -1,0 +1,146 @@
+/* =========================================
+   APP SIDEBAR STYLES (Light & Modern)
+   ========================================= */
+
+:root {
+    --sidebar-w-init: 260px;
+    --sb-bg: #ffffff;
+    --sb-border: #e2e8f0;
+    --sb-text-main: #334155;
+    --sb-text-muted: #64748b;
+    --sb-hover-bg: #f8fafc;
+    --sb-active-bg: #fffbeb; /* Warm light tint */
+    --sb-active-border: #d4af37;
+}
+
+/* Container */
+.project-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width, var(--sidebar-w-init));
+    background: var(--sb-bg);
+    border-right: 1px solid var(--sb-border);
+    z-index: 1900;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1rem;
+    overflow-y: auto;
+    overflow-x: hidden; /* No horizontal scrollbar */
+    transition: width 0.05s linear;
+}
+
+/* Custom Scrollbar */
+.project-sidebar::-webkit-scrollbar { width: 4px; }
+.project-sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.project-sidebar::-webkit-scrollbar-track { background: transparent; }
+
+/* Resizer Handle */
+.sidebar-resizer {
+    position: absolute; top: 0; right: 0; bottom: 0; width: 4px;
+    cursor: col-resize; background: transparent; z-index: 1901;
+    transition: background 0.2s;
+}
+.sidebar-resizer:hover, .sidebar-resizer.resizing { background: var(--sb-active-border); }
+
+/* --- 1. IDENTITY BADGE (Fixed Visibility) --- */
+.project-badge {
+    background: #f1f5f9; /* Light gray background */
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.project-badge .app-title {
+    color: #0f172a; /* Dark Navy Text - High Contrast */
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 8px;
+}
+.project-badge .app-subtitle {
+    color: #64748b; /* Muted Slate */
+    font-size: 0.7rem;
+    margin-top: 4px;
+    margin-left: 2px;
+    font-weight: 500;
+}
+
+/* --- 2. MENU ITEMS --- */
+.sidebar-item {
+    display: flex; align-items: center; width: 100%; padding: 10px 12px;
+    margin-bottom: 2px; border-radius: 6px; background: transparent; border: none;
+    color: var(--sb-text-main); font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; transition: all 0.15s ease; cursor: pointer; text-align: left;
+}
+.sidebar-item i { width: 22px; text-align: center; margin-right: 10px; color: #94a3b8; transition: color 0.2s; }
+
+/* Hover */
+.sidebar-item:hover { background: var(--sb-hover-bg); color: #0f172a; }
+.sidebar-item:hover i { color: var(--sb-active-border); }
+
+/* Active */
+.sidebar-item.active { 
+    background: var(--sb-active-bg); 
+    color: #b45309; 
+    font-weight: 700;
+}
+.sidebar-item.active i { color: #d97706; }
+
+/* --- 3. SUBMENU (Nested Tree) --- */
+.submenu-wrapper {
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    display: flex; flex-direction: column; gap: 4px;
+}
+
+.submenu-label {
+    font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    color: #94a3b8; margin: 0.8rem 0 0.4rem 8px;
+}
+.submenu-label:first-child { margin-top: 0; }
+
+.submenu-link {
+    display: flex; align-items: center; width: 100%; padding: 7px 10px;
+    color: #475569; font-size: 0.85rem; font-weight: 500;
+    background: transparent; border: none; border-radius: 4px;
+    text-align: left; cursor: pointer; transition: all 0.15s;
+}
+.submenu-link:hover { background: #f1f5f9; color: #0f172a; }
+.submenu-link i { width: 18px; margin-right: 8px; font-size: 0.8rem; color: #cbd5e1; }
+.submenu-link:hover i { color: var(--sb-active-border); }
+
+/* Specific Colors */
+.submenu-link.danger:hover { background: #fef2f2; color: #ef4444; }
+.submenu-link.danger:hover i { color: #ef4444; }
+
+/* --- 4. EMBEDDED CONTROLS (Fonts/Colors) --- */
+.sidebar-control-box {
+    padding: 4px 8px;
+}
+.sidebar-select {
+    width: 100%; padding: 4px 8px; font-size: 0.8rem; border: 1px solid #cbd5e1;
+    border-radius: 4px; color: #334155; background: white; cursor: pointer;
+}
+.sidebar-select:focus { outline: none; border-color: var(--sb-active-border); }
+
+.mini-theme-selector { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 8px; }
+.theme-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); transition: transform 0.2s; position: relative; }
+.theme-dot:hover { transform: scale(1.1); border-color: #000; }
+.theme-dot.custom-picker-wrapper { overflow: hidden; display: flex; align-items: center; justify-content: center; background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); }
+.theme-dot input[type="color"] { opacity: 0; width: 150%; height: 150%; cursor: pointer; position: absolute; top: -5px; left: -5px;}
+
+/* --- 5. SEPARATOR --- */
+.sidebar-separator { height: 1px; background: #e2e8f0; margin: 1rem 0; width: 100%; }
+
+/* Mobile */
+@media (max-width: 992px) {
+    .project-sidebar { transform: translateX(-100%); box-shadow: none; }
+    .project-sidebar.show { transform: translateX(0); box-shadow: 10px 0 30px rgba(0,0,0,0.1); }
+}

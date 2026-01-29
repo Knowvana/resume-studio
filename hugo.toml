@@ -1,3 +1,19 @@
 baseURL = '/'
 languageCode = 'en-us'
 title = 'Resume Studio'
+
+[module]
+  [[module.mounts]]
+    source = 'layouts'
+    target = 'layouts'
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+  
+  # This is the magic part: mount the OTHER folder directly
+  [[module.mounts]]
+    source = '../knowvana-site/layouts'
+    target = 'layouts'
+  [[module.mounts]]
+    source = '../knowvana-site/static'
+    target = 'static'

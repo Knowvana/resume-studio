@@ -1,0 +1,78 @@
+<aside class="project-sidebar no-print">
+    <div class="sidebar-resizer" @mousedown="startResizing"></div>
+
+    <div class="project-badge">
+        <div class="app-title">
+            <i class="fas fa-layer-group text-warning"></i>
+            <span>RESUME ARCHITECT</span>
+        </div>
+        <div class="app-subtitle">Studio Edition v2.0</div>
+    </div>
+
+    <button @click="setTab('editor')" class="sidebar-item" :class="activeTab === 'editor' ? 'active' : ''">
+        <i class="fas fa-pen-nib"></i> Create Resume
+    </button>
+
+    <div class="submenu-wrapper" x-show="activeTab === 'editor'" x-transition.opacity>
+        
+        <div class="submenu-label">Export</div>
+        <button onclick="window.print()" class="submenu-link">
+            <i class="fas fa-file-pdf"></i> Download PDF
+        </button>
+        <button @click="exportToWord()" class="submenu-link">
+            <i class="fas fa-file-word"></i> Download Word
+        </button>
+
+        <div class="submenu-label">Design</div>
+        
+        <div class="sidebar-control-box mb-2">
+            <div class="small text-muted mb-1" style="font-size:0.7rem;">Quick Theme</div>
+            <div class="mini-theme-selector">
+                <div @click="resume.theme.sidebar_color = '#0b1120'" class="theme-dot" style="background:#0b1120" title="Navy"></div>
+                <div @click="resume.theme.sidebar_color = '#1e293b'" class="theme-dot" style="background:#1e293b" title="Slate"></div>
+                <div @click="resume.theme.sidebar_color = '#374151'" class="theme-dot" style="background:#374151" title="Charcoal"></div>
+                <div @click="resume.theme.sidebar_color = '#14532d'" class="theme-dot" style="background:#14532d" title="Green"></div>
+                <div @click="resume.theme.sidebar_color = '#7f1d1d'" class="theme-dot" style="background:#7f1d1d" title="Red"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-control-box mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="small text-muted" style="font-size:0.7rem;">Custom Color</span>
+                <div class="theme-dot custom-picker-wrapper" title="Pick Custom Color">
+                    <input type="color" x-model="resume.theme.sidebar_color">
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-control-box">
+            <div class="small text-muted mb-1" style="font-size:0.7rem;">Font Style</div>
+            <select class="sidebar-select" x-model="resume.theme.font">
+                <option value="'Lato', sans-serif">Lato (Clean)</option>
+                <option value="'Roboto', sans-serif">Roboto (Modern)</option>
+                <option value="'Montserrat', sans-serif">Montserrat (Bold)</option>
+                <option value="'Playfair Display', serif">Playfair (Serif)</option>
+                <option value="'Open Sans', sans-serif">Open Sans</option>
+            </select>
+        </div>
+
+        <div class="submenu-label mt-3">Actions</div>
+        <button @click="resetToDefaults()" class="submenu-link danger">
+            <i class="fas fa-undo"></i> Reset Data
+        </button>
+    </div>
+
+    <div class="sidebar-separator"></div>
+
+    <button @click="setTab('about')" class="sidebar-item" :class="activeTab === 'about' ? 'active' : ''">
+        <i class="fas fa-info-circle"></i> About Resume Studio
+    </button>
+    
+    <button @click="setTab('guide')" class="sidebar-item" :class="activeTab === 'guide' ? 'active' : ''">
+        <i class="fas fa-book-reader"></i> How to Use
+    </button>
+
+    <div class="mt-auto pt-3 border-top border-secondary border-opacity-10 text-center">
+        <div class="text-muted small" style="font-size: 0.65rem;">&copy; 2026 Knowvana Labs</div>
+    </div>
+</aside>

@@ -1,0 +1,43 @@
+<div x-show="activeTab === 'about'" class="view-wrapper animate-fade" style="display: none;">
+    <div class="container py-5" style="max-width: 900px;">
+        <div class="text-center mb-5">
+            <div class="text-warning fw-bold small text-uppercase mb-2 tracking-wide">Knowvana Labs</div>
+            <h1 class="display-4 fw-bold text-dark mb-3 font-serif-bold">Resume Architect Studio</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 600px;">
+                A privacy-first, professional resume builder designed for developers and creators. Build beautiful, ATS-friendly resumes in minutes.
+            </p>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <button @click="setTab('editor')" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                    Start Building <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <button @click="setTab('guide')" class="btn btn-outline-dark btn-lg rounded-pill px-4">
+                    Learn More
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
+                    <div class="feature-icon-lg mb-3 text-warning"><i class="fas fa-bolt fa-2x"></i></div>
+                    <h5 class="fw-bold">Real-time Editing</h5>
+                    <p class="text-muted small">Edit directly on the paper. What you see is exactly what you get. No forms, no preview buttons.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
+                    <div class="feature-icon-lg mb-3 text-success"><i class="fas fa-shield-alt fa-2x"></i></div>
+                    <h5 class="fw-bold">100% Private</h5>
+                    <p class="text-muted small">Your data is stored in your browser's local storage. We don't see anything unless you choose to sync.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100 text-center feature-card">
+                    <div class="feature-icon-lg mb-3 text-primary"><i class="fas fa-file-export fa-2x"></i></div>
+                    <h5 class="fw-bold">High-Res Export</h5>
+                    <p class="text-muted small">Export to PDF with selectable text, perfect for ATS systems and HR software.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

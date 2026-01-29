@@ -1,78 +1,34 @@
-// ==============================================
-// 1. HELPER FUNCTIONS
-// ==============================================
-
-// Format "YYYY-MM" string to "Mon YYYY" for display
+// ... (Helper functions remain the same: formatDate, parseLegacyDate, getSafeDefaults) ...
 function formatDate(dateStr) {
     if (!dateStr) return "";
-    // If it's just a year "2024"
     if (dateStr.length === 4) return dateStr;
-    
-    // Add day to parse correctly
     const date = new Date(dateStr + "-01");
-    // Check if valid
     if (isNaN(date.getTime())) return dateStr;
-    
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
-// Attempt to parse old date strings back to "YYYY-MM" for inputs
 function parseLegacyDate(dateStr) {
     if (!dateStr || dateStr.toLowerCase() === 'present') return "";
-    // If it's just year
     if (dateStr.trim().match(/^\d{4}$/)) return dateStr.trim() + "-01";
-    
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return "";
-    return date.toISOString().slice(0, 7); // Returns YYYY-MM
+    return date.toISOString().slice(0, 7);
 }
 
-// Generate default data structure (Merged with Hugo data if available)
 function getSafeDefaults() {
     let data = window.hugoDefaultData;
-    
-    // Safety check if hugo data is stringified
-    if (typeof data === 'string') {
-        try { data = JSON.parse(data); } catch (e) { data = null; }
-    }
+    if (typeof data === 'string') { try { data = JSON.parse(data); } catch (e) { data = null; } }
     
     const base = {
-        theme: { 
-            font: "Lato", 
-            sidebar_color: "#0b1120" 
-        },
-        profile: { 
-            name: "", 
-            tagline: "", 
-            location: "", 
-            email: "", 
-            phone: "", 
-            linkedin: "", 
-            summary: "", 
-            impact_statement: "", 
-            image: "",
-            image_align: "center center" // Default Alignment
-        },
-        personal_details: { 
-            dob: "", 
-            nationality: "Indian", 
-            marital_status: "Single", 
-            languages: ["English"] 
-        },
-        signature_achievements: [],
-        experience: [],
-        education: [],
-        certifications: [],
-        skills: [],
-        custom_sections: [] 
+        theme: { font: "Lato", sidebar_color: "#0b1120" },
+        profile: { name: "", tagline: "", location: "", email: "", phone: "", linkedin: "", summary: "", impact_statement: "", image: "", image_align: "center center" },
+        personal_details: { dob: "", nationality: "Indian", marital_status: "Single", languages: ["English"] },
+        signature_achievements: [], experience: [], education: [], certifications: [], skills: [], custom_sections: [] 
     };
 
-    // Merge base with any existing data
     const merged = { 
-        ...base, 
-        ...data, 
+        ...base, ...data, 
         profile: { ...base.profile, ...(data?.profile || {}) },
-        // Ensure arrays exist
         signature_achievements: data?.signature_achievements || [],
         experience: data?.experience || [],
         education: data?.education || [],
@@ -80,98 +36,80 @@ function getSafeDefaults() {
         skills: data?.skills || [],
         custom_sections: data?.custom_sections || []
     };
-
-    // CRITICAL: Ensure theme object exists
     if (!merged.theme) merged.theme = base.theme;
-    
     return merged;
 }
 
-// ==============================================
-// 2. ALPINE.JS DATA COMPONENT
-// ==============================================
-
 const resumeAppData = () => ({
-    user: null,
-    loading: false,
-    isDirty: false,
-    
-    // UI States
-    showThemePanel: false,
-    showImageModal: false,
-    
-    // AI-Style Default Avatar
+    user: null, loading: false, isDirty: false,
+    activeTab: 'about', showThemePanel: false, showImageModal: false,
     defaultImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=Atul&backgroundColor=c0aede",
-    
-    // Data Storage
     resume: getSafeDefaults(),
 
-    // --- INITIALIZATION ---
     async init() {
         console.log("Resume App Initialized");
-        
-        // 1. Load from LocalStorage
         const localData = localStorage.getItem('localResumeDraft');
         if (localData) {
             try {
                 const parsed = JSON.parse(localData);
                 this.resume = { ...this.resume, ...parsed };
                 
-                // Safety: Ensure theme exists if loaded from old data
-                if (!this.resume.theme) {
-                    this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
-                }
-
-                // Migration: Fix Dates
+                // MIGRATION: Array -> String
                 if (this.resume.experience) {
                     this.resume.experience.forEach(job => {
-                        if (job.dates && !job.startDate) {
-                            const parts = job.dates.split(' - ');
-                            job.startDate = parseLegacyDate(parts[0]);
-                            job.isCurrent = (parts[1] || "").toLowerCase().includes("present");
-                            if (!job.isCurrent) job.endDate = parseLegacyDate(parts[1]);
+                        if (Array.isArray(job.achievements)) {
+                            const listItems = job.achievements.map(a => `<li>${a}</li>`).join("");
+                            job.achievements = `<ul>${listItems}</ul>`;
                         }
                     });
                 }
-                if (this.resume.education) {
-                    this.resume.education.forEach(edu => {
-                        if (edu.dates && !edu.startDate) {
-                            const parts = edu.dates.split(' - ');
-                            edu.startDate = parseLegacyDate(parts[0]);
-                            edu.endDate = parseLegacyDate(parts[1]);
-                        }
-                    });
-                }
+                
+                if (!this.resume.theme) this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
             } catch (e) { console.error("Error loading local data:", e); }
         }
 
-        // 2. Apply Theme
-        this.updateTheme();
+        const savedTab = localStorage.getItem('activeTab');
+        if (savedTab) this.activeTab = savedTab;
 
-        // 3. Setup Watchers (Auto-save & Live Theme)
+        this.updateTheme();
         this.$watch('resume.theme', () => this.updateTheme());
-        this.$watch('resume', (value) => {
+        this.$watch('activeTab', (val) => localStorage.setItem('activeTab', val));
+        this.$watch('resume', (val) => {
             this.isDirty = true;
-            localStorage.setItem('localResumeDraft', JSON.stringify(value));
+            localStorage.setItem('localResumeDraft', JSON.stringify(val));
         });
 
-        // 4. Check Auth (if available)
         if (window.AuthService) {
             try {
                 this.user = await window.AuthService.getUser();
                 if (this.user) await this.syncFromCloud();
             } catch (e) { console.error(e); }
         }
-
-        // 5. Resize Textareas after render
-        setTimeout(() => { 
-            this.$nextTick(() => { 
-                document.querySelectorAll('textarea').forEach(el => this.resize(el)); 
-            }); 
-        }, 300);
     },
 
-    // --- THEME LOGIC ---
+    setTab(tabName) {
+        this.activeTab = tabName;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    exportToWord() { alert("Word export is coming soon! Please use PDF export for now."); },
+
+    startResizing(e) {
+        e.preventDefault();
+        const startX = e.clientX;
+        const startWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 250;
+        const onMouseMove = (ev) => {
+            const newWidth = Math.max(180, Math.min(500, startWidth + (ev.clientX - startX)));
+            document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+        };
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    },
+
     updateTheme() {
         const r = document.documentElement;
         if (this.resume.theme) {
@@ -180,143 +118,103 @@ const resumeAppData = () => ({
         }
     },
 
-    resetThemeOnly() {
-        this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" };
-        this.updateTheme();
-    },
+    resetThemeOnly() { this.resume.theme = { font: "Lato", sidebar_color: "#0b1120" }; this.updateTheme(); },
 
     resetToDefaults() {
         if (confirm("Reset everything to default? All local changes will be lost.")) {
             localStorage.removeItem('localResumeDraft');
             const defaults = getSafeDefaults();
             this.resume = JSON.parse(JSON.stringify(defaults));
+            // Ensure array conversion on reset
+            if (this.resume.experience) {
+                this.resume.experience.forEach(job => {
+                    if (Array.isArray(job.achievements)) {
+                        const listItems = job.achievements.map(a => `<li>${a}</li>`).join("");
+                        job.achievements = `<ul>${listItems}</ul>`;
+                    }
+                });
+            }
             this.updateTheme();
+            this.setTab('editor');
             this.$nextTick(() => window.location.reload());
         }
     },
 
-    // --- IMAGE HANDLING ---
-    openImageModal() {
-        this.showImageModal = true;
-    },
-    
-    promptImageUrl() {
-        const url = prompt("Enter Image URL:", this.resume.profile.image || "");
-        if (url !== null) {
-            this.resume.profile.image = url;
-            this.showImageModal = false;
-        }
-    },
-
-    triggerFileUpload() {
-        // Trigger the hidden input in HTML
-        const input = document.getElementById('hidden-file-input');
-        if(input) input.click();
-    },
-
+    openImageModal() { this.showImageModal = true; },
+    promptImageUrl() { const url = prompt("Enter Image URL:", this.resume.profile.image || ""); if (url !== null) { this.resume.profile.image = url; this.showImageModal = false; } },
+    triggerFileUpload() { document.getElementById('hidden-file-input').click(); },
     handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => {
-                this.resume.profile.image = e.target.result; // Base64 string
-                this.showImageModal = false;
-            };
+            reader.onload = (e) => { this.resume.profile.image = e.target.result; this.showImageModal = false; };
             reader.readAsDataURL(file);
         }
     },
-
-    // --- ICON HANDLING ---
-    promptIcon(item) {
-        const current = item.icon || "";
-        const icon = prompt("Enter FontAwesome Icon Class (e.g. 'fab fa-google', 'fas fa-certificate'):", current);
-        if (icon !== null) {
-            item.icon = icon;
-        }
-    },
-
-    // --- UTILS ---
-    resize(el) {
-        if (!el) return;
-        el.style.height = 'auto'; 
-        el.style.height = (el.scrollHeight + 2) + 'px';
-    },
-
-    promptImage() {
-        // Legacy fallback, now redirects to modal
-        this.openImageModal();
-    },
-
+    promptIcon(item) { const i = prompt("Icon Class:", item.icon); if (i !== null) item.icon = i; },
+    resize(el) { if (!el) return; el.style.height = 'auto'; el.style.height = (el.scrollHeight + 2) + 'px'; },
+    promptImage() { this.openImageModal(); },
     formatDate(dateStr) { return formatDate(dateStr); },
 
-    // --- LIST MANAGEMENT ---
     addItem(section) {
         const defaults = {
             experience: { 
                 role: "New Role", company: "Company", 
                 startDate: new Date().toISOString().slice(0, 7), isCurrent: true, 
-                achievements: ["Add details..."] 
+                achievements: "<ul><li>Add details here...</li></ul>" 
             },
             education: { 
                 degree: "Degree", institution: "Institute", 
-                startDate: "2020-01", endDate: "2024-05", details: "Details..." 
+                startDate: "2020-01", endDate: "2024-05", details: "<p>Details...</p>" 
             },
-            certifications: { 
-                name: "Certification Name", start: "2024", end: "Present", icon: "fas fa-certificate" 
-            },
-            skills: { category: "NEW CATEGORY", list: [{ name: "New Skill", level: 3 }] },
-            signature_achievements: { title: "Title", icon: "fas fa-star", description: "Impact..." },
-            custom_sections: { title: "Section", content: ["Point 1"] }
+            certifications: { name: "Cert Name", start: "2024", end: "Present", icon: "fas fa-certificate" },
+            skills: { category: "NEW", list: [{ name: "Skill", level: 3 }] },
+            signature_achievements: { title: "Title", icon: "fas fa-star", description: "<p>Impact...</p>" },
+            custom_sections: { title: "Section", content: ["<p>Point 1</p>"] }
         };
-        
         if (this.resume[section]) {
             this.resume[section].push(JSON.parse(JSON.stringify(defaults[section])));
             this.$nextTick(() => { document.querySelectorAll('textarea').forEach(el => this.resize(el)); });
         }
     },
+    addSkillItem(idx) { this.resume.skills[idx].list.push({ name: "New Skill", level: 3 }); },
+    removeItem(sec, idx) { if (confirm("Remove?")) this.resume[sec].splice(idx, 1); },
 
-    addSkillItem(catIndex) {
-        this.resume.skills[catIndex].list.push({ name: "New Skill", level: 3 });
-    },
-
-    removeItem(section, index) {
-        if (confirm("Remove this item?")) {
-            this.resume[section].splice(index, 1);
-        }
-    },
-
-    // --- CLOUD AUTH (Optional Placeholder) ---
-    async login() { 
-        const e = prompt("Email:"); 
-        if(e && window.AuthService) window.AuthService.login(e).then(() => alert("Check email")); 
-    },
-    async logout() { 
-        if(window.AuthService && confirm("Logout?")) {
-            await window.AuthService.logout();
-            window.location.reload();
-        } 
-    },
-    async saveToCloud() { 
-        if(!this.user) return this.login();
-        this.loading = true;
-        await window.AuthService.saveResume(this.user.id, this.resume);
-        this.loading = false;
-        this.isDirty = false;
-        alert("Saved!"); 
-    },
+    async login() { const e = prompt("Email:"); if(e && window.AuthService) window.AuthService.login(e).then(() => alert("Check email")); },
+    async logout() { if(window.AuthService && confirm("Logout?")) { await window.AuthService.logout(); window.location.reload(); } },
+    async saveToCloud() { if(!this.user) return this.login(); this.loading = true; await window.AuthService.saveResume(this.user.id, this.resume); this.loading = false; this.isDirty = false; alert("Saved!"); },
     async syncFromCloud() { 
-        this.loading = true;
-        const {data} = await window.AuthService.loadResume(this.user.id);
-        this.loading = false;
-        if (data) {
-            if (this.isDirty && !confirm("Overwrite local changes with cloud data?")) return;
-            this.resume = data;
-            this.$nextTick(() => document.querySelectorAll('textarea').forEach(el => this.resize(el)));
-        }
+        this.loading = true; const {data} = await window.AuthService.loadResume(this.user.id); this.loading = false;
+        if (data) { if (this.isDirty && !confirm("Overwrite local?")) return; this.resume = data; this.$nextTick(() => document.querySelectorAll('textarea').forEach(el => this.resize(el))); }
     }
 });
 
-// Initialize Alpine Data
 document.addEventListener('alpine:init', () => { 
     Alpine.data('resumeApp', resumeAppData); 
+
+    Alpine.data('richText', (initialContent, modelCallback) => ({
+        editor: null,
+        content: initialContent,
+        init() {
+            this.$nextTick(() => {
+                this.editor = new Quill(this.$refs.quillEditor, {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['clean']
+                        ]
+                    },
+                    placeholder: 'Type details here...'
+                });
+                if (this.content) { this.editor.root.innerHTML = this.content; }
+                this.editor.on('text-change', () => {
+                    let html = this.editor.root.innerHTML;
+                    if (html === '<p><br></p>') html = '';
+                    modelCallback(html);
+                });
+            });
+        }
+    }));
 });
