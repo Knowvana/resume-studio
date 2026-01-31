@@ -1,3 +1,3 @@
 [submodule "themes/knowvana"]
 	path = themes/knowvana
-	url = ../knowvana-site
+	url = https://github.com/Knowvana/knowvana-site.git
