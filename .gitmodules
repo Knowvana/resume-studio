@@ -1,6 +1,3 @@
-[submodule "shared"]
-	path = shared
-	url = https://github.com/Knowvana/knowvana-site.git
 [submodule "themes/knowvana"]
 	path = themes/knowvana
 	url = ../knowvana-site
