@@ -160,68 +160,28 @@ body {
 .profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
 /* =========================================
-   4. PRINT SETTINGS (FIXED)
+   4. PRINT SETTINGS
    ========================================= */
 @media print {
-    /* 1. RESTORE MARGINS: Use standard margins to prevent text touching edges */
     @page { margin: 1.25cm 0cm; size: A4; }
     
-    html, body {
-        width: 210mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        overflow: visible !important;
-        height: auto !important;
-    }
+    html, body { width: 210mm !important; margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: visible !important; height: auto !important; }
 
-    /* Hide UI Elements */
-    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { 
-        display: none !important; 
-    }
+    .project-sidebar, .global-header, .theme-fab, .theme-panel, .no-print, .navbar, .btn, .ql-toolbar, .format-toolbar { display: none !important; }
 
     .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
-    /* Resume Paper Layout */
-    .resume-paper { 
-        margin: 0 !important; 
-        box-shadow: none !important; 
-        border-radius: 0 !important; 
-        width: 100% !important; 
-        min-height: 100vh !important; 
-        display: flex !important; 
-        flex-wrap: nowrap !important;
-        background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important;
-        -webkit-print-color-adjust: exact !important; 
-    }
+    .resume-paper { margin: 0 !important; box-shadow: none !important; border-radius: 0 !important; width: 100% !important; min-height: 100vh !important; display: flex !important; flex-wrap: nowrap !important; background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important; -webkit-print-color-adjust: exact !important; }
 
     .col-lg-4 { width: 32% !important; flex: 0 0 32% !important; background-color: transparent !important; }
     .col-lg-8 { width: 68% !important; flex: 0 0 68% !important; }
 
-    /* 2. FIX: FORCE LEFT ALIGNMENT for Sidebar */
-    .sidebar-wrapper { 
-        padding: 40px 15px 40px 20px !important; 
-        text-align: left !important; /* Fixes Core Competencies Alignment */
-    }
+    .sidebar-wrapper { padding: 40px 15px 40px 20px !important; text-align: left !important; }
     .skill-category-input, .skill-name-input { text-align: left !important; }
-    
     .main-content-wrapper { padding: 40px 40px !important; }
 
-    /* 3. FIX: PAGE BREAKS */
-    .section-group { 
-        break-inside: auto !important; 
-        page-break-inside: auto !important; 
-        display: block; 
-        margin-bottom: 2rem !important;
-    }
-    
-    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper, .cert-main-card { 
-        break-inside: avoid !important; 
-        page-break-inside: avoid !important; 
-        margin-bottom: 1rem !important; 
-    }
+    .section-group { break-inside: auto !important; page-break-inside: auto !important; display: block; margin-bottom: 2rem !important; }
+    .timeline-item, .personal-details-card, .highlight-box, .card, .skill-category-wrapper, .cert-main-card { break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 1rem !important; }
 
     .ql-editor { padding: 0 !important; overflow: visible !important; border: none !important; }
     .ql-container { border: none !important; }
@@ -230,3 +190,31 @@ body {
 }
 
 .print-only { display: none; }
+
+/* =========================================
+   5. PREVIEW MODE (New Feature)
+   ========================================= */
+.preview-active .no-print { display: none !important; }
+/* Force print-only elements to be visible in preview, overriding the default display:none */
+.preview-active .print-only { display: block !important; }
+
+/* Hide floating UI tools in preview */
+.preview-active .theme-fab, 
+.preview-active .theme-panel, 
+.preview-active .btn-remove-card,
+.preview-active .btn-remove-tag,
+.preview-active .ql-toolbar,
+.preview-active .image-overlay {
+    display: none !important;
+}
+
+/* Ensure inputs are hidden if they don't have the no-print class but should be hidden */
+.preview-active input:not(.pd-value), 
+.preview-active textarea {
+    border: none !important;
+    background: transparent !important;
+    pointer-events: none;
+}
+
+/* Fix Quill Editor borders in preview */
+.preview-active .ql-container { border: none !important; }

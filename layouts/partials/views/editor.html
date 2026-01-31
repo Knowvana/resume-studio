@@ -1,4 +1,4 @@
-<div x-show="activeTab === 'editor'" class="view-wrapper animate-fade">
+<div x-show="activeTab === 'editor'" class="view-wrapper animate-fade" :class="{'preview-active': previewMode}">
     <div class="theme-panel no-print" x-show="showThemePanel" @click.outside="showThemePanel = false" x-transition style="display:none;">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="mb-0 fw-bold text-white">Advanced Settings</h6>
@@ -95,11 +95,12 @@
                                 <div class="w-100">
                                     <textarea x-model="cert.name" class="form-control-ghost form-control-ghost-dark fw-bold small p-0 no-print" placeholder="Name" rows="1" @input="resize($event.target)" x-init="resize($el)"></textarea>
                                     <div class="print-only fw-bold small text-white" style="line-height: 1.2;" x-text="cert.name"></div>
-                                    <div class="d-flex gap-1 mt-1 align-items-center">
+                                    <div class="d-flex gap-1 mt-1 align-items-center no-print">
                                         <input x-model="cert.start" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="Start">
                                         <span class="text-white-50 small">-</span>
                                         <input x-model="cert.end" class="form-control-ghost form-control-ghost-dark small p-0 text-white-50" style="font-size: 0.75rem; width: 60px;" placeholder="End">
                                     </div>
+                                    <div class="print-only text-white-50 small mt-1" x-text="(cert.start || '') + ' - ' + (cert.end || '')"></div>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +112,8 @@
                     <template x-for="(cat, cIndex) in resume.skills" :key="cIndex">
                         <div class="mb-4 skill-category-wrapper">
                             <div class="d-flex justify-content-between align-items-center">
-                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input" placeholder="CATEGORY">
+                                <input x-model="cat.category" class="form-control-ghost form-control-ghost-dark skill-category-input no-print" placeholder="CATEGORY">
+                                <div class="print-only skill-category-input" x-text="cat.category"></div>
                                 <div class="no-print">
                                     <button @click="addSkillItem(cIndex)" class="btn btn-sm btn-link text-white-50 p-0"><i class="fas fa-plus small"></i></button>
                                     <button @click="resume.skills.splice(cIndex, 1)" class="btn btn-sm btn-link text-danger p-0 ms-1"><i class="fas fa-times small"></i></button>
@@ -263,14 +265,30 @@
                     <div class="beautiful-separator"></div>
                     <div class="personal-details-card">
                         <div class="row g-4">
-                            <div class="col-md-4"><span class="pd-label">Date of Birth</span><input x-model="resume.personal_details.dob" type="date" class="form-control-ghost pd-value"></div>
-                            <div class="col-md-4"><span class="pd-label">Nationality</span><select x-model="resume.personal_details.nationality" class="form-control-ghost pd-value"><option>Indian</option><option>American</option><option>British</option><option>German</option></select></div>
-                            <div class="col-md-4"><span class="pd-label">Marital Status</span><select x-model="resume.personal_details.marital_status" class="form-control-ghost pd-value"><option>Single</option><option>Married</option></select></div>
+                            <div class="col-md-4">
+                                <span class="pd-label">Date of Birth</span>
+                                <input x-model="resume.personal_details.dob" type="date" class="form-control-ghost pd-value no-print">
+                                <div class="print-only pd-value" x-text="resume.personal_details.dob"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="pd-label">Nationality</span>
+                                <select x-model="resume.personal_details.nationality" class="form-control-ghost pd-value no-print"><option>Indian</option><option>American</option><option>British</option><option>German</option></select>
+                                <div class="print-only pd-value" x-text="resume.personal_details.nationality"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="pd-label">Marital Status</span>
+                                <select x-model="resume.personal_details.marital_status" class="form-control-ghost pd-value no-print"><option>Single</option><option>Married</option></select>
+                                <div class="print-only pd-value" x-text="resume.personal_details.marital_status"></div>
+                            </div>
                             <div class="col-12">
                                 <div class="d-flex justify-content-between"><span class="pd-label">Languages</span><button @click="resume.personal_details.languages.push('')" class="btn btn-sm text-primary py-0 no-print">+ Add</button></div>
                                 <div class="d-flex flex-wrap gap-2 mt-2">
                                     <template x-for="(lang, i) in resume.personal_details.languages" :key="i">
-                                        <div class="bg-light px-3 py-1 rounded-pill border d-flex align-items-center"><input x-model="resume.personal_details.languages[i]" class="form-control-ghost p-0 fw-bold small text-center" style="width: 80px;"><i @click="resume.personal_details.languages.splice(i, 1)" class="fas fa-times text-danger ms-2 cursor-pointer no-print small"></i></div>
+                                        <div class="bg-light px-3 py-1 rounded-pill border d-flex align-items-center">
+                                            <input x-model="resume.personal_details.languages[i]" class="form-control-ghost p-0 fw-bold small text-center no-print" style="width: 80px;">
+                                            <span class="print-only fw-bold small" x-text="resume.personal_details.languages[i]"></span>
+                                            <i @click="resume.personal_details.languages.splice(i, 1)" class="fas fa-times text-danger ms-2 cursor-pointer no-print small"></i>
+                                        </div>
                                     </template>
                                 </div>
                             </div>
@@ -281,7 +299,8 @@
                 <template x-for="(section, sIndex) in resume.custom_sections" :key="sIndex">
                     <div class="mb-5 position-relative group-hover section-group">
                         <button @click="removeItem('custom_sections', sIndex)" class="btn btn-sm text-danger position-absolute top-0 end-0 no-print"><i class="fas fa-trash"></i></button>
-                        <input x-model="section.title" class="form-control-ghost section-title mb-2" placeholder="Section Title">
+                        <input x-model="section.title" class="form-control-ghost section-title mb-2 no-print" placeholder="Section Title">
+                        <div class="print-only section-title mb-2" x-text="section.title"></div>
                         <div class="beautiful-separator"></div>
                         <ul class="list-unstyled detail-list text-muted ps-2">
                             <template x-for="(item, iIndex) in section.content" :key="iIndex">

@@ -2,7 +2,7 @@
 const resumeAppData = () => ({
     ...window.imageEditorMixin(),
     ...window.crudMixin(),
-
+    ...window.previewMixin(),
     user: null, loading: false, isDirty: false,
     activeTab: 'about', showThemePanel: false, 
     
