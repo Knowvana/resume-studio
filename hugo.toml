@@ -10,6 +10,10 @@ title = 'Resume Studio'
   [[module.mounts]]
     source = 'themes/knowvana/static'
     target = 'static'
+[[module.mounts]]
+  source = 'themes/knowvana/data'
+  target = 'data'
+
 
   # 2. Mount your local project files LAST
   # This gives them "Highest Priority" so your newest changes appear
