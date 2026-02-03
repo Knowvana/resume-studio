@@ -23,3 +23,8 @@ title = 'Resume Studio'
   [[module.mounts]]
     source = 'static'
     target = 'static'
+    
+  # --- ADD THIS SECTION BELOW ---
+  [[module.mounts]]
+    source = 'data'
+    target = 'data'
